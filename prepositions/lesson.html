@@ -1,45 +1,812 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Prepositions - Main Lesson</title>
-    <!-- Note the relative path to assets folder -->
-    <link rel="stylesheet" href="../assets/css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <title>Khóa Học Giới Từ Toàn Tập (Bản Trực Quan & Sơ Đồ Hóa)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f6f8;
+            --primary: #86b1c2; /* Pastel Blue */
+            --primary-light: #d6e6ed;
+            --secondary: #e6b8a2; /* Pastel Peach */
+            --accent-1: #9db2a1; /* Pastel Green */
+            --accent-2: #d8b4e2; /* Pastel Purple */
+            --accent-3: #f6d155; /* Pastel Yellow */
+            --text-main: #4a4a4a;
+            --text-light: #7a7a7a;
+            --card-bg: #ffffff;
+            --success: #6ccf95;
+            --error: #ff7675;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.7;
+        }
+
+        /* Navbar */
+        .navbar {
+            background-color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            background-color: var(--primary-light);
+            color: var(--primary);
+            border: none;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: none;
+        }
+
+        .back-btn:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Views */
+        .view {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .view.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Dashboard View */
+        .header-section {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .header-section h1 {
+            color: var(--text-main);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background-color: #e0e0e0;
+            border-radius: 6px;
+            margin: 1rem auto;
+            max-width: 400px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background-color: var(--success);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .module-card {
+            background-color: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-top: 8px solid;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+        }
+
+        .module-card:nth-child(1) { border-color: var(--primary); }
+        .module-card:nth-child(2) { border-color: var(--accent-1); }
+        .module-card:nth-child(3) { border-color: var(--secondary); }
+        .module-card:nth-child(4) { border-color: var(--accent-2); }
+
+        .module-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .module-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); }
+        .module-desc { color: var(--text-light); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .module-stats { font-size: 0.9rem; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 5px 15px; border-radius: 20px; align-self: flex-start; }
+
+        .status-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 700;
+            background-color: #f0f0f0;
+            color: #888;
+        }
+
+        .module-card.completed .status-badge { background-color: var(--success); color: white; }
+
+        /* Module View */
+        .module-header {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .module-header-icon { font-size: 5rem; }
+
+        .content-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+        }
+
+        .content-title {
+            color: var(--primary);
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            border-bottom: 3px dashed #eee;
+            padding-bottom: 1rem;
+        }
+
+        h4.sub-heading {
+            font-size: 1.4rem;
+            color: var(--text-main);
+            margin: 2rem 0 1rem 0;
+            padding-left: 1rem;
+            border-left: 5px solid var(--primary);
+        }
+
+        /* --- Sơ Đồ Cây (Tree Diagram) --- */
+        .tree-diagram { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin: 2rem 0; }
+        @media (max-width: 768px) { .tree-diagram { grid-template-columns: 1fr; } }
+        .tree-branch { background: #fafbfc; border-radius: 15px; border: 2px dashed #ddd; padding: 2rem 1.5rem; text-align: center; }
+        .tree-root { display: inline-block; padding: 12px 30px; border-radius: 30px; font-weight: 800; font-size: 1.3rem; color: white; margin-bottom: 2.5rem; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .time-root { background-color: var(--primary); }
+        .place-root { background-color: var(--accent-1); }
+        
+        .tree-root::after { content: ''; position: absolute; bottom: -2.5rem; left: 50%; width: 3px; height: 2.5rem; background: #ccc; transform: translateX(-50%); }
+        .tree-leaves { display: flex; flex-direction: column; gap: 1.5rem; position: relative; }
+        
+        .tree-leaf { padding: 15px 20px; border-radius: 12px; font-weight: 500; text-align: left; position: relative; box-shadow: 0 2px 8px rgba(0,0,0,0.02); }
+        .tree-leaf::before { content: ''; position: absolute; left: 50%; top: -1.5rem; width: 3px; height: 1.5rem; background: #ccc; transform: translateX(-50%); }
+        .tree-leaf:first-child::before { display: none; }
+        .tree-leaf:not(:first-child)::after { content: ''; position: absolute; left: 50%; top: -1.5rem; width: 3px; height: 1.5rem; background: #ccc; transform: translateX(-50%); }
+
+        .in-leaf { background-color: #f0f7fa; border-left: 6px solid var(--primary); }
+        .on-leaf { background-color: #fdf5f0; border-left: 6px solid var(--secondary); }
+        .at-leaf { background-color: #fdfbe8; border-left: 6px solid var(--accent-3); }
+        
+        .leaf-title { font-size: 1.4rem; font-weight: 800; margin-bottom: 5px; display: block;}
+        .in-leaf .leaf-title { color: #2c6e8f; }
+        .on-leaf .leaf-title { color: #a15531; }
+        .at-leaf .leaf-title { color: #8a7114; }
+
+        /* --- Icon Grid (Directional Prepositions) --- */
+        .icon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; margin: 2rem 0; }
+        .prep-card { background: #fafbfc; border: 1px solid #eee; border-radius: 15px; padding: 1.5rem; text-align: center; transition: transform 0.2s; }
+        .prep-card:hover { transform: translateY(-5px); box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .prep-icon { font-size: 2.5rem; margin-bottom: 1rem; background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.02); display: inline-block; line-height: 1.2;}
+        .prep-name { font-size: 1.3rem; font-weight: 800; color: var(--primary); margin-bottom: 5px; text-transform: uppercase;}
+        .prep-desc { font-size: 1rem; color: var(--text-light); }
+
+
+        .grammar-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin: 1.5rem 0; }
+        .grammar-table th { background-color: var(--primary-light); color: var(--text-main); padding: 15px; text-align: left; border-radius: 10px; font-size: 1.1rem; }
+        .grammar-table td { background-color: #fafbfc; padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .grammar-table ul { margin-left: 1.5rem; }
+        .grammar-table li { margin-bottom: 0.5rem; }
+
+        .highlight-box { background-color: #fff9e6; border-left: 5px solid var(--accent-3); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #594a1b; font-size: 1.1rem; }
+        .alert-box { background-color: #ffecec; border-left: 5px solid var(--error); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #8a2525; font-size: 1.1rem; }
+
+        /* Quiz Styles */
+        .quiz-status { text-align: right; font-weight: 700; color: var(--primary); font-size: 1.2rem; margin-bottom: 2rem; }
+        .quiz-item { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); text-align: center; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .opt-btn.correct { background: #e8f8f0; border-color: var(--success); color: #1a7a40; }
+        .opt-btn.incorrect { background: #ffecec; border-color: var(--error); color: #b33131; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+
+        .explanation { display: none; margin-top: 1.5rem; padding: 1.2rem; background: #f0f7fa; border-radius: 10px; border-left: 4px solid var(--primary); color: #266d8a; font-weight: 500; font-size: 1.1rem; animation: fadeIn 0.3s ease; }
+        
+        .complete-btn { display: block; width: 100%; padding: 18px; background-color: var(--success); color: white; border: none; border-radius: 15px; font-size: 1.4rem; font-weight: 800; cursor: pointer; margin-top: 3rem; transition: transform 0.2s; opacity: 0.5; pointer-events: none; }
+        .complete-btn.active { opacity: 1; pointer-events: auto; }
+        .complete-btn.active:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 207, 149, 0.4); }
+
+    </style>
 </head>
 <body>
-    <header>
-        <a href="../index.html" class="logo">GrammarHub ✨</a>
-    </header>
 
-    <main>
-        <a href="../index.html" class="back-link">
-            <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
-        </a>
+    <nav class="navbar">
+        <div class="brand" onclick="goHome()">📚 GrammarMaster Pro</div>
+        <button class="back-btn" id="back-btn" onclick="goHome()">← Bảng Điều Khiển</button>
+    </nav>
+
+    <div class="container">
         
-        <div class="content-wrapper">
-            <div class="content-header">
-                <h1 style="color: var(--dark); font-size: 2.5rem; margin-bottom: 0.5rem;">Prepositions</h1>
-                <p style="color: var(--gray);">Main Lesson</p>
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view active">
+            <div class="header-section">
+                <h1>Khóa Học Giới Từ Toàn Tập</h1>
+                <p style="font-size: 1.2rem; color: var(--text-light);">Phiên bản Trực Quan Hóa 2.0 - Dễ học, dễ nhớ với Sơ đồ và 12 Emojis Chuyển động.</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="main-progress"></div>
+                </div>
+                <p style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">Đã hoàn thành <span id="progress-text">0/4</span> học phần</p>
             </div>
-            
-            <div class="content-body">
-                <h2>1. Introduction to Prepositions</h2>
-                <p>A preposition is a word or group of words used before a noun, pronoun, or noun phrase to show direction, time, place, location, spatial relationships, or to introduce an object.</p>
-                
-                <h2>2. Common Prepositions</h2>
-                <p>Some examples of prepositions are words like "in," "at," "on," "of," and "to."</p>
-                
-                <!-- Content goes here -->
+
+            <div class="modules-grid">
+                <div class="module-card" id="card-m1" onclick="openModule(1)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🌳</div>
+                    <div class="module-title">1. Sơ Đồ Cây (In, On, At)</div>
+                    <div class="module-desc">Sơ đồ hóa In, On, At giúp não bộ ghi nhớ theo cấu trúc phân tầng. Bổ sung các ngoại lệ thú vị.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m2" onclick="openModule(2)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🏃</div>
+                    <div class="module-title">2. Vị Trí & Phương Hướng Chuyên Sâu</div>
+                    <div class="module-desc">12 chiều không gian và chuyển động (Up, Down, Past, Towards...) minh họa bằng Icon siêu dễ hiểu.</div>
+                    <div class="module-stats">📝 12 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m3" onclick="openModule(3)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">⏳</div>
+                    <div class="module-title">3. Giới Từ Thời Gian (Nâng Cao)</div>
+                    <div class="module-desc">Đào sâu: Since vs For, During vs In, By vs Until. Phân biệt "in time" và "on time".</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m4" onclick="openModule(4)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🔗</div>
+                    <div class="module-title">4. Giới Từ Phụ Thuộc Đại Toàn Tập</div>
+                    <div class="module-desc">Bảng tổng hợp hơn 30 cụm Collocations đi kèm Tính từ, Động từ và Danh từ thường gặp.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
             </div>
         </div>
-    </main>
 
-    <footer>
-        <p>&copy; 2024 English Grammar Hub.</p>
-    </footer>
+        <!-- MODULE CONTENT VIEWS -->
+        <div id="view-module" class="view">
+            <div class="module-header">
+                <div class="module-header-icon" id="m-icon"></div>
+                <div>
+                    <h2 id="m-title" style="font-size: 2.2rem; font-weight: 800;"></h2>
+                    <p id="m-desc" style="color: var(--text-light); font-size: 1.2rem; margin-top: 5px;"></p>
+                </div>
+            </div>
 
-    <script src="../assets/js/script.js"></script>
+            <div class="content-card">
+                <h3 class="content-title">📖 Lý Thuyết Trực Quan</h3>
+                <div id="m-theory" style="font-size: 1.1rem;">
+                    <!-- Theory content injected via JS -->
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem;">
+                    <h3 class="content-title" style="border: none; margin: 0; padding: 0;">🎯 Thực Hành</h3>
+                    <div class="quiz-status" id="quiz-status">Tiến độ: 0/10</div>
+                </div>
+                <div id="m-practice">
+                    <!-- Quizzes injected via JS -->
+                </div>
+                <button id="btn-complete-module" class="complete-btn" onclick="completeCurrentModule()">Hoàn Thành Bài Học 🎉</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- THEORY CONTENT & QUIZZES --- //
+        
+        const modulesData = {
+            1: {
+                icon: "🌳",
+                title: "1. Không Gian & Thời Gian (In, On, At)",
+                desc: "Hệ thống hóa kiến thức bằng Sơ Đồ Cây (Tree Diagram).",
+                theory: `
+                    <div class="tree-diagram">
+                        <!-- Cây THỜI GIAN -->
+                        <div class="tree-branch">
+                            <div class="tree-root time-root">⏰ THỜI GIAN</div>
+                            <div class="tree-leaves">
+                                <div class="tree-leaf in-leaf">
+                                    <span class="leaf-title">IN (Dài hạn)</span>
+                                    • Năm, Mùa, Tháng (in 2023, in May).<br>
+                                    • Buổi chung chung (in the morning).
+                                </div>
+                                <div class="tree-leaf on-leaf">
+                                    <span class="leaf-title">ON (Trung hạn)</span>
+                                    • Thứ, Ngày (on Monday, on May 1st).<br>
+                                    • Ngày lễ có "Day" (on Christmas Day).<br>
+                                    • Buổi của 1 ngày (on Monday morning).
+                                </div>
+                                <div class="tree-leaf at-leaf">
+                                    <span class="leaf-title">AT (Ngắn hạn / Chính xác)</span>
+                                    • Giờ giấc (at 7 AM).<br>
+                                    • Thời khắc (at noon, at midnight).<br>
+                                    • Lễ hội chung (at Christmas).
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cây NƠI CHỐN -->
+                        <div class="tree-branch">
+                            <div class="tree-root place-root">📍 NƠI CHỐN</div>
+                            <div class="tree-leaves">
+                                <div class="tree-leaf in-leaf">
+                                    <span class="leaf-title">IN (Bao quanh / 3D)</span>
+                                    • Quốc gia, Thành phố (in Vietnam).<br>
+                                    • Trong phòng, trong hộp (in a room).<br>
+                                    • Phương tiện nhỏ (in a car/taxi).
+                                </div>
+                                <div class="tree-leaf on-leaf">
+                                    <span class="leaf-title">ON (Bề mặt / Mặt phẳng)</span>
+                                    • Tên đường phố (on Oxford St).<br>
+                                    • Trên mặt bàn, mặt sàn (on the table).<br>
+                                    • Phương tiện lớn (on a bus/train).
+                                </div>
+                                <div class="tree-leaf at-leaf">
+                                    <span class="leaf-title">AT (Điểm cụ thể)</span>
+                                    • Số nhà chính xác (at 123 ABC St).<br>
+                                    • Điểm dừng, mục đích (at the station).<br>
+                                    • Sự kiện (at a party).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="highlight-box">
+                        💡 <strong>Mẹo hay:</strong> Nếu phương tiện nào bạn <strong>có thể đứng thẳng lên và đi lại được bên trong</strong> (Xe buýt, Máy bay, Tàu hỏa), hãy dùng <strong>ON</strong>. Nếu bạn phải <strong>khom người chui vào và chỉ có thể ngồi</strong> (Ô tô, Taxi, Trực thăng), hãy dùng <strong>IN</strong>.
+                    </div>
+                `,
+                quizzes: [
+                    { q: "We usually have a meeting _____ Monday morning.", opts: ["in", "on", "at"], ans: 1, exp: "Theo Sơ đồ cây, 'Buổi của 1 ngày cụ thể' phải dùng ON -> on Monday morning." },
+                    { q: "They got married _____ 2021.", opts: ["in", "on", "at"], ans: 0, exp: "Theo Sơ đồ cây (Thời gian dài hạn: Năm), ta dùng IN (in 2021)." },
+                    { q: "I will see you _____ lunchtime.", opts: ["in", "on", "at"], ans: 2, exp: "Lunchtime (giờ ăn trưa) là một thời điểm (thời khắc) cụ thể, dùng AT." },
+                    { q: "There is a beautiful picture _____ the wall.", opts: ["in", "on", "at"], ans: 1, exp: "Treo trên bề mặt tường, tiếp xúc bề mặt dùng ON." },
+                    { q: "We were stuck _____ a taxi for two hours.", opts: ["in", "on", "at"], ans: 0, exp: "Taxi là phương tiện nhỏ (không thể đi lại bên trong), ta dùng IN." },
+                    { q: "She loves reading books _____ the train.", opts: ["in", "on", "at"], ans: 1, exp: "Tàu hỏa (train) là phương tiện lớn có thể đi lại, dùng ON." },
+                    { q: "The concert starts exactly _____ 8:00 PM.", opts: ["in", "on", "at"], ans: 2, exp: "Giờ giấc chính xác tuyệt đối dùng AT." },
+                    { q: "He was born _____ October 15th.", opts: ["in", "on", "at"], ans: 1, exp: "Dù có tháng (October) nhưng có NGÀY (15th), cứ có Ngày là phải dùng ON." },
+                    { q: "I met him _____ a party last night.", opts: ["in", "on", "at"], ans: 2, exp: "Tại một sự kiện (party, concert), ta coi nó như một 'điểm' hẹn, dùng AT." },
+                    { q: "The company headquarters is located _____ 45 Wall Street.", opts: ["in", "on", "at"], ans: 2, exp: "Có số nhà cụ thể (45) nên dùng AT. Nếu chỉ có 'Wall Street' thì dùng ON." }
+                ]
+            },
+            2: {
+                icon: "🏃",
+                title: "2. 12 Chiều Vị Trí & Phương Hướng",
+                desc: "12 Chiều chuyển động được trực quan hóa bằng Emojis.",
+                theory: `
+                    <h4 class="sub-heading">Giới Từ Phương Hướng (Movement)</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Giới từ phương hướng luôn gắn liền với Động từ di chuyển (walk, run, jump, go, drive...).</p>
+                    
+                    <div class="icon-grid">
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ ↗️ ⛰️</div>
+                            <div class="prep-name">Up</div>
+                            <div class="prep-desc">Đi LÊN một vị trí cao hơn (Go up the hill).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ ↘️ ⛰️</div>
+                            <div class="prep-name">Down</div>
+                            <div class="prep-desc">Đi XUỐNG một vị trí thấp hơn (Walk down the stairs).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ ➡️ 🚪</div>
+                            <div class="prep-name">Into</div>
+                            <div class="prep-desc">Từ ngoài bước VÀO TRONG (Go into the room).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚪 ➡️ 🚶‍♂️</div>
+                            <div class="prep-name">Out of</div>
+                            <div class="prep-desc">Từ trong bước RA NGOÀI (Get out of the car).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🌳 🚶‍♂️ 🌳</div>
+                            <div class="prep-name">Through</div>
+                            <div class="prep-desc">XUYÊN QUA không gian 3D (qua rừng, đường hầm).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ 🌉 🚶‍♂️</div>
+                            <div class="prep-name">Across</div>
+                            <div class="prep-desc">BĂNG QUA một mặt phẳng 2D (qua đường, qua sông).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ 🛣️</div>
+                            <div class="prep-name">Along</div>
+                            <div class="prep-desc">DỌC THEO chiều dài (dọc bờ biển, hành lang).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ ➡️ 🏢</div>
+                            <div class="prep-name">Past</div>
+                            <div class="prep-desc">Đi NGANG QUA mà không dừng lại (Walk past the bank).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ ➡️ 🎯</div>
+                            <div class="prep-name">Towards</div>
+                            <div class="prep-desc">VỀ PHÍA (Hướng tới một điểm nhưng chưa chắc đã đến).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🚶‍♂️ 🔄 ⛲</div>
+                            <div class="prep-name">Around</div>
+                            <div class="prep-desc">Đi VÒNG QUANH một vật (Walk around the fountain).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🐈 ⬆️ 🪑</div>
+                            <div class="prep-name">Onto</div>
+                            <div class="prep-desc">Nhảy LÊN TRÊN bề mặt (The cat jumped onto the chair).</div>
+                        </div>
+                        <div class="prep-card">
+                            <div class="prep-icon">🤸‍♂️ ⬇️ 🐎</div>
+                            <div class="prep-name">Off</div>
+                            <div class="prep-desc">RỜI KHỎI, ngã khỏi bề mặt (Fall off the horse).</div>
+                        </div>
+                    </div>
+
+                    <h4 class="sub-heading">Phân Biệt Các Cặp Dễ Nhầm (Position)</h4>
+                    <table class="grammar-table">
+                        <tr>
+                            <th style="width: 25%">Under vs. Below</th>
+                            <td>
+                                <ul>
+                                    <li><strong>Under (⬇️ Ngay dưới):</strong> Thường bị che khuất hoặc chạm trực tiếp (hiding under the table).</li>
+                                    <li><strong>Below (📉 Thấp hơn):</strong> Ở vị trí thấp hơn (trên thang đo, mực nước). (The temperature is below zero).</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Over vs. Above</th>
+                            <td>
+                                <ul>
+                                    <li><strong>Over (🌈 Phủ lên/Vượt qua):</strong> Ngay phía trên (phủ lên), hoặc bay vượt qua. (Fly over the mountain).</li>
+                                    <li><strong>Above (☁️ Cao hơn hẳn):</strong> Ở vị trí cao hơn trong không gian, không chạm. (The clouds above us).</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>In front of vs. Opposite</th>
+                            <td>
+                                <ul>
+                                    <li><strong>In front of (👤👤 Đứng sau lưng):</strong> Phía trước mặt (Cả 2 có thể đang nhìn về cùng một hướng, người này che khuất người kia).</li>
+                                    <li><strong>Opposite (👤↔️👤 Đối mặt):</strong> Đối diện (Hai bên nhìn vào nhau, thường bị ngăn cách bởi con đường/bàn).</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+                `,
+                quizzes: [
+                    { q: "The plane flew _____ the mountain.", opts: ["above", "over", "on"], ans: 1, exp: "Bay vượt qua (có sự chuyển động vượt qua từ bên này sang bên kia) dùng 'Over'." },
+                    { q: "The temperature today is 5 degrees _____ zero.", opts: ["below", "under", "down"], ans: 0, exp: "Thấp hơn trên một thang đo (độ C) ta dùng 'below'." },
+                    { q: "Jack and Jill went _____ the hill to fetch a pail of water.", opts: ["up", "onto", "past"], ans: 0, exp: "Biểu tượng 🚶‍♂️ ↗️ ⛰️: Đi lên đồi dùng 'Up'." },
+                    { q: "He walked _____ me but didn't say hello.", opts: ["around", "past", "towards"], ans: 1, exp: "Biểu tượng 🚶‍♂️ ➡️ 🏢: Đi lướt ngang qua mặt ai đó mà không dừng lại dùng 'Past'." },
+                    { q: "The earth moves _____ the sun.", opts: ["around", "across", "along"], ans: 0, exp: "Biểu tượng 🚶‍♂️ 🔄 ⛲: Chuyển động theo quỹ đạo vòng quanh dùng 'Around'." },
+                    { q: "They sat _____ each other at the coffee table.", opts: ["in front of", "opposite", "across"], ans: 1, exp: "Ngồi uống cafe mặt đối mặt nhìn nhau -> dùng 'Opposite'." },
+                    { q: "Be careful! Don't fall _____ the stairs!", opts: ["down", "under", "off"], ans: 0, exp: "Biểu tượng 🚶‍♂️ ↘️ ⛰️: Ngã lăn xuống cầu thang dùng 'Down'." },
+                    { q: "We walked _____ the forest to find the cabin.", opts: ["across", "through", "along"], ans: 1, exp: "Biểu tượng 🌳 🚶‍♂️ 🌳: Rừng là không gian 3D, đi xuyên qua nó dùng 'Through'." },
+                    { q: "He ran _____ the finish line as fast as he could.", opts: ["towards", "along", "onto"], ans: 0, exp: "Biểu tượng 🚶‍♂️ ➡️ 🎯: Chạy 'hướng về phía' đích đến dùng 'Towards'." },
+                    { q: "The boy fell _____ his bicycle and hurt his knee.", opts: ["down", "out of", "off"], ans: 2, exp: "Biểu tượng 🤸‍♂️ ⬇️ 🐎: Rời khỏi bề mặt xe đạp (ngã xuống) dùng 'Off'." },
+                    { q: "Be careful when you walk _____ the street.", opts: ["through", "across", "into"], ans: 1, exp: "Biểu tượng 🚶‍♂️ 🌉 🚶‍♂️: Đường phố là mặt phẳng, đi băng ngang qua lề dùng 'Across'." },
+                    { q: "We strolled (đi dạo) _____ the beach at sunset.", opts: ["along", "through", "across"], ans: 0, exp: "Biểu tượng 🚶‍♂️ 🛣️: Đi dạo dọc theo chiều dài của bờ biển dùng 'Along'." }
+                ]
+            },
+            3: {
+                icon: "⏳",
+                title: "3. Giới Từ Thời Gian (Nâng Cao)",
+                desc: "Từ Since, For đến Before, After, By, Until.",
+                theory: `
+                    <h4 class="sub-heading">Phân Biệt Cơ Bản</h3>
+                    <table class="grammar-table">
+                        <tr>
+                            <th style="width: 20%">Since vs. For</th>
+                            <td>
+                                <ul>
+                                    <li><strong>Since + Mốc thời gian (Từ khi):</strong> since 2015, since Monday. Trả lời câu hỏi <em>"Từ lúc nào?"</em></li>
+                                    <li><strong>For + Khoảng thời gian (Trong bao lâu):</strong> for 3 years, for a long time. Trả lời câu hỏi <em>"Bao lâu rồi?"</em></li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>During vs. In</th>
+                            <td>
+                                <ul>
+                                    <li><strong>During + Sự kiện/Danh từ:</strong> during the film, during the holiday. (Trong suốt thời gian sự kiện đó diễn ra).</li>
+                                    <li><strong>In + Khung thời gian:</strong> in the summer, in May. (KHÔNG dùng in the film).</li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>By vs. Until (Till)</th>
+                            <td>
+                                <ul>
+                                    <li><strong>By (Deadline):</strong> Xong trước hoặc chậm nhất là lúc đó. (You must submit the essay <em>by</em> Friday).</li>
+                                    <li><strong>Until (Sự kéo dài):</strong> Làm một việc liên tục cho đến lúc đó thì dừng. (We waited <em>until</em> 5 PM).</li>
+                                </ul>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="alert-box">
+                        <strong>Phân biệt IN TIME vs ON TIME:</strong><br>
+                        - <strong>On time ⏰:</strong> Đúng giờ (chính xác như lịch trình, không sớm không muộn). <em>The train left on time.</em><br>
+                        - <strong>In time 🏃‍♂️:</strong> Kịp lúc (vừa kịp trước khi chuyện xấu xảy ra hoặc vừa kịp để tham gia). <em>He arrived in time to save her.</em>
+                    </div>
+                `,
+                quizzes: [
+                    { q: "I haven't seen Mary _____ last Christmas.", opts: ["since", "for", "during"], ans: 0, exp: "Last Christmas là một mốc thời gian -> dùng Since." },
+                    { q: "We stayed in a hotel _____ our holiday in Rome.", opts: ["in", "for", "during"], ans: 2, exp: "Holiday là một danh từ chỉ sự kiện, dùng During (Trong suốt kỳ nghỉ)." },
+                    { q: "You have to finish this report _____ 5:00 PM today.", opts: ["until", "by", "for"], ans: 1, exp: "Đây là một deadline (trễ nhất là 5h phải xong), dùng By." },
+                    { q: "The store is open _____ 8 AM to 9 PM.", opts: ["from", "between", "since"], ans: 0, exp: "Cấu trúc Từ... đến... là From... to..." },
+                    { q: "She has been studying English _____ three years.", opts: ["since", "for", "during"], ans: 1, exp: "Three years là một khoảng thời gian đếm được -> dùng For." },
+                    { q: "I will keep working on this _____ I finish it.", opts: ["by", "until", "in"], ans: 1, exp: "Hành động 'làm việc' kéo dài liên tục cho ĐẾN KHI xong, dùng Until." },
+                    { q: "The ambulance arrived just _____ time to save the patient.", opts: ["in", "on", "at"], ans: 0, exp: "Đến 'kịp lúc' trước khi có nguy hiểm, dùng In time." },
+                    { q: "In Japan, trains always run exactly _____ time.", opts: ["in", "on", "at"], ans: 1, exp: "Đúng boong giờ lịch trình (không sớm không muộn), dùng On time." },
+                    { q: "Please return the book _____ two weeks.", opts: ["within", "until", "for"], ans: 0, exp: "Trong vòng 2 tuần (giới hạn thời gian tối đa), dùng Within." },
+                    { q: "Always stretch your muscles _____ exercising.", opts: ["before", "after", "since"], ans: 0, exp: "Khởi động 'trước khi' tập thể dục, dùng Before." }
+                ]
+            },
+            4: {
+                icon: "🔗",
+                title: "4. Giới Từ Phụ Thuộc Đại Toàn Tập",
+                desc: "Học theo cụm (Collocations) để chinh phục mọi bài thi.",
+                theory: `
+                    <p style="font-size: 1.1rem; margin-bottom: 1rem; color: var(--text-light);">Đây là những cụm từ "dính chặt" vào nhau, xuất hiện trong 80% các bài thi A2-B2.</p>
+                    
+                    <h4 class="sub-heading">Tính Từ + Giới Từ</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <ul style="background: white; padding: 1.5rem 2.5rem; border-radius: 10px; border: 1px solid #eee;">
+                            <li><strong>Good / Bad AT:</strong> Giỏi/Tệ về</li>
+                            <li><strong>Surprised / Amazed AT:</strong> Ngạc nhiên về</li>
+                            <li><strong>Interested IN:</strong> Thích thú, quan tâm</li>
+                            <li><strong>Successful IN:</strong> Thành công trong</li>
+                            <li><strong>Famous / Known FOR:</strong> Nổi tiếng về</li>
+                            <li><strong>Responsible FOR:</strong> Chịu trách nhiệm</li>
+                        </ul>
+                        <ul style="background: white; padding: 1.5rem 2.5rem; border-radius: 10px; border: 1px solid #eee;">
+                            <li><strong>Afraid / Scared OF:</strong> Sợ hãi</li>
+                            <li><strong>Proud OF:</strong> Tự hào về</li>
+                            <li><strong>Aware / Capable OF:</strong> Nhận thức / Có khả năng</li>
+                            <li><strong>Tired OF:</strong> Mệt mỏi, chán ngán</li>
+                            <li><strong>Different FROM:</strong> Khác biệt với</li>
+                            <li><strong>Similar TO:</strong> Tương tự với</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="sub-heading">Động Từ + Giới Từ</h4>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                        <ul style="background: white; padding: 1.5rem 2rem; border-radius: 10px; border: 1px solid #eee;">
+                            <li style="color: var(--primary); font-weight: 700; list-style: none; margin-bottom: 10px; margin-left: -1rem;">Với FOR / FROM</li>
+                            <li><strong>Apologize FOR:</strong> Xin lỗi</li>
+                            <li><strong>Wait / Look FOR:</strong> Chờ / Tìm</li>
+                            <li><strong>Protect FROM:</strong> Bảo vệ khỏi</li>
+                        </ul>
+                        <ul style="background: white; padding: 1.5rem 2rem; border-radius: 10px; border: 1px solid #eee;">
+                            <li style="color: var(--secondary); font-weight: 700; list-style: none; margin-bottom: 10px; margin-left: -1rem;">Với ON / IN</li>
+                            <li><strong>Depend / Rely ON:</strong> Phụ thuộc</li>
+                            <li><strong>Concentrate ON:</strong> Tập trung</li>
+                            <li><strong>Believe / Succeed IN:</strong> Tin / T.Công</li>
+                        </ul>
+                        <ul style="background: white; padding: 1.5rem 2rem; border-radius: 10px; border: 1px solid #eee;">
+                            <li style="color: var(--accent-1); font-weight: 700; list-style: none; margin-bottom: 10px; margin-left: -1rem;">Với TO / WITH</li>
+                            <li><strong>Listen / Belong TO:</strong> Nghe/Thuộc về</li>
+                            <li><strong>Object TO:</strong> Phản đối</li>
+                            <li><strong>Agree WITH:</strong> Đồng ý với</li>
+                        </ul>
+                    </div>
+
+                    <h4 class="sub-heading">Danh Từ + Giới Từ</h4>
+                    <ul style="background: white; padding: 1.5rem 2.5rem; border-radius: 10px; border: 1px solid #eee; display: flex; flex-wrap: wrap; gap: 2rem;">
+                        <li><strong>Reason FOR:</strong> Lý do cho...</li>
+                        <li><strong>Advantage / Disadvantage OF:</strong> Lợi ích/Tác hại của...</li>
+                        <li><strong>Increase / Decrease IN:</strong> Sự tăng/giảm trong...</li>
+                        <li><strong>Solution TO:</strong> Giải pháp cho...</li>
+                    </ul>
+                `,
+                quizzes: [
+                    { q: "She is very proud _____ her son's achievements.", opts: ["of", "for", "about"], ans: 0, exp: "Proud OF: Tự hào về ai/cái gì." },
+                    { q: "Are you aware _____ the risks involved in this project?", opts: ["with", "of", "about"], ans: 1, exp: "Aware OF: Nhận thức được, biết được." },
+                    { q: "Vietnam is famous _____ its delicious street food.", opts: ["of", "for", "with"], ans: 1, exp: "Famous FOR: Nổi tiếng vì điều gì." },
+                    { q: "I strongly object _____ this unfair decision.", opts: ["to", "for", "against"], ans: 0, exp: "Object TO (+ Ving/N): Phản đối việc gì." },
+                    { q: "Who is responsible _____ organizing the event?", opts: ["for", "of", "with"], ans: 0, exp: "Responsible FOR: Chịu trách nhiệm cho." },
+                    { q: "Please concentrate _____ your work and stop talking.", opts: ["in", "at", "on"], ans: 2, exp: "Concentrate ON: Tập trung vào." },
+                    { q: "This new software is completely different _____ the old one.", opts: ["than", "from", "with"], ans: 1, exp: "Different FROM: Khác biệt so với." },
+                    { q: "There has been a huge increase _____ the price of oil.", opts: ["in", "of", "on"], ans: 0, exp: "Increase/Decrease IN: Sự tăng/giảm trong (giá cả, số lượng)." },
+                    { q: "I am totally exhausted and tired _____ this repetitive job.", opts: ["of", "with", "from"], ans: 0, exp: "Tired OF: Mệt mỏi, chán ngấy vì cái gì." },
+                    { q: "We haven't found a solution _____ this problem yet.", opts: ["for", "of", "to"], ans: 2, exp: "Solution TO a problem: Giải pháp CHO một vấn đề." }
+                ]
+            }
+        };
+
+        // --- APP LOGIC --- //
+
+        let currentModuleId = 0;
+        let userProgress = { 1: false, 2: false, 3: false, 4: false };
+        let currentModuleQuizzesPassed = 0;
+        let totalQuestionsInModule = 0;
+
+        function updateDashboard() {
+            let completed = 0;
+            for(let i=1; i<=4; i++) {
+                if(userProgress[i]) {
+                    completed++;
+                    const card = document.getElementById(`card-m${i}`);
+                    card.classList.add('completed');
+                    card.querySelector('.status-badge').innerText = 'Hoàn thành';
+                }
+            }
+            document.getElementById('progress-text').innerText = `${completed}/4`;
+            document.getElementById('main-progress').style.width = `${(completed/4)*100}%`;
+        }
+
+        function goHome() {
+            document.getElementById('view-module').classList.remove('active');
+            document.getElementById('view-dashboard').classList.add('active');
+            document.getElementById('back-btn').style.display = 'none';
+            updateDashboard();
+        }
+
+        function openModule(id) {
+            currentModuleId = id;
+            currentModuleQuizzesPassed = 0;
+            const data = modulesData[id];
+            totalQuestionsInModule = data.quizzes.length;
+            
+            // Set Header
+            document.getElementById('m-icon').innerText = data.icon;
+            document.getElementById('m-title').innerText = data.title;
+            document.getElementById('m-desc').innerText = data.desc;
+            
+            // Set Theory
+            document.getElementById('m-theory').innerHTML = data.theory;
+            
+            // Reset Quiz Status
+            document.getElementById('quiz-status').innerText = `Tiến độ: 0/${totalQuestionsInModule}`;
+            
+            // Build Quizzes
+            const practiceDiv = document.getElementById('m-practice');
+            practiceDiv.innerHTML = '';
+            
+            data.quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 ${q.exp}</div>
+                    </div>
+                `;
+                practiceDiv.innerHTML += quizHtml;
+            });
+            
+            // Reset Complete Button
+            const btnComplete = document.getElementById('btn-complete-module');
+            btnComplete.classList.remove('active');
+            btnComplete.innerText = "Hãy hoàn thành các câu hỏi để tiếp tục";
+
+            // Switch view
+            document.getElementById('view-dashboard').classList.remove('active');
+            document.getElementById('view-module').classList.add('active');
+            document.getElementById('back-btn').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            // Prevent multiple clicks
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            currentModuleQuizzesPassed++;
+            document.getElementById('quiz-status').innerText = `Tiến độ: ${currentModuleQuizzesPassed}/${totalQuestionsInModule}`;
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+            
+            // Check if all answered
+            if(currentModuleQuizzesPassed === totalQuestionsInModule) {
+                const btnComplete = document.getElementById('btn-complete-module');
+                btnComplete.classList.add('active');
+                btnComplete.innerText = "Hoàn Thành Bài Học 🎉";
+            }
+        }
+
+        function completeCurrentModule() {
+            userProgress[currentModuleId] = true;
+            goHome();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Init
+        updateDashboard();
+    </script>
 </body>
 </html>
