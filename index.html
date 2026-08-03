@@ -8,91 +8,57 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
+<body class="dashboard-body">
     <header>
         <a href="index.html" class="logo">GrammarHub ✨</a>
         <nav>
             <ul>
-                <li><a href="index.html">Dashboard</a></li>
+                <li><a href="index.html" class="active">Dashboard</a></li>
                 <li><a href="#">About</a></li>
                 <li><a href="#">Progress</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <div class="page-title">
-            <h1>Master English Grammar</h1>
-            <p>Choose a topic below to start your learning journey.</p>
-        </div>
+    <div class="layout-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <h2 class="sidebar-title"><i class="fa-solid fa-layer-group"></i> Topics</h2>
+            <!-- Khu vực Sidebar sẽ được JavaScript bơm tự động vào đây -->
+            <ul class="topic-list" id="dynamic-sidebar">
+                <li style="text-align: center; color: var(--gray); padding: 1.5rem 0;">
+                    <i class="fa-solid fa-spinner fa-spin" style="margin-right: 8px;"></i> Loading lessons...
+                </li>
+            </ul>
+        </aside>
 
-        <div class="dashboard-grid">
-            <!-- Topic 1: Prepositions -->
-            <div class="topic-card">
-                <div class="topic-icon">📍</div>
-                <h3 class="topic-title">Prepositions</h3>
-                <p class="topic-desc">Learn how to use in, on, at, by, for, and other prepositions correctly in different contexts.</p>
-                <div class="topic-actions">
-                    <a href="prepositions/lesson.html" class="action-btn">
-                        <span><i class="fa-solid fa-book-open"></i> Main Lesson</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="prepositions/homework.html" class="action-btn">
-                        <span><i class="fa-solid fa-pen-nib"></i> Homework</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="prepositions/answer.html" class="action-btn">
-                        <span><i class="fa-solid fa-check-double"></i> Answers</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
+        <!-- Main Quiz Area -->
+        <main class="main-content">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h2>Daily Grammar Challenge 🔥</h2>
+                    <p>Test your knowledge with random questions!</p>
+                </div>
+                
+                <div class="quiz-card">
+                    <div class="quiz-topic-badge" id="quiz-topic">Topic</div>
+                    <h3 class="question-text" id="question-text">Loading question...</h3>
+                    
+                    <div class="options-grid" id="options-grid">
+                        <button class="option-btn" data-index="0">A. <span class="opt-text">...</span></button>
+                        <button class="option-btn" data-index="1">B. <span class="opt-text">...</span></button>
+                        <button class="option-btn" data-index="2">C. <span class="opt-text">...</span></button>
+                        <button class="option-btn" data-index="3">D. <span class="opt-text">...</span></button>
+                    </div>
+
+                    <div class="feedback-area hidden" id="feedback-area">
+                        <p class="feedback-msg" id="feedback-msg"></p>
+                        <button class="next-btn" id="next-btn">Next Question <i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
                 </div>
             </div>
-
-            <!-- Topic 2: Present Simple -->
-            <div class="topic-card">
-                <div class="topic-icon">⏱️</div>
-                <h3 class="topic-title">Present Simple</h3>
-                <p class="topic-desc">Master habits, general truths, and fixed arrangements using the present simple tense.</p>
-                <div class="topic-actions">
-                    <a href="present-simple/lesson.html" class="action-btn">
-                        <span><i class="fa-solid fa-book-open"></i> Main Lesson</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="present-simple/homework.html" class="action-btn">
-                        <span><i class="fa-solid fa-pen-nib"></i> Homework</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="present-simple/answer.html" class="action-btn">
-                        <span><i class="fa-solid fa-check-double"></i> Answers</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Topic 3: Relative Clauses -->
-            <div class="topic-card">
-                <div class="topic-icon">🔗</div>
-                <h3 class="topic-title">Relative Clauses</h3>
-                <p class="topic-desc">Connect sentences and add information using who, which, that, whose, and whom.</p>
-                <div class="topic-actions">
-                    <a href="relative-clauses/lesson.html" class="action-btn">
-                        <span><i class="fa-solid fa-book-open"></i> Main Lesson</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="relative-clauses/homework.html" class="action-btn">
-                        <span><i class="fa-solid fa-pen-nib"></i> Homework</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                    <a href="relative-clauses/answer.html" class="action-btn">
-                        <span><i class="fa-solid fa-check-double"></i> Answers</span>
-                        <i class="fa-solid fa-chevron-right"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <!-- Add more topics here later -->
-        </div>
-    </main>
+        </main>
+    </div>
 
     <footer>
         <p>&copy; 2024 English Grammar Hub. Designed for seamless learning.</p>
