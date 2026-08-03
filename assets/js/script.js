@@ -82,49 +82,44 @@ async function loadDynamicSidebar() {
     const sidebar = document.getElementById('dynamic-sidebar');
     
     try {
-        // Fetch the file tree from GitHub API for hliyenglish/Grammar on main branch
-        const repoUrl = 'https://api.github.com/repos/hliyenglish/Grammar/git/trees/main?recursive=1';
+        // Sử dụng jsdelivr API để tránh lỗi giới hạn lượt truy cập của GitHub
+        const repoUrl = 'https://data.jsdelivr.com/v1/package/gh/hliyenglish/Grammar@main';
         const response = await fetch(repoUrl);
         
         if (!response.ok) {
-            throw new Error(`GitHub API returned ${response.status}`);
+            throw new Error(`API returned ${response.status}`);
         }
         
         const data = await response.json();
-        if (!data.tree) throw new Error("No tree found");
-
         const topics = {};
         
-        // Filter HTML files inside subdirectories
-        data.tree.forEach(item => {
-            if (item.type === 'blob' && item.path.endsWith('.html') && item.path.includes('/')) {
-                const parts = item.path.split('/');
-                const folderName = parts[0];
-                const fileName = parts[1];
-                
-                // Exclude assets folder
-                if (folderName === 'assets') return;
-                
-                if (!topics[folderName]) {
+        // Quét cấu trúc thư mục mới từ jsdelivr
+        if (data.files) {
+            data.files.forEach(folder => {
+                // Chỉ lấy các thư mục (bỏ qua thư mục assets và các file lẻ ở ngoài)
+                if (folder.type === 'directory' && folder.name !== 'assets') {
+                    const folderName = folder.name;
                     topics[folderName] = [];
+                    
+                    folder.files.forEach(file => {
+                        if (file.type === 'file' && file.name.endsWith('.html')) {
+                            let displayName = file.name.replace('.html', '');
+                            // Định dạng tên đẹp
+                            if(displayName.toLowerCase() === 'lesson') displayName = 'Main Lesson';
+                            if(displayName.toLowerCase() === 'homework') displayName = 'Homework';
+                            if(displayName.toLowerCase() === 'answer') displayName = 'Answers';
+                            
+                            displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+                            
+                            topics[folderName].push({
+                                path: `${folderName}/${file.name}`,
+                                name: displayName
+                            });
+                        }
+                    });
                 }
-                
-                // Prettify filename (remove .html and capitalize)
-                let displayName = fileName.replace('.html', '');
-                // Special formatting rules
-                if(displayName.toLowerCase() === 'lesson') displayName = 'Main Lesson';
-                if(displayName.toLowerCase() === 'homework') displayName = 'Homework';
-                if(displayName.toLowerCase() === 'answer') displayName = 'Answers';
-                
-                // Capitalize first letter if not caught by rules
-                displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
-                
-                topics[folderName].push({
-                    path: item.path,
-                    name: displayName
-                });
-            }
-        });
+            });
+        }
         
         // Render the Sidebar
         sidebar.innerHTML = '';
@@ -132,7 +127,7 @@ async function loadDynamicSidebar() {
         const sortedFolders = Object.keys(topics).sort();
         
         if (sortedFolders.length === 0) {
-            sidebar.innerHTML = '<li style="text-align: center; color: var(--gray); padding: 1rem;">No topics found on GitHub. Push some folders!</li>';
+            sidebar.innerHTML = '<li style="text-align: center; color: var(--gray); padding: 1rem;">No topics found. Push some folders!</li>';
             return;
         }
 
@@ -160,7 +155,6 @@ async function loadDynamicSidebar() {
             
             files.forEach(file => {
                 const subLi = document.createElement('li');
-                // The URL is relative to index.html, which is what item.path provides directly!
                 subLi.innerHTML = `<a href="${file.path}">${file.name}</a>`;
                 subLinks.appendChild(subLi);
             });
@@ -171,7 +165,6 @@ async function loadDynamicSidebar() {
             
             // Add Dropdown Toggle Event
             header.addEventListener('click', () => {
-                // Đóng tất cả các menu khác (nếu muốn, có thể bỏ phần này nếu muốn mở nhiều cái cùng lúc)
                 document.querySelectorAll('.sub-links').forEach(el => {
                     if (el !== subLinks) el.classList.remove('active');
                 });
@@ -179,7 +172,6 @@ async function loadDynamicSidebar() {
                     if (el !== header.querySelector('.dropdown-arrow')) el.classList.remove('open');
                 });
 
-                // Toggle menu hiện tại
                 subLinks.classList.toggle('active');
                 header.querySelector('.dropdown-arrow').classList.toggle('open');
             });
@@ -187,7 +179,7 @@ async function loadDynamicSidebar() {
         
     } catch (error) {
         console.error('Error loading sidebar:', error);
-        sidebar.innerHTML = '<li style="color: var(--danger); padding: 1rem; text-align: center;">Could not load topics from GitHub. Check your internet or GitHub API limit.</li>';
+        sidebar.innerHTML = '<li style="color: var(--danger); padding: 1rem; text-align: center;">Hệ thống đang bảo trì hoặc mạng yếu. Vui lòng thử lại sau.</li>';
     }
 }
 
