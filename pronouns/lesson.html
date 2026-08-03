@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa Học Đại Từ Toàn Tập (Bản Siêu Chi Tiết)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f6f4;
+            --primary: #9b89b3; /* Pastel Purple */
+            --primary-light: #e4dcf1;
+            --secondary: #b3d4ff; /* Pastel Blue */
+            --accent-1: #ffd1dc; /* Pastel Pink */
+            --accent-2: #c1e1c1; /* Pastel Green */
+            --accent-3: #fdfd96; /* Pastel Yellow */
+            --accent-4: #ffd1a9; /* Pastel Orange */
+            --text-main: #4a4a4a;
+            --text-light: #7a7a7a;
+            --card-bg: #ffffff;
+            --success: #6ccf95;
+            --error: #ff7675;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        /* Navbar */
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .back-btn { background-color: var(--primary-light); color: var(--primary); border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: none; }
+        .back-btn:hover { background-color: var(--primary); color: white; }
+
+        /* Main Container */
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+
+        /* Views */
+        .view { display: none; animation: fadeIn 0.4s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Dashboard View */
+        .header-section { text-align: center; margin-bottom: 3rem; }
+        .header-section h1 { color: var(--text-main); font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+        .progress-bar { width: 100%; height: 12px; background-color: #e0e0e0; border-radius: 6px; margin: 1rem auto; max-width: 400px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.5s ease; }
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+        @media (max-width: 768px) { .modules-grid { grid-template-columns: 1fr; } }
+
+        .module-card { background-color: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.3s ease; border-top: 8px solid; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .module-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        .module-card:nth-child(1) { border-color: var(--primary); }
+        .module-card:nth-child(2) { border-color: var(--secondary); }
+        .module-card:nth-child(3) { border-color: var(--accent-1); }
+        .module-card:nth-child(4) { border-color: var(--accent-2); }
+        .module-card:nth-child(5) { border-color: var(--accent-4); }
+
+        .module-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .module-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); }
+        .module-desc { color: var(--text-light); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .module-stats { font-size: 0.9rem; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 5px 15px; border-radius: 20px; align-self: flex-start; }
+        .status-badge { position: absolute; top: 20px; right: 20px; padding: 6px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: 700; background-color: #f0f0f0; color: #888; }
+        .module-card.completed .status-badge { background-color: var(--success); color: white; }
+
+        /* Module View */
+        .module-header { background: white; padding: 2.5rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 2rem; }
+        .module-header-icon { font-size: 5rem; }
+        .content-card { background: white; padding: 3rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .content-title { color: var(--primary); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem; }
+
+        /* Theory Styles */
+        h4.sub-heading { font-size: 1.4rem; color: var(--text-main); margin: 2rem 0 1rem 0; padding-left: 1rem; border-left: 5px solid var(--primary); }
+        
+        .grammar-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin: 1.5rem 0; }
+        .grammar-table th { background-color: var(--primary-light); color: #5a4b73; padding: 15px; text-align: left; border-radius: 10px; font-size: 1.1rem; font-weight: 700;}
+        .grammar-table td { background-color: #fafbfc; padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .grammar-table td:first-child { font-weight: 700; border-radius: 10px 0 0 10px; border-left: 5px solid #eee;}
+        .grammar-table td:last-child { border-radius: 0 10px 10px 0; }
+        
+        .grammar-table.style-2 th { background-color: var(--secondary); color: #2d558a;}
+        .grammar-table.style-2 td:first-child { border-left-color: var(--secondary); }
+
+        .grammar-table.style-3 th { background-color: var(--accent-1); color: #8a3f51;}
+        .grammar-table.style-3 td:first-child { border-left-color: var(--accent-1); }
+
+        .grammar-table.style-4 th { background-color: var(--accent-2); color: #3d733d;}
+        .grammar-table.style-4 td:first-child { border-left-color: var(--accent-2); }
+
+        .highlight-box { background-color: #fdfbe8; border-left: 5px solid var(--accent-3); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #594a1b; font-size: 1.1rem; }
+        .alert-box { background-color: #ffecec; border-left: 5px solid var(--error); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #8a2525; font-size: 1.1rem; }
+
+        /* Quiz Styles */
+        .quiz-status { text-align: right; font-weight: 700; color: var(--primary); font-size: 1.2rem; margin-bottom: 2rem; }
+        .quiz-item { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); text-align: center; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .opt-btn.correct { background: #e8f8f0; border-color: var(--success); color: #1a7a40; }
+        .opt-btn.incorrect { background: #ffecec; border-color: var(--error); color: #b33131; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+        .explanation { display: none; margin-top: 1.5rem; padding: 1.2rem; background: #f5f0fa; border-radius: 10px; border-left: 4px solid var(--primary); color: #4e356e; font-weight: 500; font-size: 1.1rem; animation: fadeIn 0.3s ease; }
+        
+        .complete-btn { display: block; width: 100%; padding: 18px; background-color: var(--success); color: white; border: none; border-radius: 15px; font-size: 1.4rem; font-weight: 800; cursor: pointer; margin-top: 3rem; transition: transform 0.2s; opacity: 0.5; pointer-events: none; }
+        .complete-btn.active { opacity: 1; pointer-events: auto; }
+        .complete-btn.active:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 207, 149, 0.4); }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand" onclick="goHome()">📚 GrammarMaster Pro</div>
+        <button class="back-btn" id="back-btn" onclick="goHome()">← Bảng Điều Khiển</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view active">
+            <div class="header-section">
+                <h1>Khóa Học Đại Từ Toàn Tập</h1>
+                <p style="font-size: 1.2rem; color: var(--text-light);">Phiên bản Siêu Chi Tiết - Làm chủ mọi loại Đại từ (Pronouns) với 4 Module chuyên sâu và 40 bài tập.</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="main-progress"></div>
+                </div>
+                <p style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">Đã hoàn thành <span id="progress-text">0/7</span> học phần</p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card" id="card-m1" onclick="openModule(1)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">👤</div>
+                    <div class="module-title">1. Đại Từ Nhân Xưng</div>
+                    <div class="module-desc">Sự khác biệt cốt lõi giữa Chủ ngữ (I, He...) và Tân ngữ (Me, Him...). Lỗi sai kinh điển "You and I" vs "You and me".</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m2" onclick="openModule(2)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">💎</div>
+                    <div class="module-title">2. Sở Hữu Cấp Độ Sâu</div>
+                    <div class="module-desc">Phân biệt Tính từ sở hữu (My) và Đại từ sở hữu (Mine). Cấu trúc nâng cao "A friend of mine".</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m3" onclick="openModule(3)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🪞</div>
+                    <div class="module-title">3. Đại Từ Phản Thân</div>
+                    <div class="module-desc">Khi nào dùng Myself, Themselves? Hai cách dùng chính: Phản thân (cùng chủ ngữ) và Nhấn mạnh (tự tay làm).</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m4" onclick="openModule(4)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">❓</div>
+                    <div class="module-title">4. Chỉ Định & Bất Định</div>
+                    <div class="module-desc">This/That/These/Those. Quy tắc vàng của Someone, Anybody, Nothing (Luôn đi với động từ số ít).</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m5" onclick="openModule(5)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🎭</div>
+                    <div class="module-title">5. Đại Từ Giả (There & It)</div>
+                    <div class="module-desc">Sự thật về Chủ ngữ giả. Hiểu rõ cách dùng There is/There are và cấu trúc thời gian, thời tiết với It (It takes...).</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m6" onclick="openModule(6)" style="border-color: #ffd1dc;">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🎓</div>
+                    <div class="module-title">6. Bí Kíp Chuyên Sâu</div>
+                    <div class="module-desc">Đại từ They dùng cho 1 người? Cách trả lời điện thoại "This is" thay vì "I am". Phân biệt Another vs Other.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m7" onclick="openModule(7)" style="border-color: #a2d9ce;">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🔍</div>
+                    <div class="module-title">7. Nghi Vấn & Tương Hỗ</div>
+                    <div class="module-desc">Sự khác biệt giữa Each other và One another. Phân biệt Who vs Whom, What vs Which cực kỳ đơn giản.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE CONTENT VIEWS -->
+        <div id="view-module" class="view">
+            <div class="module-header">
+                <div class="module-header-icon" id="m-icon"></div>
+                <div>
+                    <h2 id="m-title" style="font-size: 2.2rem; font-weight: 800;"></h2>
+                    <p id="m-desc" style="color: var(--text-light); font-size: 1.2rem; margin-top: 5px;"></p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="content-title">📖 Lý Thuyết Chuyên Sâu</h3>
+                <div id="m-theory" style="font-size: 1.1rem;">
+                    <!-- Theory content injected via JS -->
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem;">
+                    <h3 class="content-title" style="border: none; margin: 0; padding: 0;">🎯 Thực Hành</h3>
+                    <div class="quiz-status" id="quiz-status">Tiến độ: 0/10</div>
+                </div>
+                <div id="m-practice">
+                    <!-- Quizzes injected via JS -->
+                </div>
+                <button id="btn-complete-module" class="complete-btn" onclick="completeCurrentModule()">Hoàn Thành Bài Học 🎉</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- THEORY CONTENT & QUIZZES --- //
+        
+        const modulesData = {
+            1: {
+                icon: "👤",
+                title: "1. Đại Từ Nhân Xưng (Chủ ngữ & Tân ngữ)",
+                desc: "Nền tảng quan trọng nhất trong tiếng Anh giao tiếp.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Đại từ nhân xưng dùng để thay thế cho một Danh từ (chỉ người, vật, sự việc) đã được nhắc đến trước đó để tránh lặp từ.</p>
+                    
+                    <h4 class="sub-heading">Bảng Phân Loại</h4>
+                    <table class="grammar-table">
+                        <tr>
+                            <th style="width: 20%">Ngôi</th>
+                            <th style="width: 40%">Đại từ Chủ Ngữ<br>(Subject Pronouns)</th>
+                            <th style="width: 40%">Đại từ Tân Ngữ<br>(Object Pronouns)</th>
+                        </tr>
+                        <tr>
+                            <td>Ngôi thứ 1 (Tôi, Chúng tôi)</td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">I / We</strong></td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">me / us</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ngôi thứ 2 (Bạn, Các bạn)</td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">You</strong></td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">you</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ngôi thứ 3 số ít (Anh, Cô, Nó)</td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">He / She / It</strong></td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">him / her / it</strong></td>
+                        </tr>
+                        <tr>
+                            <td>Ngôi thứ 3 số nhiều (Họ, Chúng)</td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">They</strong></td>
+                            <td><strong style="color:var(--primary); font-size: 1.2rem;">them</strong></td>
+                        </tr>
+                    </table>
+
+                    <h4 class="sub-heading">Vị Trí Đứng Trong Câu (Cực Kỳ Quan Trọng)</h4>
+                    <div style="display: flex; flex-direction: column; gap: 1rem;">
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--primary); box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                            <strong>1. Chủ Ngữ (Subject):</strong> Đứng ĐẦU câu, TRƯỚC Động từ để tạo ra hành động.<br>
+                            <em>Ví dụ: <strong>She</strong> likes apples. (Cô ấy thích táo - "She" tạo ra hành động thích).</em>
+                        </div>
+                        <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--secondary); box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                            <strong>2. Tân Ngữ (Object):</strong> Đứng SAU Động từ hoặc SAU Giới từ (in, on, at, for, with...). Là đối tượng chịu tác động.<br>
+                            <em>Ví dụ: I love <strong>him</strong>. (Đứng sau động từ 'love')<br>
+                            Ví dụ: This gift is for <strong>her</strong>. (Đứng sau giới từ 'for')</em>
+                        </div>
+                    </div>
+
+                    <div class="alert-box">
+                        <strong>🚨 LỖI SAI KINH ĐIỂN: "You and I" hay "You and me"?</strong><br>
+                        Tùy thuộc vào vị trí của nó trong câu!
+                        <br>- Nếu đứng TRƯỚC động từ làm Chủ ngữ: <strong>You and I</strong> (Ví dụ: <em>You and I</em> are friends).
+                        <br>- Nếu đứng SAU giới từ làm Tân ngữ: <strong>You and me</strong> (Ví dụ: Between <em>you and me</em>... -> Không bao giờ nói Between you and I).
+                    </div>
+                `,
+                quizzes: [
+                    { q: "_____ am studying English right now.", opts: ["Me", "I", "My"], ans: 1, exp: "Đứng đầu câu làm chủ ngữ tạo ra hành động 'am studying', phải dùng Chủ ngữ (I)." },
+                    { q: "Please give this book to _____.", opts: ["he", "his", "him"], ans: 2, exp: "Đứng sau giới từ 'to', phải dùng Tân ngữ (him)." },
+                    { q: "Mary and Tom are my friends. I often play with _____.", opts: ["they", "them", "their"], ans: 1, exp: "Thay thế cho 'Mary and Tom' (số nhiều) đứng sau giới từ 'with', dùng Tân ngữ (them)." },
+                    { q: "_____ went to the cinema together yesterday.", opts: ["He and I", "Him and me", "He and me"], ans: 0, exp: "Đứng đầu câu làm chủ ngữ của động từ 'went', cả hai đều phải là Chủ ngữ (He and I)." },
+                    { q: "The teacher asked _____ to answer the question.", opts: ["we", "our", "us"], ans: 2, exp: "Đứng sau động từ 'asked', đóng vai trò là đối tượng bị hỏi, dùng Tân ngữ (us)." },
+                    { q: "Keep this secret just between you and _____.", opts: ["I", "me", "my"], ans: 1, exp: "Lỗi kinh điển! Đứng sau giới từ 'between', bắt buộc phải dùng Tân ngữ (me)." },
+                    { q: "My dog is very smart. _____ can do tricks.", opts: ["It", "He", "Its"], ans: 0, exp: "Thay thế cho con vật ở vị trí Chủ ngữ, ta dùng It." },
+                    { q: "Do you know that woman? Yes, I know _____.", opts: ["she", "her", "hers"], ans: 1, exp: "Đứng sau động từ 'know', làm Tân ngữ chỉ phụ nữ, dùng 'her'." },
+                    { q: "My brother and _____ are planning a trip to Japan.", opts: ["me", "I", "mine"], ans: 1, exp: "Đóng vai trò Chủ ngữ (cùng thực hiện hành động 'are planning'), dùng I." },
+                    { q: "They invited my husband and _____ to their wedding.", opts: ["I", "me", "my"], ans: 1, exp: "Đứng sau động từ 'invited' (được mời), phải dùng Tân ngữ (me)." }
+                ]
+            },
+            2: {
+                icon: "💎",
+                title: "2. Sở Hữu Cấp Độ Sâu",
+                desc: "Phân biệt rạch ròi Tính từ sở hữu và Đại từ sở hữu.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Cả hai loại này đều diễn tả sự sở hữu (Của tôi, Của bạn...), nhưng cách đứng trong câu lại hoàn toàn khác nhau.</p>
+                    
+                    <table class="grammar-table style-2">
+                        <tr>
+                            <th style="width: 50%">Tính từ Sở Hữu (Possessive Adjectives)</th>
+                            <th style="width: 50%">Đại từ Sở Hữu (Possessive Pronouns)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>My, Your, His, Her, Its, Our, Their</strong><br><br>
+                                <span style="background: #e6f0fa; padding: 5px 10px; border-radius: 5px; font-weight: 700; color: #2d558a;">BẮT BUỘC ĐI KÈM DANH TỪ</span><br>
+                                Nó luôn phải đứng trước một danh từ để bổ nghĩa. Tuyệt đối không được đứng một mình.<br><br>
+                                <em>Ví dụ: This is <strong>my</strong> book. (Không thể nói: This is my).</em>
+                            </td>
+                            <td>
+                                <strong>Mine, Yours, His, Hers, Ours, Theirs</strong> (Lưu ý: đa số thêm 's', riêng 'my' thành 'mine').<br><br>
+                                <span style="background: #e6f0fa; padding: 5px 10px; border-radius: 5px; font-weight: 700; color: #2d558a;">ĐỨNG MỘT MÌNH (ĐỘC LẬP)</span><br>
+                                Nó được dùng để THAY THẾ cho [Tính từ sở hữu + Danh từ] đã được nhắc đến phía trước để tránh lặp từ.<br><br>
+                                <em>Ví dụ: This is your book. That is <strong>mine</strong>. (mine = my book).</em>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <h4 class="sub-heading">Cấu Trúc Đặc Biệt Nâng Cao (Double Possessive)</h4>
+                    <div class="highlight-box" style="border-left-color: var(--secondary); background-color: #f0f5fa; color: #2d558a;">
+                        Trong tiếng Việt ta nói: "Một người bạn của tôi".<br>
+                        Nhiều người sẽ dịch sát nghĩa là: <em>"A friend of me"</em> -> <strong>SAI!</strong><br><br>
+                        <strong>Quy tắc chuẩn: Danh từ + OF + Đại Từ Sở Hữu</strong><br>
+                        ✅ A friend of <strong>mine</strong>.<br>
+                        ✅ That idea of <strong>yours</strong> is brilliant.<br>
+                        ✅ A colleague of <strong>hers</strong>.
+                    </div>
+                `,
+                quizzes: [
+                    { q: "I can't find _____ keys. Have you seen them?", opts: ["mine", "me", "my"], ans: 2, exp: "Đứng ngay trước danh từ 'keys', ta cần Tính từ sở hữu (my)." },
+                    { q: "This umbrella isn't _____. It belongs to Sarah.", opts: ["my", "mine", "me"], ans: 1, exp: "Đứng một mình ở cuối câu, không có danh từ theo sau, ta dùng Đại từ sở hữu (mine = my umbrella)." },
+                    { q: "We bought this house last year. It is _____.", opts: ["our", "us", "ours"], ans: 2, exp: "Đứng độc lập, thay thế cho 'our house', ta dùng Đại từ sở hữu (ours)." },
+                    { q: "They parked _____ car right in front of the gate.", opts: ["their", "theirs", "them"], ans: 0, exp: "Có danh từ 'car' theo sau, phải dùng Tính từ sở hữu (their)." },
+                    { q: "I went to a cafe with a friend of _____.", opts: ["me", "my", "mine"], ans: 2, exp: "Cấu trúc sở hữu kép nâng cao: Noun + of + Đại từ sở hữu (a friend of mine)." },
+                    { q: "Is this jacket _____? No, it's Tom's.", opts: ["your", "you", "yours"], ans: 2, exp: "Đứng độc lập cuối câu hỏi, thay thế cho 'your jacket', dùng yours." },
+                    { q: "The dog wagged _____ tail happily.", opts: ["it's", "its", "it"], ans: 1, exp: "Lỗi dễ nhầm: 'its' (không có dấu phẩy) là Tính từ sở hữu (cái đuôi CỦA nó). 'it's' là 'it is'." },
+                    { q: "Her presentation was much better than _____.", opts: ["my", "mine", "me"], ans: 1, exp: "So sánh bài thuyết trình của cô ấy và bài thuyết trình CỦA TÔI (my presentation). Rút gọn lại thành 'mine'." },
+                    { q: "That idea of _____ was absolutely brilliant!", opts: ["his", "him", "he"], ans: 0, exp: "Cấu trúc Noun + of + Đại từ sở hữu (Đại từ sở hữu của 'his' vẫn là 'his')." },
+                    { q: "We must protect _____ environment.", opts: ["ours", "our", "us"], ans: 1, exp: "Đứng trước danh từ 'environment', dùng Tính từ sở hữu 'our'." }
+                ]
+            },
+            3: {
+                icon: "🪞",
+                title: "3. Đại Từ Phản Thân & Nhấn Mạnh",
+                desc: "Cách dùng myself, yourself, themselves một cách chuyên nghiệp.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Đại từ phản thân có đuôi <strong>-self</strong> (số ít) và <strong>-selves</strong> (số nhiều). Ví dụ: myself, yourself (bạn), yourselves (các bạn), himself, herself, itself, ourselves, themselves.</p>
+                    
+                    <h4 class="sub-heading">Hai Chức Năng Chính</h4>
+                    <table class="grammar-table style-3">
+                        <tr>
+                            <th style="width: 50%">1. Chức năng Phản Thân (Reflexive)</th>
+                            <th style="width: 50%">2. Chức năng Nhấn Mạnh (Emphatic)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                Dùng khi <strong>Chủ ngữ và Tân ngữ cùng là một người.</strong> (Chủ thể thực hiện hành động tác động ngược lại chính mình).<br><br>
+                                <em>Ví dụ: He cut <strong>himself</strong> while cooking. (Anh ấy tự cắt vào tay mình).<br>
+                                She looked at <strong>herself</strong> in the mirror.</em>
+                            </td>
+                            <td>
+                                Dùng để nhấn mạnh rằng <strong>CHÍNH NGƯỜI ĐÓ</strong> tự làm việc đó (không cần ai giúp đỡ). Thường đứng ngay sau Chủ ngữ hoặc ở cuối câu.<br><br>
+                                <em>Ví dụ: The CEO <strong>himself</strong> welcomed us. (Chính đích thân ngài giám đốc...)<br>
+                                I fixed the computer <strong>myself</strong>. (Tự tôi sửa đấy).</em>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="alert-box" style="background-color: #fdf0f2; border-left-color: var(--accent-1); color: #8a3f51;">
+                        <strong>💎 Cụm từ Vàng (Gold Collocations)</strong><br>
+                        <strong>by + đại từ phản thân</strong> = <strong>on + tính từ sở hữu + own</strong> (Mang nghĩa: Một mình, tự làm).<br>
+                        ✅ I live <strong>by myself</strong> = I live <strong>on my own</strong>.<br>
+                        ✅ She did the homework <strong>by herself</strong> = She did the homework <strong>on her own</strong>.
+                    </div>
+                `,
+                quizzes: [
+                    { q: "I don't need any help. I can do it _____.", opts: ["me", "myself", "my"], ans: 1, exp: "Nhấn mạnh bản thân tự làm được (chức năng nhấn mạnh), dùng myself." },
+                    { q: "Be careful with that knife! You might cut _____.", opts: ["you", "your", "yourself"], ans: 2, exp: "Chủ thể (You) tác động lên chính mình (cut), dùng chức năng phản thân (yourself)." },
+                    { q: "They painted the whole house by _____.", opts: ["them", "their", "themselves"], ans: 2, exp: "Cấu trúc 'by + đại từ phản thân' (tự họ làm)." },
+                    { q: "The manager _____ apologized for the mistake.", opts: ["himself", "him", "he"], ans: 0, exp: "Đứng ngay sau danh từ (The manager) để nhấn mạnh 'chính đích thân ông ấy', dùng himself." },
+                    { q: "We really enjoyed _____ at the party last night.", opts: ["us", "ourselves", "our"], ans: 1, exp: "Enjoy oneself: tự mình tận hưởng/vui vẻ (Cụm cố định phải có đại từ phản thân)." },
+                    { q: "She has been living on _____ own for 5 years.", opts: ["her", "herself", "hers"], ans: 0, exp: "Cấu trúc: on + tính từ sở hữu (her) + own = by herself." },
+                    { q: "Kids, please help _____ to the sandwiches on the table.", opts: ["yourself", "yourselves", "you"], ans: 1, exp: "Chủ ngữ là 'Kids' (số nhiều), nên 'cứ tự nhiên lấy ăn đi' phải dùng yourselves (số nhiều)." },
+                    { q: "The cat is washing _____ in the sun.", opts: ["it", "its", "itself"], ans: 2, exp: "Con mèo tự tắm cho chính nó, hành động tác động ngược lại chủ thể -> itself." },
+                    { q: "You should be proud of _____ for passing the exam.", opts: ["you", "your", "yourself"], ans: 2, exp: "Proud of oneself (Tự hào về chính bản thân mình)." },
+                    { q: "He built this entire business by _____.", opts: ["him", "his", "himself"], ans: 2, exp: "Cấu trúc 'by himself' mang nghĩa một mình anh ấy tự làm." }
+                ]
+            },
+            4: {
+                icon: "❓",
+                title: "4. Chỉ Định & Bất Định",
+                desc: "This/That/These/Those và Quy tắc vàng của Someone, Anybody.",
+                theory: `
+                    <h4 class="sub-heading">Đại Từ Chỉ Định (Demonstrative)</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Dùng để trỏ đến người/vật cụ thể trong không gian hoặc thời gian.</p>
+                    <table class="grammar-table style-4">
+                        <tr>
+                            <th></th>
+                            <th>Khoảng cách GẦN (Here)</th>
+                            <th>Khoảng cách XA (There)</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Số Ít (1 vật)</strong></td>
+                            <td><strong>THIS</strong> (Cái này/Người này)</td>
+                            <td><strong>THAT</strong> (Cái kia/Người kia)</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Số Nhiều (≥ 2 vật)</strong></td>
+                            <td><strong>THESE</strong> (Những cái này)</td>
+                            <td><strong>THOSE</strong> (Những cái kia)</td>
+                        </tr>
+                    </table>
+
+                    <h4 class="sub-heading">Đại Từ Bất Định (Indefinite Pronouns)</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Dùng để chỉ một người/vật/nơi chốn không cụ thể, chung chung.</p>
+                    <div style="background: white; padding: 2rem; border-radius: 10px; border: 1px solid #eee; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <strong>SOME- (Dùng cho câu Khẳng định)</strong><br>
+                            - Someone / Somebody (Ai đó)<br>
+                            - Something (Thứ gì đó)<br>
+                            - Somewhere (Nơi nào đó)
+                        </div>
+                        <div>
+                            <strong>ANY-</strong><br>
+                            - Thường dùng trong <strong>Phủ định & Nghi vấn</strong> (Không có thứ gì; Có thứ gì không?)<br>
+                            - 🌟 <strong>NGOẠI LỆ:</strong> Dùng trong câu <strong>Khẳng định</strong> khi mang nghĩa "Bất cứ..." (không quan trọng là cái nào).<br>
+                            <em>(Ví dụ: I am so hungry. I will eat <strong>anything</strong> - Tôi sẽ ăn bất cứ thứ gì).</em>
+                        </div>
+                        <div>
+                            <strong>NO- (Dùng mang nghĩa Không)</strong><br>
+                            - No one / Nobody (Không ai)<br>
+                            - Nothing (Không gì cả)
+                        </div>
+                        <div>
+                            <strong>EVERY- (Dùng mang nghĩa Tất cả)</strong><br>
+                            - Everyone / Everybody (Mọi người)<br>
+                            - Everything (Mọi thứ)
+                        </div>
+                    </div>
+
+                    <div class="alert-box" style="background-color: #f1faed; border-left-color: var(--accent-2); color: #3d733d;">
+                        <strong>🔥 QUY TẮC VÀNG TUYỆT ĐỐI:</strong><br>
+                        TẤT CẢ các Đại từ bất định (kể cả Everyone, Everybody mang nghĩa nhiều người) đều bắt buộc đi với <strong>ĐỘNG TỪ CHIA Ở SỐ ÍT (is, has, was, V-s/es)</strong>.<br>
+                        ✅ <em>Everyone <strong>is</strong> here.</em> (Không dùng are)<br>
+                        ✅ <em>Something <strong>needs</strong> to be done.</em>
+                    </div>
+                `,
+                quizzes: [
+                    { q: "Look at _____ birds up in the sky!", opts: ["this", "that", "those"], ans: 2, exp: "Chim trên trời (Khoảng cách xa) + số nhiều (birds) -> Dùng Those." },
+                    { q: "Can I introduce you to my friend? _____ is John.", opts: ["This", "That", "These"], ans: 0, exp: "Giới thiệu người ở ngay cạnh mình (Gần + Số ít) -> Dùng This." },
+                    { q: "I don't have _____ to wear to the party tonight.", opts: ["something", "anything", "nothing"], ans: 1, exp: "Câu phủ định (don't have) phải dùng Any- -> anything." },
+                    { q: "_____ is knocking at the door. Can you open it?", opts: ["Someone", "Anyone", "No one"], ans: 0, exp: "Câu khẳng định, chỉ một người không xác định -> Someone (Ai đó)." },
+                    { q: "Everybody _____ agreed to the new proposal.", opts: ["have", "has", "are"], ans: 1, exp: "Quy tắc vàng: Đại từ bất định (Everybody) luôn đi với Động từ số ít (has)." },
+                    { q: "There is _____ in the fridge. We need to go shopping.", opts: ["anything", "nothing", "everything"], ans: 1, exp: "Tủ lạnh trống trơn (Không có gì cả) -> Nothing." },
+                    { q: "Did you go _____ nice during your vacation?", opts: ["somewhere", "anywhere", "nowhere"], ans: 1, exp: "Câu hỏi (Nghi vấn) thường dùng Any- -> anywhere." },
+                    { q: "I love these shoes, but _____ ones over there are cheaper.", opts: ["this", "these", "those"], ans: 2, exp: "'over there' (đằng kia - Xa) + số nhiều (ones) -> Those." },
+                    { q: "Everything _____ going to be fine. Don't worry!", opts: ["are", "is", "were"], ans: 1, exp: "Đại từ bất định (Everything) luôn đi với Động từ số ít (is)." },
+                    { q: "I'm hungry. I want to eat _____.", opts: ["something", "anything", "nothing"], ans: 0, exp: "Câu khẳng định, muốn ăn một thứ gì đó -> something." }
+                ]
+            },
+            5: {
+                icon: "🎭",
+                title: "5. Đại Từ Giả (Dummy Pronouns: There & It)",
+                desc: "Hiểu sâu về cấu trúc There is/are và It.",
+                theory: `
+                    <h4 class="sub-heading">Thế Nào Là Đại Từ Giả?</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Tiếng Anh bắt buộc mọi câu phải có Chủ Ngữ. Khi một câu KHÔNG CÓ chủ thể thực hiện hành động rõ ràng (ví dụ nói về thời tiết, thời gian, sự tồn tại), ta phải dùng <strong>Đại từ giả (Dummy Pronouns)</strong> để lấp vào vị trí đó. Hai đại từ giả duy nhất là <strong>IT</strong> và <strong>THERE</strong>.</p>
+                    
+                    <h4 class="sub-heading">1. Đại Từ Giả "THERE" (Chỉ sự Tồn Tại)</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--accent-4); margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                        Dùng cấu trúc <strong>There + to-be + Noun</strong> (Có cái gì đó). Chủ ngữ thật sự của câu chính là Danh từ đứng sau to-be.<br><br>
+                        - Đi với danh từ SỐ ÍT hoặc KHÔNG ĐẾM ĐƯỢC -> <strong>There is</strong> (Ví dụ: <em>There is</em> a cat on the roof).<br>
+                        - Đi với danh từ SỐ NHIỀU -> <strong>There are</strong> (Ví dụ: <em>There are</em> three apples on the table).<br>
+                        - Nếu liệt kê nhiều thứ, có 2 trường phái xảy ra:<br>
+                        &nbsp;&nbsp;+ <strong>Trong tiếng Anh thực tế & giao tiếp bản xứ (Quy tắc tiệm cận):</strong> Động từ to-be chia theo <strong>DANH TỪ ĐẦU TIÊN</strong> đứng ngay sau nó. <em>(Ví dụ: There <strong>is</strong> a pen and two books)</em>. Cách này tự nhiên và phổ biến nhất (Cambridge/Oxford khuyên dùng).<br>
+                        &nbsp;&nbsp;+ <strong>Trong ngữ pháp học thuật khắt khe:</strong> Họ cộng dồn số lượng (1 bút + 2 sách = 3) nên dùng số nhiều. <em>(Ví dụ: There <strong>are</strong> a pen and two books)</em>. Cách này đúng logic toán học nhưng nghe rất gượng gạo. Đi thi ở Việt Nam nếu thầy cô khó tính thì nên chú ý trường hợp này!
+                    </div>
+
+                    <h4 class="sub-heading">2. Đại Từ Giả "IT" (Chỉ Thời tiết, Thời gian, Khoảng cách)</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--accent-4); box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                        "It" hoàn toàn không có nghĩa là "Nó" trong những trường hợp sau:<br><br>
+                        - Thời tiết: <strong>It</strong> is raining. (Trời đang mưa).<br>
+                        - Thời gian: <strong>It</strong> is 9 o'clock. (Bây giờ là 9 giờ).<br>
+                        - Khoảng cách: <strong>It</strong> is 5 kilometers from here to the station.<br><br>
+                        <strong>Các cấu trúc nâng cao rất hay thi:</strong><br>
+                        - <strong>It takes + (somebody) + time + TO DO something.</strong><br>
+                        (Mất của ai đó bao nhiêu thời gian để làm gì).<br>
+                        <em>Ví dụ: <strong>It</strong> takes me 2 hours <strong>to finish</strong> this test.</em><br><br>
+                        - <strong>It is + Tính từ + (for sb) + TO DO something.</strong><br>
+                        (Thật là [tính từ] để làm việc gì đó). Tiếng Anh rất ghét việc để một cụm từ quá dài làm chủ ngữ đứng đầu câu. Thay vì nói <em>"To walk alone is dangerous"</em>, họ lôi chủ ngữ giả "It" ra thế chỗ để đẩy phần dài ra phía sau cho câu cân đối.<br>
+                        <em>Ví dụ: <strong>It</strong> is very dangerous <strong>to walk</strong> alone. (Thật nguy hiểm khi đi bộ một mình).</em>
+                    </div>
+                `,
+                quizzes: [
+                    { q: "_____ is raining heavily outside. Don't go out.", opts: ["It", "There", "He"], ans: 0, exp: "Nói về thời tiết, luôn dùng Chủ ngữ giả là 'It' (Trời đang mưa)." },
+                    { q: "_____ are many people in the park today.", opts: ["There", "They", "It"], ans: 0, exp: "Diễn tả sự tồn tại (Có nhiều người). Phía sau là số nhiều (many people) -> There are." },
+                    { q: "How far is it to the airport? - _____ is about 10 kilometers.", opts: ["There", "That", "It"], ans: 2, exp: "Nói về khoảng cách địa lý, luôn dùng Chủ ngữ giả 'It'." },
+                    { q: "_____ is a pen, an eraser, and two books on the desk.", opts: ["There", "There are", "It"], ans: 0, exp: "Khi liệt kê, To-be chia theo danh từ ĐẦU TIÊN. 'a pen' là số ít -> There is." },
+                    { q: "_____ takes my father 30 minutes to drive to work every day.", opts: ["It", "There", "He"], ans: 0, exp: "Cấu trúc: It takes + somebody + time + to do something (Mất bao nhiêu thời gian để làm gì)." },
+                    { q: "_____ was a terrible storm last night.", opts: ["It", "There", "That"], ans: 1, exp: "Diễn tả sự tồn tại (Đã có một cơn bão) -> Dùng There was." },
+                    { q: "What time is it? - _____ is half past six.", opts: ["It", "This", "There"], ans: 0, exp: "Trả lời câu hỏi về thời gian, dùng Chủ ngữ giả 'It'." },
+                    { q: "_____ is very dangerous to walk alone at night in this area.", opts: ["There", "This", "It"], ans: 2, exp: "Cấu trúc: It is + Adj + To-V (Thật là... để làm gì đó)." },
+                    { q: "_____ any milk left in the fridge?", opts: ["Is it", "Is there", "Are there"], ans: 1, exp: "Sự tồn tại của 'milk' (sữa - không đếm được, dùng số ít) -> Dùng Is there (Có sữa không?)." },
+                    { q: "Look! _____ a spider on the ceiling!", opts: ["It is", "There is", "There are"], ans: 1, exp: "Chỉ ra sự tồn tại của 1 con nhện (số ít) -> There is." }
+                ]
+            },
+            6: {
+                icon: "🎓",
+                title: "6. Các Bí Kíp Chuyên Sâu (Advanced Pronoun Hacks)",
+                desc: "Những quy tắc 'ẩn' giúp bạn giao tiếp giống hệt người bản xứ.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Chào mừng đến với học phần nâng cao! Đây là những kiến thức ít được dạy trong sách giáo khoa cơ bản, nhưng lại xuất hiện 100% trong đời sống thực tế.</p>
+                    
+                    <h4 class="sub-heading">1. Singular "THEY" (Dùng They/Them cho 1 người)</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--primary); margin-bottom: 1.5rem;">
+                        Thông thường "They/Them/Their" mang nghĩa là "Họ/Chúng" (số nhiều).<br>
+                        Tuy nhiên, khi ta nhắc đến <strong>một người chung chung (Someone, Anyone, A person, A customer...) mà ta KHÔNG BIẾT hoặc KHÔNG MUỐN XÁC ĐỊNH GIỚI TÍNH</strong>, ta sẽ dùng They/Them thay vì "He or She".<br><br>
+                        <em>Ví dụ: If anyone calls, tell <strong>them</strong> I am busy. (Nếu ai đó gọi tới, hãy bảo người đó là tôi bận - Dùng "them" thay vì "him or her").</em>
+                    </div>
+
+                    <h4 class="sub-heading">2. "IT" và "THIS / THAT" khi trả lời cửa hoặc điện thoại</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--secondary); margin-bottom: 1.5rem;">
+                        <strong>Gõ cửa:</strong><br>
+                        - Người trong nhà hỏi: <em>Who is <strong>it</strong>?</em> (Chứ không hỏi: Who are you?)<br>
+                        - Người gõ cửa đáp: <em><strong>It's</strong> me, John.</em> (Chứ không đáp: I am John).<br><br>
+                        <strong>Điện thoại:</strong><br>
+                        - Xin gặp ai đó: <em>Is <strong>that</strong> Sarah?</em> (Đó có phải Sarah không? - Không dùng Are you Sarah?).<br>
+                        - Giới thiệu bản thân: <em><strong>This is</strong> John.</em> (Tôi là John - Không dùng I am John).
+                    </div>
+
+                    <h4 class="sub-heading">3. Đại gia đình "OTHER" (Other, Others, Another, The other)</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--accent-1); margin-bottom: 1.5rem;">
+                        <strong>NHÓM KHÔNG XÁC ĐỊNH (Chung chung):</strong><br>
+                        - <strong>Another + Noun số ít:</strong> MỘT CÁI KHÁC. <em>(Can I have <strong>another</strong> cup of tea?)</em><br>
+                        - <strong>Other + Noun số nhiều:</strong> NHỮNG CÁI KHÁC. <em>(I have <strong>other</strong> things to do).</em><br>
+                        - <strong>Others (Đứng một mình):</strong> = Other + Noun số nhiều. <em>(Some people like tea, <strong>others</strong> prefer coffee - others thay cho other people).</em><br><br>
+                        
+                        <strong>NHÓM XÁC ĐỊNH (Phần còn lại cuối cùng):</strong><br>
+                        - <strong>The other + Noun số ít:</strong> CÁI CÒN LẠI (Trong bộ 2 cái).<br>
+                        <em>Ví dụ: I have 2 pens. One is red, <strong>the other pen</strong> is blue. (Cái bút duy nhất còn lại).</em><br><br>
+                        - <strong>The other + Noun số nhiều:</strong> NHỮNG CÁI CÒN LẠI (Đã xác định số lượng).<br>
+                        <em>Ví dụ: I have 5 pens. Two are red, <strong>the other pens</strong> are blue. (3 cái bút còn lại).</em><br><br>
+                        - <strong>The others (Đứng một mình):</strong> Đại từ thay thế cho (The other + Noun số nhiều).<br>
+                        <em>Ví dụ: I have 5 pens. Two are red, <strong>the others</strong> are blue. (the others = the other pens).</em>
+                    </div>
+
+                    <h4 class="sub-heading">4. Đại từ thay thế "ONE / ONES"</h4>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--accent-2);">
+                        Để tránh lặp lại một danh từ đã đếm được ở phía trước, ta dùng One (số ít) hoặc Ones (số nhiều).<br><br>
+                        <em>Ví dụ 1: I don't like the red shirt. I prefer the blue <strong>one</strong>. (one = shirt).</em><br>
+                        <em>Ví dụ 2: These shoes are too small. Do you have bigger <strong>ones</strong>? (ones = shoes).</em>
+                    </div>
+                `,
+                quizzes: [
+                    { q: "If a customer has a complaint, please listen to _____ carefully.", opts: ["him", "them", "him or her"], ans: 1, exp: "A customer là đối tượng chung chung chưa rõ giới tính -> Dùng Singular 'them' là tự nhiên nhất." },
+                    { q: "Someone left _____ umbrella in the meeting room.", opts: ["his", "their", "its"], ans: 1, exp: "Someone (Ai đó - chưa rõ giới tính), dùng Tính từ sở hữu 'their' thay vì 'his'." },
+                    { q: "*(Knocking on door)* - Who is _____? - _____ is me, David.", opts: ["it / It", "you / I", "that / This"], ans: 0, exp: "Quy tắc gõ cửa: Who is it? - It's me." },
+                    { q: "*(On the phone)* Hello, is _____ the manager?", opts: ["you", "that", "it"], ans: 1, exp: "Hỏi ai đó trên điện thoại: Is that...?" },
+                    { q: "*(On the phone)* Hello, _____ is Mary speaking.", opts: ["I am", "this", "it"], ans: 1, exp: "Giới thiệu bản thân trên điện thoại: This is..." },
+                    { q: "I have two brothers. One is a doctor, _____ is a teacher.", opts: ["another", "other", "the other"], ans: 2, exp: "Có 2 người. Đã nói 1 người, người CÒN LẠI phải dùng 'the other'." },
+                    { q: "This cake is delicious! Can I have _____ piece?", opts: ["other", "another", "the other"], ans: 1, exp: "Muốn thêm MỘT miếng nữa (trong số rất nhiều miếng) -> Dùng another + Noun số ít." },
+                    { q: "Some people like tea, _____ prefer coffee.", opts: ["others", "the others", "another"], ans: 0, exp: "Những người khác (chung chung, không xác định) -> Dùng others (đại từ của other people)." },
+                    { q: "I don't like this jacket. Show me a cheaper _____.", opts: ["ones", "one", "it"], ans: 1, exp: "Thay thế cho 'jacket' (số ít) để tránh lặp từ -> Dùng one." },
+                    { q: "These apples are sour. Do you have sweet _____?", opts: ["ones", "one", "them"], ans: 0, exp: "Thay thế cho 'apples' (số nhiều) -> Dùng ones." }
+                ]
+            },
+            7: {
+                icon: "🔍",
+                title: "7. Đại Từ Nghi Vấn & Tương Hỗ",
+                desc: "Các loại đại từ dùng để hỏi (Who, Whom) và chỉ sự qua lại (Each other).",
+                theory: `
+                    <h4 class="sub-heading">1. Đại Từ Tương Hỗ (Reciprocal Pronouns)</h4>
+                    <p style="margin-bottom: 1rem;">Dùng để chỉ hành động có sự tương tác qua lại "lẫn nhau" giữa 2 hoặc nhiều đối tượng.</p>
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--accent-3); margin-bottom: 1.5rem; box-shadow: 0 2px 10px rgba(0,0,0,0.02);">
+                        <strong>👉 EACH OTHER (Dùng cho 2 người/vật):</strong><br>
+                        <em>Ví dụ: Romeo and Juliet loved <strong>each other</strong>. (Romeo và Juliet yêu nhau).</em><br><br>
+                        <strong>👉 ONE ANOTHER (Dùng cho 3 người/vật trở lên):</strong><br>
+                        <em>Ví dụ: The students in this class always help <strong>one another</strong>. (Các học sinh trong lớp luôn giúp đỡ lẫn nhau).</em><br><br>
+                        <em>💡 Lưu ý thực tế: Trong tiếng Anh hiện đại, người bản xứ thường dùng "each other" cho cả 2 trường hợp, nhưng khi làm bài tập ngữ pháp, bạn vẫn nên phân biệt 2 người vs 3 người trở lên nhé!</em>
+                    </div>
+
+                    <h4 class="sub-heading">2. Đại Từ Nghi Vấn (Interrogative Pronouns)</h4>
+                    <p style="margin-bottom: 1rem;">Dùng để đặt câu hỏi. Nhóm này hay bị nhầm lẫn nhất, đặc biệt là Who và Whom.</p>
+                    <table class="grammar-table style-3">
+                        <tr>
+                            <th style="width: 20%">Đại Từ</th>
+                            <th style="width: 30%">Chức năng</th>
+                            <th style="width: 50%">Ví Dụ</th>
+                        </tr>
+                        <tr>
+                            <td><strong>WHO</strong></td>
+                            <td>Hỏi về NGƯỜI.<br>Đóng vai trò CHỦ NGỮ.</td>
+                            <td><em>👉 <strong>Who</strong> broke the window? (Ai đã làm vỡ cửa sổ - Who là người thực hiện hành động broke).</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>WHOM</strong></td>
+                            <td>Hỏi về NGƯỜI.<br>Đóng vai trò TÂN NGỮ.</td>
+                            <td><em>👉 <strong>Whom</strong> did you invite to the party? (Bạn đã mời ai - You là người mời, Whom là người bị mời).<br>Lưu ý: Nếu có giới từ, bắt buộc đưa giới từ lên trước Whom (To whom, With whom).</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>WHOSE</strong></td>
+                            <td>Hỏi về SỞ HỮU.<br>(Của ai)</td>
+                            <td><em>👉 <strong>Whose</strong> car is this? (Chiếc xe này của ai?).</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>WHAT</strong></td>
+                            <td>Hỏi VẬT chung chung.<br>(Không giới hạn lựa chọn)</td>
+                            <td><em>👉 <strong>What</strong> is your favorite color? (Màu sắc bạn thích là gì - có hàng ngàn màu).</em></td>
+                        </tr>
+                        <tr>
+                            <td><strong>WHICH</strong></td>
+                            <td>Hỏi VẬT (hoặc NGƯỜI).<br>(Lựa chọn HẠN CHẾ)</td>
+                            <td><em>👉 <strong>Which</strong> color do you prefer, red or blue? (Bạn thích màu nào, đỏ hay xanh - chỉ có 2 sự lựa chọn).</em></td>
+                        </tr>
+                    </table>
+                `,
+                quizzes: [
+                    { q: "Jane and Mary are best friends. They always tell _____ their secrets.", opts: ["one another", "each other", "themselves"], ans: 1, exp: "Có 2 người (Jane và Mary) -> Dùng 'each other' (lẫn nhau)." },
+                    { q: "All 30 employees in the company cooperate with _____ very well.", opts: ["each other", "one another", "themselves"], ans: 1, exp: "Có nhiều hơn 2 người (30 employees) -> Dùng 'one another' (lẫn nhau)." },
+                    { q: "_____ is knocking at the door?", opts: ["Who", "Whom", "Whose"], ans: 0, exp: "Đóng vai trò Chủ ngữ thực hiện hành động 'knocking' -> Dùng Who." },
+                    { q: "With _____ did you go to the cinema last night?", opts: ["Who", "Whom", "Whose"], ans: 1, exp: "Sau giới từ (With) phải dùng đại từ tân ngữ -> Whom." },
+                    { q: "_____ jacket is this? It looks expensive.", opts: ["Who's", "Who", "Whose"], ans: 2, exp: "Hỏi về sự sở hữu (Áo khoác này của ai?) -> Dùng Whose." },
+                    { q: "_____ size do you want, Small or Medium?", opts: ["What", "Which", "Who"], ans: 1, exp: "Có sự lựa chọn giới hạn (Small hay Medium) -> Dùng Which." },
+                    { q: "_____ did she say about the project?", opts: ["Which", "What", "Who"], ans: 1, exp: "Hỏi về sự việc chung chung (Cô ấy đã nói cái gì?) -> Dùng What." },
+                    { q: "_____ do you think is the best candidate for this job?", opts: ["Whom", "Who", "Whose"], ans: 1, exp: "Đây là câu hỏi lừa! 'Who' làm chủ ngữ cho 'is the best candidate' (do you think chỉ là mệnh đề chêm vào) -> Dùng Who." },
+                    { q: "Look at those twins! They are exactly like _____.", opts: ["one another", "each other", "others"], ans: 1, exp: "Twins (Sinh đôi - tức là 2 người) -> Dùng each other." },
+                    { q: "I have two pens. _____ one is yours?", opts: ["What", "Which", "Whose"], ans: 1, exp: "Sự lựa chọn giới hạn (trong 2 cây bút) -> Dùng Which." }
+                ]
+            }
+        };
+
+        // --- APP LOGIC --- //
+        let currentModuleId = 0;
+        let userProgress = { 1: false, 2: false, 3: false, 4: false, 5: false, 6: false, 7: false };
+        let currentModuleQuizzesPassed = 0;
+        let totalQuestionsInModule = 0;
+
+        function updateDashboard() {
+            let completed = 0;
+            for(let i=1; i<=7; i++) {
+                if(userProgress[i]) {
+                    completed++;
+                    const card = document.getElementById(`card-m${i}`);
+                    card.classList.add('completed');
+                    card.querySelector('.status-badge').innerText = 'Hoàn thành';
+                }
+            }
+            document.getElementById('progress-text').innerText = `${completed}/7`;
+            document.getElementById('main-progress').style.width = `${(completed/7)*100}%`;
+        }
+
+        function goHome() {
+            document.getElementById('view-module').classList.remove('active');
+            document.getElementById('view-dashboard').classList.add('active');
+            document.getElementById('back-btn').style.display = 'none';
+            updateDashboard();
+        }
+
+        function openModule(id) {
+            currentModuleId = id;
+            currentModuleQuizzesPassed = 0;
+            const data = modulesData[id];
+            totalQuestionsInModule = data.quizzes.length;
+            
+            // Set Header
+            document.getElementById('m-icon').innerText = data.icon;
+            document.getElementById('m-title').innerText = data.title;
+            document.getElementById('m-desc').innerText = data.desc;
+            
+            // Set Theory
+            document.getElementById('m-theory').innerHTML = data.theory;
+            
+            // Reset Quiz Status
+            document.getElementById('quiz-status').innerText = `Tiến độ: 0/${totalQuestionsInModule}`;
+            
+            // Build Quizzes
+            const practiceDiv = document.getElementById('m-practice');
+            practiceDiv.innerHTML = '';
+            
+            data.quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                practiceDiv.innerHTML += quizHtml;
+            });
+            
+            // Reset Complete Button
+            const btnComplete = document.getElementById('btn-complete-module');
+            btnComplete.classList.remove('active');
+            btnComplete.innerText = "Hãy hoàn thành các câu hỏi để tiếp tục";
+
+            // Switch view
+            document.getElementById('view-dashboard').classList.remove('active');
+            document.getElementById('view-module').classList.add('active');
+            document.getElementById('back-btn').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            currentModuleQuizzesPassed++;
+            document.getElementById('quiz-status').innerText = `Tiến độ: ${currentModuleQuizzesPassed}/${totalQuestionsInModule}`;
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+            
+            if(currentModuleQuizzesPassed === totalQuestionsInModule) {
+                const btnComplete = document.getElementById('btn-complete-module');
+                btnComplete.classList.add('active');
+                btnComplete.innerText = "Hoàn Thành Bài Học 🎉";
+            }
+        }
+
+        function completeCurrentModule() {
+            userProgress[currentModuleId] = true;
+            goHome();
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        // Init
+        updateDashboard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách 100 Câu Trắc Nghiệm Đại Từ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f6fb;
+            --primary: #8e44ad; 
+            --primary-light: #f3e5f5;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; justify-content: center; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 700; color: var(--primary); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .header-section h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 0.5rem; font-weight: 800; }
+        .progress-bar { width: 100%; height: 15px; background-color: #e0e0e0; border-radius: 10px; margin: 1.5rem auto; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.3s ease; }
+        
+        .score-display { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-top: 1rem; }
+        .score-display span { color: var(--success); }
+
+        .content-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        
+        .quiz-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 2px dashed #eee; animation: fadeIn 0.5s ease; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; color: #34495e; }
+        
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); text-align: center; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; transform: translateY(-2px); }
+        .opt-btn.correct { background: #d5f5e3; border-color: var(--success); color: #1e8449; }
+        .opt-btn.incorrect { background: #fadbd8; border-color: var(--error); color: #a93226; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        
+        .explanation { display: none; margin-top: 1.5rem; padding: 1.2rem; background: var(--primary-light); border-radius: 10px; border-left: 5px solid var(--primary); color: #4a235a; font-weight: 600; font-size: 1.1rem; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">🏆 Bài Kiểm Tra Cuối Khóa: 100 Câu Đại Từ</div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Thử Thách 100 Câu Đại Từ</h1>
+            <p style="font-size: 1.1rem; color: var(--text-light);">Hệ thống đã chọn 100 câu hỏi phủ kín 7 nhóm đại từ để bạn rèn luyện phản xạ.</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="main-progress"></div>
+            </div>
+            <div class="score-display">Tiến độ: <span id="progress-text">0/100</span></div>
+        </div>
+
+        <div class="content-card" id="quiz-container">
+            <!-- Quizzes injected here via JS -->
+        </div>
+    </div>
+
+    <script>
+        // 100 Questions covering all 7 modules of Pronouns
+        const questionsDB = [
+            // Personal Pronouns (1-15)
+            { q: "_____ am going to the supermarket. Do you want to come?", opts: ["Me", "I", "Mine"], ans: 1, exp: "Làm chủ ngữ cho câu -> I." },
+            { q: "Please give _____ the book on the table.", opts: ["I", "mine", "me"], ans: 2, exp: "Đứng sau động từ 'give', làm tân ngữ -> me." },
+            { q: "My brother and _____ are planning a trip to Japan.", opts: ["I", "me", "myself"], ans: 0, exp: "Cả cụm 'My brother and I' làm Chủ ngữ -> dùng I." },
+            { q: "The teacher asked Mary and _____ to stay after class.", opts: ["I", "me", "my"], ans: 1, exp: "Đứng sau động từ 'asked', làm tân ngữ -> me (Mary and me)." },
+            { q: "_____ went to the cinema yesterday.", opts: ["They", "Them", "Their"], ans: 0, exp: "Chủ ngữ -> They." },
+            { q: "I can't find my keys. Have you seen _____?", opts: ["it", "them", "they"], ans: 1, exp: "Keys (số nhiều) -> thay bằng tân ngữ them." },
+            { q: "Let _____ help you with those heavy bags.", opts: ["I", "me", "my"], ans: 1, exp: "Sau 'Let' luôn là đại từ tân ngữ (Let me/him/us)." },
+            { q: "Who is there? - It is _____.", opts: ["I", "me", "my"], ans: 1, exp: "Sau 'It is' trong giao tiếp luôn dùng đại từ tân ngữ (It's me)." },
+            { q: "He is taller than _____.", opts: ["me", "my", "myself"], ans: 0, exp: "Sau 'than' trong giao tiếp thường dùng đại từ tân ngữ -> me (hoặc 'I am')." },
+            { q: "Between you and _____, I don't trust him.", opts: ["I", "me", "my"], ans: 1, exp: "Sau giới từ 'between' phải dùng đại từ tân ngữ -> me." },
+            { q: "_____ don't know what to do next.", opts: ["Us", "We", "Ours"], ans: 1, exp: "Chủ ngữ số nhiều -> We." },
+            { q: "This secret is just between _____ and her.", opts: ["him", "he", "his"], ans: 0, exp: "Sau giới từ 'between' phải dùng đại từ tân ngữ -> him." },
+            { q: "I invited _____ to my birthday party.", opts: ["she", "her", "hers"], ans: 1, exp: "Làm tân ngữ sau động từ 'invited' -> her." },
+            { q: "Are _____ coming with us?", opts: ["them", "they", "their"], ans: 1, exp: "Chủ ngữ cho to-be 'Are' -> they." },
+            { q: "Nobody but _____ knew the answer.", opts: ["I", "me", "my"], ans: 1, exp: "Sau giới từ 'but' (ngoại trừ) dùng đại từ tân ngữ -> me." },
+
+            // Possessive Pronouns (16-30)
+            { q: "This is my car. Where is _____?", opts: ["your", "yours", "you"], ans: 1, exp: "Đại từ sở hữu thay cho 'your car' -> yours." },
+            { q: "That book is not _____. It belongs to Mary.", opts: ["mine", "my", "me"], ans: 0, exp: "Đại từ sở hữu thay cho 'my book' -> mine." },
+            { q: "Is this pen _____?", opts: ["he", "him", "his"], ans: 2, exp: "Đại từ sở hữu của 'he' cũng là 'his'." },
+            { q: "We bought this house, so it is _____.", opts: ["our", "ours", "us"], ans: 1, exp: "Đại từ sở hữu của 'we' -> ours." },
+            { q: "They have a dog. That dog is _____.", opts: ["their", "theirs", "them"], ans: 1, exp: "Đại từ sở hữu của 'they' -> theirs." },
+            { q: "I lost my umbrella. Can I borrow _____?", opts: ["your", "yours", "you"], ans: 1, exp: "Thay cho 'your umbrella' -> yours." },
+            { q: "Her dress is red, and _____ is blue.", opts: ["my", "mine", "me"], ans: 1, exp: "Thay cho 'my dress' -> mine." },
+            { q: "These tickets are _____.", opts: ["our", "ours", "we"], ans: 1, exp: "Đại từ sở hữu đóng vai trò bổ ngữ sau to-be -> ours." },
+            { q: "She is a friend of _____.", opts: ["my", "me", "mine"], ans: 2, exp: "Cấu trúc sở hữu kép: a friend of + Đại từ sở hữu (mine/yours/his...)." },
+            { q: "Is he a relative of _____?", opts: ["yours", "your", "you"], ans: 0, exp: "Sở hữu kép: a relative of yours (Một người họ hàng của bạn)." },
+            { q: "I didn't have a pen, so Sarah lent me _____.", opts: ["her", "hers", "she"], ans: 1, exp: "Thay cho 'her pen' -> hers." },
+            { q: "Your idea is good, but _____ is better.", opts: ["his", "him", "he"], ans: 0, exp: "Thay cho 'his idea' -> his (his vừa là tính từ vừa là đại từ)." },
+            { q: "The cat is washing _____ paws.", opts: ["its", "it's", "it"], ans: 0, exp: "Tính từ sở hữu của 'it' là 'its' (không có dấu nháy)." },
+            { q: "Whose bags are these? - They are _____.", opts: ["their", "theirs", "them"], ans: 1, exp: "Thay cho 'their bags' -> theirs." },
+            { q: "My phone is broken. Can I use _____?", opts: ["yours", "your", "you"], ans: 0, exp: "Thay cho 'your phone' -> yours." },
+
+            // Reflexive Pronouns (31-45)
+            { q: "I cut _____ while cooking yesterday.", opts: ["me", "myself", "mine"], ans: 1, exp: "Chủ ngữ và tân ngữ là một người (I) -> dùng đại từ phản thân 'myself'." },
+            { q: "She looked at _____ in the mirror.", opts: ["her", "herself", "hers"], ans: 1, exp: "Hành động tác động ngược lại chính người đó (She) -> herself." },
+            { q: "We built this house by _____.", opts: ["us", "our", "ourselves"], ans: 2, exp: "By + Reflexive pronoun = tự làm lấy (By ourselves)." },
+            { q: "Did you fix the car _____?", opts: ["yourself", "you", "yours"], ans: 0, exp: "Nhấn mạnh 'chính bạn' đã làm việc đó -> yourself." },
+            { q: "The boys hurt _____ when they were playing football.", opts: ["themself", "themselves", "them"], ans: 1, exp: "Số nhiều của phản thân là '-selves' -> themselves." },
+            { q: "He learned to play the piano all by _____.", opts: ["himself", "him", "his"], ans: 0, exp: "All by himself = hoàn toàn tự làm, không ai giúp." },
+            { q: "Help _____ to the food, kids!", opts: ["yourself", "yourselves", "you"], ans: 1, exp: "Nói với 'kids' (số nhiều) -> yourselves." },
+            { q: "The machine turns _____ off automatically.", opts: ["it", "its", "itself"], ans: 2, exp: "Tác động lại chính cái máy (vật) -> itself." },
+            { q: "I don't need any help. I can do it _____.", opts: ["myself", "me", "mine"], ans: 0, exp: "Đại từ nhấn mạnh (đứng cuối câu) -> myself." },
+            { q: "The president _____ handed out the awards.", opts: ["himself", "him", "he"], ans: 0, exp: "Đại từ nhấn mạnh có thể đứng ngay sau chủ ngữ -> himself." },
+            { q: "She lives completely by _____ in a big house.", opts: ["her", "hers", "herself"], ans: 2, exp: "By herself = alone (một mình)." },
+            { q: "Take care of _____ on your trip!", opts: ["you", "yourself", "yours"], ans: 1, exp: "Câu mệnh lệnh (ngầm hiểu chủ ngữ là You) -> phản thân là yourself." },
+            { q: "They blame _____ for the accident.", opts: ["them", "theirs", "themselves"], ans: 2, exp: "Chủ ngữ 'They' tự trách chính họ -> themselves." },
+            { q: "We _____ didn't know the answer.", opts: ["us", "ourselves", "our"], ans: 1, exp: "Đại từ nhấn mạnh đứng sau chủ ngữ We -> ourselves (Chính chúng tôi cũng không biết)." },
+            { q: "My computer updates _____ every night.", opts: ["it", "itself", "its"], ans: 1, exp: "Computer tự cập nhật nó -> itself." },
+
+            // Indefinite & Demonstrative (46-60)
+            { q: "_____ is knocking at the door. Can you check?", opts: ["Somebody", "Anybody", "Nobody"], ans: 0, exp: "Câu khẳng định dùng Somebody (Ai đó)." },
+            { q: "I didn't see _____ in the room.", opts: ["somebody", "anybody", "nobody"], ans: 1, exp: "Câu phủ định (didn't) phải dùng 'anybody' (bất cứ ai)." },
+            { q: "Does _____ have a pen I can borrow?", opts: ["somebody", "anybody", "nobody"], ans: 1, exp: "Câu hỏi nghi vấn thường dùng 'anybody'." },
+            { q: "_____ is impossible if you work hard.", opts: ["Something", "Anything", "Nothing"], ans: 2, exp: "Không có gì là không thể -> Nothing is impossible." },
+            { q: "I have _____ to tell you. It's a secret.", opts: ["something", "anything", "nothing"], ans: 0, exp: "Câu khẳng định -> something (vài điều)." },
+            { q: "Everyone _____ ready for the test.", opts: ["is", "are", "be"], ans: 0, exp: "Các đại từ bất định (everyone, someone, nothing...) LUÔN đi với động từ số ít -> is." },
+            { q: "Is there _____ wrong with the car?", opts: ["something", "anything", "nothing"], ans: 1, exp: "Câu hỏi -> Anything (Có vấn đề gì không?)." },
+            { q: "_____ came to the party because of the heavy rain.", opts: ["Somebody", "Anybody", "Nobody"], ans: 2, exp: "Không ai đến vì mưa to -> Nobody." },
+            { q: "Someone left _____ bag here.", opts: ["their", "his", "its"], ans: 0, exp: "Đại từ thay thế cho Someone/Everybody (chưa rõ giới tính) thường dùng 'their'." },
+            { q: "_____ is my brother over there.", opts: ["This", "That", "These"], ans: 1, exp: "Chỉ người ở xa (over there) số ít -> That." },
+            { q: "I don't like _____ shoes. Show me those.", opts: ["this", "that", "these"], ans: 2, exp: "Shoes (số nhiều) gần người nói -> these." },
+            { q: "_____ are my favorite books.", opts: ["This", "That", "Those"], ans: 2, exp: "Sách (số nhiều, đi với are) -> Those (hoặc These)." },
+            { q: "Hello, _____ is Mary speaking.", opts: ["I am", "this", "it"], ans: 1, exp: "Giới thiệu bản thân qua điện thoại dùng 'This is'." },
+            { q: "Did you hear _____?", opts: ["that", "this", "those"], ans: 0, exp: "Nhắc lại một sự việc vừa xảy ra hoặc âm thanh ở xa -> that (Bạn có nghe thấy tiếng đó không?)." },
+            { q: "Everything _____ going to be fine.", opts: ["is", "are", "were"], ans: 0, exp: "Đại từ bất định (Everything) đi với động từ số ít -> is." },
+
+            // Dummy Pronouns (61-70)
+            { q: "_____ is raining heavily outside.", opts: ["It", "There", "He"], ans: 0, exp: "Nói về thời tiết dùng chủ ngữ giả It." },
+            { q: "_____ are a lot of people in the park today.", opts: ["It", "There", "They"], ans: 1, exp: "Chỉ sự tồn tại số nhiều -> There are." },
+            { q: "_____ is about 10 kilometers to the beach.", opts: ["There", "It", "That"], ans: 1, exp: "Khoảng cách dùng chủ ngữ giả It." },
+            { q: "_____ takes me 20 minutes to go to school.", opts: ["There", "He", "It"], ans: 2, exp: "Cấu trúc: It takes + time + to-V (Mất bao lâu để làm gì)." },
+            { q: "_____ is a cat on the roof.", opts: ["It", "There", "This"], ans: 1, exp: "Sự tồn tại của 1 con mèo -> There is." },
+            { q: "What time is _____? - _____ is 7 PM.", opts: ["it / It", "there / There", "that / That"], ans: 0, exp: "Giờ giấc dùng chủ ngữ giả It." },
+            { q: "_____ is very dangerous to swim here.", opts: ["There", "It", "This"], ans: 1, exp: "It is + Adj + To-V (Thật là... để làm gì)." },
+            { q: "Are _____ any apples left in the basket?", opts: ["there", "they", "it"], ans: 0, exp: "Câu hỏi sự tồn tại số nhiều -> Are there." },
+            { q: "_____ is a pen and two books on the desk.", opts: ["There", "It", "They"], ans: 0, exp: "Liệt kê, chia theo danh từ đầu tiên (a pen) -> There is." },
+            { q: "_____ was a huge earthquake last night.", opts: ["It", "There", "That"], ans: 1, exp: "Đã có 1 trận động đất (sự tồn tại trong quá khứ) -> There was." },
+
+            // Interrogative & Reciprocal (71-85)
+            { q: "Romeo and Juliet loved _____ very much.", opts: ["one another", "each other", "themselves"], ans: 1, exp: "2 người tương tác qua lại -> each other." },
+            { q: "The four players congratulated _____ after the match.", opts: ["each other", "one another", "themselves"], ans: 1, exp: "Từ 3 người trở lên tương tác -> one another." },
+            { q: "_____ is your new English teacher?", opts: ["Who", "Whom", "Whose"], ans: 0, exp: "Hỏi người làm chủ ngữ -> Who." },
+            { q: "With _____ did you go to the party?", opts: ["Who", "Whom", "Whose"], ans: 1, exp: "Sau giới từ (With) phải dùng đại từ tân ngữ -> Whom." },
+            { q: "_____ bag is this? - It's mine.", opts: ["Who's", "Who", "Whose"], ans: 2, exp: "Hỏi về sở hữu -> Whose." },
+            { q: "_____ do you prefer, tea or coffee?", opts: ["What", "Which", "Who"], ans: 1, exp: "Có sự lựa chọn giới hạn (tea hay coffee) -> Which." },
+            { q: "_____ are you looking at? - I am looking at that strange building.", opts: ["Who", "Whose", "What"], ans: 2, exp: "Câu trả lời là 'that building' (vật) nên phải dùng What (Nhìn vào cái gì)." },
+            { q: "_____ did you invite to the wedding?", opts: ["Who", "Whom", "Whose"], ans: 1, exp: "Hỏi về người bị tác động (bị mời) làm tân ngữ -> Whom (hoặc Who trong văn nói)." },
+            { q: "Look at the twins! They are exactly like _____.", opts: ["each other", "one another", "themselves"], ans: 0, exp: "Twins (2 người) -> each other." },
+            { q: "_____ happened here yesterday?", opts: ["Which", "What", "Who"], ans: 1, exp: "Chuyện gì đã xảy ra -> What." },
+            { q: "_____ of these two laptops is better?", opts: ["What", "Which", "Who"], ans: 1, exp: "Lựa chọn trong 2 cái -> Which." },
+            { q: "To _____ should I send this letter?", opts: ["Who", "Whom", "Whose"], ans: 1, exp: "Sau giới từ 'To' -> Whom." },
+            { q: "_____ do you think will win the match?", opts: ["Whom", "Who", "Whose"], ans: 1, exp: "Chủ ngữ của 'will win' -> Who (do you think chỉ là chêm vào)." },
+            { q: "All the students in the class help _____.", opts: ["each other", "one another", "others"], ans: 1, exp: "Nhiều học sinh giúp đỡ lẫn nhau -> one another." },
+            { q: "_____ car did you borrow? - My uncle's.", opts: ["Who", "Whom", "Whose"], ans: 2, exp: "Hỏi sự sở hữu (Mượn xe của ai) -> Whose." },
+
+            // Advanced (86-100)
+            { q: "If a customer asks for a refund, tell _____ to wait.", opts: ["him", "them", "him or her"], ans: 1, exp: "Singular They thay cho a customer (không rõ giới tính) -> them." },
+            { q: "I don't like this red shirt. Show me the blue _____.", opts: ["ones", "one", "it"], ans: 1, exp: "Thay cho 'shirt' (số ít) -> one." },
+            { q: "These shoes are too small. I need bigger _____.", opts: ["ones", "one", "them"], ans: 0, exp: "Thay cho 'shoes' (số nhiều) -> ones." },
+            { q: "I have two pens. One is red, _____ is blue.", opts: ["other", "another", "the other"], ans: 2, exp: "Cái DUY NHẤT CÒN LẠI trong 2 cái -> the other." },
+            { q: "This cake is great. Can I have _____ piece?", opts: ["other", "another", "others"], ans: 1, exp: "Thêm MỘT cái nữa (trong nhiều cái) -> another." },
+            { q: "Some people like rock music, _____ prefer pop.", opts: ["other", "others", "another"], ans: 1, exp: "Những người khác (chung chung) -> others." },
+            { q: "I have three cats. One is white, _____ are black.", opts: ["others", "the others", "the other"], ans: 1, exp: "Những con còn lại (trong nhóm xác định 3 con) -> the others." },
+            { q: "*(Knocking on door)* - Who is it? - It's _____.", opts: ["I", "me", "my"], ans: 1, exp: "Trả lời gõ cửa -> It's me." },
+            { q: "*(On phone)* Hello, is _____ John?", opts: ["you", "that", "he"], ans: 1, exp: "Hỏi ai đó qua điện thoại -> Is that John?" },
+            { q: "I need _____ cup of coffee before I start working.", opts: ["other", "another", "the other"], ans: 1, exp: "Một tách NỮA (bất kỳ) -> another." },
+            { q: "Someone dropped _____ wallet on the floor.", opts: ["his", "their", "its"], ans: 1, exp: "Singular They: Someone (ai đó) -> their wallet." },
+            { q: "Do you have any _____ questions?", opts: ["other", "another", "others"], ans: 0, exp: "Đứng trước Noun số nhiều (questions) -> other." },
+            { q: "Only two students passed. _____ failed.", opts: ["The other", "Others", "The others"], ans: 2, exp: "Số sinh viên CÒN LẠI trong lớp -> The others." },
+            { q: "I don't want these green apples. Give me the red _____.", opts: ["one", "ones", "them"], ans: 1, exp: "Thay cho 'apples' -> ones." },
+            { q: "If anyone calls, take _____ number.", opts: ["their", "his", "its"], ans: 0, exp: "Singular They thay cho 'anyone' -> their." }
+        ];
+
+        // Shuffle function
+        function shuffle(array) {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Render Quizzes
+        let shuffledQuestions = [];
+        let score = 0;
+
+        function initQuiz() {
+            shuffledQuestions = [...questionsDB];
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            shuffledQuestions.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">Câu ${qIndex + 1}: ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                container.innerHTML += quizHtml;
+            });
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+                score++;
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+            
+            // Update progress UI
+            const answeredCount = document.querySelectorAll('.quiz-item .opt-btn[disabled]').length / 3;
+            document.getElementById('progress-text').innerText = `${Math.floor(answeredCount)}/100`;
+            document.getElementById('main-progress').style.width = `${(Math.floor(answeredCount)/100)*100}%`;
+        }
+
+        // Start
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
