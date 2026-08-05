@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân Biệt Older / Elder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --primary: #2980b9; /* Blue */
+            --primary-light: #ebf5fb;
+            --secondary: #16a085; /* Green */
+            --secondary-light: #e8f8f5;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .header-section h1 { color: var(--text-main); font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        
+        .content-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; }
+        .content-title { color: var(--primary); font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem; }
+
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+        
+        .compare-box { padding: 2rem; border-radius: 15px; border: 2px solid; }
+        .box-older { background-color: var(--primary-light); border-color: var(--primary); }
+        .box-elder { background-color: var(--secondary-light); border-color: var(--secondary); }
+        
+        .box-title { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 1rem; }
+        .box-older .box-title { color: var(--primary); }
+        .box-elder .box-title { color: var(--secondary); }
+
+        .highlight { font-weight: 700; background: yellow; padding: 0 5px; border-radius: 3px; }
+
+        .alert-box { background-color: #fef9e7; border-left: 5px solid #f1c40f; padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #7d6608; font-size: 1.1rem; }
+        
+        /* Quiz Styles */
+        .quiz-item { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; transform: translateY(-2px); }
+        .opt-btn.correct { background: #d5f5e3; border-color: var(--success); color: #1e8449; }
+        .opt-btn.incorrect { background: #fadbd8; border-color: var(--error); color: #a93226; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        
+        .explanation { display: none; margin-top: 1rem; padding: 1rem; background: #f4f6f6; border-radius: 10px; border-left: 4px solid var(--text-main); font-weight: 600; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">📚 GrammarMaster Mini-Lesson</div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Phân Biệt Older & Elder</h1>
+            <p style="font-size: 1.2rem; color: var(--text-light);">Bí kíp để không bao giờ bị "bắt bẻ" khi nói về sự lớn tuổi.</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">📖 Lý Thuyết Trọng Tâm</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">Cả hai cặp từ này đều bắt nguồn từ tính từ gốc <strong>OLD</strong> (già, cũ). Tuy nhiên, có một ranh giới rất lớn về cách sử dụng giữa chúng, đặc biệt là khi dùng chữ "Elder".</p>
+            
+            <div class="compare-grid">
+                <!-- OLDER -->
+                <div class="compare-box box-older">
+                    <div class="box-title">OLDER / OLDEST<br><span style="font-size: 1rem; color: var(--text-light);">(Già hơn, Cũ hơn)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Dùng cho TẤT CẢ:</strong> Người, động vật, hoặc đồ vật vô tri.</li>
+                        <li><strong>Có thể đi chung với THAN.</strong></li>
+                        <li>Có thể đứng sau động từ to-be hoặc đứng trước danh từ.</li>
+                    </ul>
+                    <p><em>👉 Đồ vật: This house is <strong>older</strong> than mine. (Hoàn toàn đúng).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Người (đi với than): He is <strong>older</strong> than me. (Hoàn toàn đúng).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Nhất: That is <strong>the oldest</strong> tree in the forest.</em></p>
+                </div>
+
+                <!-- ELDER -->
+                <div class="compare-box box-elder">
+                    <div class="box-title">ELDER / ELDEST<br><span style="font-size: 1rem; color: var(--text-light);">(Lớn hơn - Dùng trong nhà)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>CHỈ DÙNG CHO NGƯỜI, đặc biệt là NGƯỜI TRONG CÙNG GIA ĐÌNH</strong> (anh/chị lớn, con trưởng).</li>
+                        <li><strong>❌ KHÔNG BAO GIỜ ĐI VỚI "THAN".</strong></li>
+                        <li>Chỉ được đứng trước danh từ (Ví dụ: elder brother, eldest son). Không đứng một mình sau to-be.</li>
+                    </ul>
+                    <p><em>👉 Trong gia đình: My <strong>elder</strong> sister is a doctor. (Chị gái tôi làm bác sĩ).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Sai ngữ pháp: <span style="text-decoration: line-through; color: red;">He is elder than me.</span> (Bắt buộc phải sửa thành older than).</em></p>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <strong>💡 CHỐT LẠI MẸO NHỚ:</strong><br><br>
+                1. Thấy chữ <strong>THAN</strong> -> Nhắm mắt khoanh ngay <strong>OLDER</strong> (Tuyệt đối không dùng Elder than).<br>
+                2. Nói về <strong>Đồ vật / Con vật</strong> -> Chắc chắn là <strong>OLDER / OLDEST</strong>.<br>
+                3. Đứng trước <strong>brother, sister, son, daughter</strong> -> Dùng <strong>ELDER / ELDEST</strong> (nghe sẽ tự nhiên và lịch sự hơn rất nhiều, mặc dù Older vẫn không sai).
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">🎯 Bài Tập Áp Dụng (10 Câu)</h2>
+            <div id="quiz-container">
+                <!-- Quizzes -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizzes = [
+            { q: "My _____ brother works as a software engineer in Google.", opts: ["older", "elder"], ans: 1, exp: "Anh ruột trong gia đình (đứng trước danh từ brother) -> Dùng Elder sẽ hay và chuẩn xác nhất." },
+            { q: "This building is much _____ than the one across the street.", opts: ["older", "elder"], ans: 0, exp: "1. Nói về vật (building). 2. Có chữ 'than' -> Bắt buộc dùng older." },
+            { q: "Are you _____ than your husband?", opts: ["older", "elder"], ans: 0, exp: "Có chữ 'than' -> Bắt buộc dùng older (Không bao giờ dùng elder than)." },
+            { q: "John is the _____ son in the family.", opts: ["oldest", "eldest"], ans: 1, exp: "Con trưởng trong gia đình (đứng trước danh từ son) -> Dùng eldest." },
+            { q: "That is the _____ tree in our village. It has been there for 200 years.", opts: ["oldest", "eldest"], ans: 0, exp: "Nói về cái cây (vật vô tri vô giác) -> Bắt buộc dùng oldest (Không bao giờ dùng eldest cho vật)." },
+            { q: "I have two sisters. The _____ one is married.", opts: ["older", "elder"], ans: 1, exp: "Chị gái trong gia đình -> Elder." },
+            { q: "My grandfather is the _____ person in our town.", opts: ["oldest", "eldest"], ans: 0, exp: "So sánh một người với toàn bộ thị trấn (không phải ruột thịt trong 1 gia đình) -> Dùng oldest." },
+            { q: "He is three years _____ than me.", opts: ["older", "elder"], ans: 0, exp: "Có chữ 'than' -> Bắt buộc dùng older." },
+            { q: "As the _____ child, she had to take care of her younger siblings.", opts: ["oldest", "eldest"], ans: 1, exp: "Đứa con lớn nhất trong nhà -> Eldest." },
+            { q: "I need to replace my car. It is getting _____.", opts: ["older", "elder"], ans: 0, exp: "Nói về đồ vật (xe hơi) và đứng sau động từ to-be -> Bắt buộc dùng older." }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                container.innerHTML += quizHtml;
+            });
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>

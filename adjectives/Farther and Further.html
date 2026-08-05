@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân Biệt Farther / Further</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --primary: #c0392b; /* Deep Red */
+            --primary-light: #fdedec;
+            --secondary: #2980b9; /* Blue */
+            --secondary-light: #ebf5fb;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #27ae60;
+            --error: #e74c3c;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .header-section h1 { color: var(--text-main); font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        
+        .content-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; }
+        .content-title { color: var(--primary); font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem; }
+
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+        
+        .compare-box { padding: 2rem; border-radius: 15px; border: 2px solid; }
+        .box-farther { background-color: var(--primary-light); border-color: var(--primary); }
+        .box-further { background-color: var(--secondary-light); border-color: var(--secondary); }
+        
+        .box-title { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 1rem; }
+        .box-farther .box-title { color: var(--primary); }
+        .box-further .box-title { color: var(--secondary); }
+
+        .highlight { font-weight: 700; background: yellow; padding: 0 5px; border-radius: 3px; }
+
+        .alert-box { background-color: #fef9e7; border-left: 5px solid #f1c40f; padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #7d6608; font-size: 1.1rem; }
+        
+        /* Quiz Styles */
+        .quiz-item { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; transform: translateY(-2px); }
+        .opt-btn.correct { background: #d5f5e3; border-color: var(--success); color: #1e8449; }
+        .opt-btn.incorrect { background: #fadbd8; border-color: var(--error); color: #a93226; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        
+        .explanation { display: none; margin-top: 1rem; padding: 1rem; background: #f4f6f6; border-radius: 10px; border-left: 4px solid var(--text-main); font-weight: 600; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">📚 GrammarMaster Mini-Lesson</div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Phân Biệt Farther & Further</h1>
+            <p style="font-size: 1.2rem; color: var(--text-light);">Cặp từ dễ gây lú lẫn nhất trong bài So Sánh của Tính từ.</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">📖 Lý Thuyết Trọng Tâm</h2>
+            <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">Cả <strong>Farther</strong> và <strong>Further</strong> đều là dạng so sánh hơn của tính từ/trạng từ <strong>FAR</strong> (xa). Tuy nhiên, cách dùng của chúng có sự khác biệt rất rõ ràng mà người bản xứ luôn tuân thủ.</p>
+            
+            <div class="compare-grid">
+                <!-- FARTHER -->
+                <div class="compare-box box-farther">
+                    <div class="box-title">FARTHER<br><span style="font-size: 1rem; color: var(--text-light);">(Xa hơn)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Chỉ dùng cho KHOẢNG CÁCH ĐỊA LÝ / VẬT LÝ</strong> (có thể đo đếm được bằng km, mét).</li>
+                        <li>Chữ "A" trong f<strong>a</strong>rther giúp liên tưởng đến chữ "A" trong <strong>A</strong>ctual distance (Khoảng cách thực tế).</li>
+                    </ul>
+                    <p><em>👉 Ví dụ: HCM City is <strong>farther</strong> than Da Lat from here. (Về khoảng cách địa lý, TP.HCM xa hơn Đà Lạt).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Ví dụ: He threw the ball <strong>the farthest</strong>. (Anh ấy ném quả bóng đi xa nhất).</em></p>
+                </div>
+
+                <!-- FURTHER -->
+                <div class="compare-box box-further">
+                    <div class="box-title">FURTHER<br><span style="font-size: 1rem; color: var(--text-light);">(Xa hơn / Thêm nữa)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Dùng được cho cả KHOẢNG CÁCH ĐỊA LÝ và KHOẢNG CÁCH TRỪU TƯỢNG (Nghĩa bóng).</strong></li>
+                        <li>Mang nghĩa: Thêm nữa, sâu hơn, nhiều hơn (More/Additional).</li>
+                    </ul>
+                    <p><em>👉 Địa lý: HCM City is <strong>further</strong> than Da Lat from here. (Hoàn toàn ĐÚNG - Dùng thay thế cho Farther).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Trừu tượng: For <strong>further</strong> information, contact us. (Để biết <span class="highlight">thêm thông tin</span>, hãy liên hệ... ❌ Tuyệt đối không dùng farther).</em></p>
+                </div>
+            </div>
+
+            <div class="alert-box">
+                <strong>💡 CHỐT LẠI MẸO NHỚ:</strong><br><br>
+                1. Nếu nói về <strong>Khoảng cách đường đi (Địa lý)</strong>: Dùng <strong>Farther</strong> hay <strong>Further</strong> đều ĐÚNG.<br>
+                2. Nếu mang nghĩa <strong>"Thêm nữa, sâu hơn" (Nghĩa bóng, trừu tượng)</strong>: BẮT BUỘC dùng <strong>Further</strong>.<br>
+                <em>(Ví dụ: further details - chi tiết thêm, further research - nghiên cứu sâu hơn, further education - học lên cao nữa).</em>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">🎯 Bài Tập Áp Dụng (10 Câu)</h2>
+            <div id="quiz-container">
+                <!-- Quizzes -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizzes = [
+            { q: "For _____ information, please visit our website.", opts: ["farther", "further"], ans: 1, exp: "Thông tin thêm/trừu tượng -> Bắt buộc dùng further." },
+            { q: "My house is _____ from the school than yours.", opts: ["farther", "Cả 2 đều đúng"], ans: 1, exp: "Khoảng cách địa lý -> Dùng farther hay further đều đúng." },
+            { q: "Do you have any _____ questions?", opts: ["farther", "further"], ans: 1, exp: "Câu hỏi thêm (nghĩa bóng/trừu tượng) -> Bắt buộc dùng further." },
+            { q: "We need to discuss this issue _____.", opts: ["farther", "further"], ans: 1, exp: "Bàn bạc sâu hơn, thêm nữa (nghĩa bóng) -> Bắt buộc dùng further." },
+            { q: "Jupiter is _____ from the Sun than Mars.", opts: ["further", "Cả 2 đều đúng"], ans: 1, exp: "Khoảng cách vật lý trong không gian -> Dùng farther hay further đều đúng." },
+            { q: "He refused to go any _____ into the cave because it was too dark.", opts: ["farther", "Cả 2 đều đúng"], ans: 1, exp: "Khoảng cách vật lý (đi bộ sâu vào hang) -> Dùng farther hay further đều đúng." },
+            { q: "The company will be closed until _____ notice.", opts: ["farther", "further"], ans: 1, exp: "Thông báo thêm/tiếp theo (until further notice - cụm từ cố định) -> Bắt buộc dùng further." },
+            { q: "If you need _____ assistance, just call this number.", opts: ["farther", "further"], ans: 1, exp: "Sự giúp đỡ thêm (trừu tượng) -> Bắt buộc dùng further." },
+            { q: "Of all the runners, John ran _____.", opts: ["the farthest", "Cả 2 đều đúng"], ans: 1, exp: "Khoảng cách chạy (vật lý) -> Dùng the farthest hay the furthest đều đúng." },
+            { q: "We cannot afford any _____ delays in this project.", opts: ["farther", "further"], ans: 1, exp: "Sự chậm trễ thêm (trừu tượng/thời gian) -> Bắt buộc dùng further." }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                container.innerHTML += quizHtml;
+            });
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>

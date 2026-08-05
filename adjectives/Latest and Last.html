@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phân Biệt The Latest / The Last</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f8f9fa;
+            --primary: #8e44ad; /* Purple */
+            --primary-light: #f4ecf7;
+            --secondary: #e67e22; /* Orange */
+            --secondary-light: #fef5e7;
+            --text-main: #2c3e50;
+            --text-light: #7f8c8d;
+            --success: #27ae60;
+            --error: #c0392b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .header-section h1 { color: var(--text-main); font-size: 2.2rem; font-weight: 800; margin-bottom: 0.5rem; }
+        
+        .content-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); margin-bottom: 2rem; }
+        .content-title { color: var(--primary); font-size: 1.8rem; font-weight: 800; margin-bottom: 1.5rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem; }
+
+        .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+        @media (max-width: 768px) { .compare-grid { grid-template-columns: 1fr; } }
+        
+        .compare-box { padding: 2rem; border-radius: 15px; border: 2px solid; }
+        .box-latest { background-color: var(--primary-light); border-color: var(--primary); }
+        .box-last { background-color: var(--secondary-light); border-color: var(--secondary); }
+        
+        .box-title { font-size: 1.5rem; font-weight: 800; text-align: center; margin-bottom: 1rem; }
+        .box-latest .box-title { color: var(--primary); }
+        .box-last .box-title { color: var(--secondary); }
+
+        .highlight { font-weight: 700; background: yellow; padding: 0 5px; border-radius: 3px; }
+
+        .alert-box { background-color: #fef9e7; border-left: 5px solid #f1c40f; padding: 1.5rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #7d6608; font-size: 1.1rem; }
+        
+        /* Quiz Styles */
+        .quiz-item { margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.2rem; font-weight: 700; margin-bottom: 1rem; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; transform: translateY(-2px); }
+        .opt-btn.correct { background: #d5f5e3; border-color: var(--success); color: #1e8449; }
+        .opt-btn.incorrect { background: #fadbd8; border-color: var(--error); color: #a93226; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        
+        .explanation { display: none; margin-top: 1rem; padding: 1rem; background: #f4f6f6; border-radius: 10px; border-left: 4px solid var(--text-main); font-weight: 600; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">📚 GrammarMaster Mini-Lesson</div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Phân Biệt The Latest & The Last</h1>
+            <p style="font-size: 1.2rem; color: var(--text-light);">Hai cụm từ "sát thủ" hay xuất hiện trong các bài thi đọc hiểu và giao tiếp.</p>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">📖 Lý Thuyết Trọng Tâm</h2>
+            
+            <div class="alert-box" style="margin-top: 0;">
+                <strong>⚠️ LƯU Ý LỚN:</strong> Rất nhiều bạn bị nhầm lẫn và tự chế ra từ <strong>"the lastest"</strong>. Trong tiếng Anh <strong>KHÔNG CÓ TỪ NÀY</strong> bạn nhé! Chúng ta chỉ có <strong>The Latest</strong> hoặc <strong>The Last</strong> (là 2 dạng cấp bậc của từ "LATE" - muộn).
+            </div>
+            
+            <p style="margin-bottom: 1.5rem; font-size: 1.1rem;">Hãy tưởng tượng trục thời gian. "The latest" là điểm gần hiện tại nhất, còn "The last" là điểm chốt sổ, chấm hết!</p>
+            
+            <div class="compare-grid">
+                <!-- THE LATEST -->
+                <div class="compare-box box-latest">
+                    <div class="box-title">THE LATEST<br><span style="font-size: 1rem; color: var(--text-light);">(Mới nhất / Gần đây nhất)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Dùng để chỉ KHOẢNG THỜI GIAN GẦN NHẤT.</strong></li>
+                        <li>Mang nghĩa: Cái mới ra mắt nhất (Most recent).</li>
+                        <li><strong>Dấu hiệu:</strong> Mọi thứ vẫn CÒN TIẾP DIỄN, tương lai sẽ có thêm cái mới hơn nữa.</li>
+                    </ul>
+                    <p><em>👉 Ví dụ: Have you heard <strong>the latest</strong> news? (Bạn đã nghe tin tức <span class="highlight">mới nhất</span> chưa? - Ngày mai sẽ có tin khác).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Ví dụ: This is Taylor Swift's <strong>latest</strong> album. (Đây là album mới nhất của Taylor - Cô ấy vẫn sẽ hát tiếp).</em></p>
+                </div>
+
+                <!-- THE LAST -->
+                <div class="compare-box box-last">
+                    <div class="box-title">THE LAST<br><span style="font-size: 1rem; color: var(--text-light);">(Cuối cùng / Chót)</span></div>
+                    <ul style="list-style-type: disc; margin-left: 1.5rem; margin-bottom: 1rem;">
+                        <li><strong>Dùng để chỉ THỨ TỰ (Cái chốt sổ).</strong></li>
+                        <li>Mang nghĩa: Cuối cùng (Final).</li>
+                        <li><strong>Dấu hiệu:</strong> Đã CHẤM DỨT, sau nó không còn cái nào nữa. Hoặc dùng cho thời gian trong quá khứ (last week).</li>
+                    </ul>
+                    <p><em>👉 Ví dụ: This is <strong>the last</strong> train tonight. (Đây là chuyến tàu <span class="highlight">cuối cùng</span> trong đêm - Chuyến chót rồi).</em></p>
+                    <p style="margin-top: 0.5rem;"><em>👉 Ví dụ: This was his <strong>last</strong> book. (Đây là cuốn sách cuối cùng của ông ấy - Ông ấy đã giải nghệ/qua đời).</em></p>
+                </div>
+            </div>
+
+            <div style="background: #fdfefe; border: 1px solid #d5dbdb; padding: 1.5rem; border-radius: 10px; margin-bottom: 2rem;">
+                <h3 style="color: #34495e; margin-bottom: 1rem;">🤔 Test tư duy nhanh:</h3>
+                <p>Nếu bạn nói: <strong>"This is my latest boyfriend."</strong> -> <em>Anh ấy là người yêu mới nhất của tôi (ý là tương lai tôi sẽ đổi người yêu tiếp, haha!).</em></p>
+                <p>Nếu bạn nói: <strong>"This is my last boyfriend."</strong> -> <em>Anh ấy là người yêu cuối cùng của tôi (chúng tôi sẽ cưới, hoặc tôi không bao giờ yêu ai nữa).</em></p>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <h2 class="content-title">🎯 Bài Tập Áp Dụng (10 Câu)</h2>
+            <div id="quiz-container">
+                <!-- Quizzes -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizzes = [
+            { q: "Have you seen the _____ iPhone model? It was released yesterday.", opts: ["latest", "last"], ans: 0, exp: "Mẫu iPhone 'mới nhất' vừa ra mắt (tương lai sẽ có iPhone mới hơn) -> latest." },
+            { q: "Hurry up! We need to catch the _____ bus home. There are no buses after midnight.", opts: ["latest", "last"], ans: 1, exp: "Chuyến xe buýt 'cuối cùng' (không còn chuyến nào sau đó) -> last." },
+            { q: "What is the _____ fashion trend in Paris right now?", opts: ["latest", "last"], ans: 0, exp: "Xu hướng thời trang 'mới nhất / gần đây nhất' -> latest." },
+            { q: "I spent my _____ dollar on this coffee. I am completely broke now.", opts: ["latest", "last"], ans: 1, exp: "Đồng đô la 'cuối cùng' (cháy túi rồi, không còn tiền nữa) -> last." },
+            { q: "Did you read the _____ chapter of the book? How does the story end?", opts: ["latest", "last"], ans: 1, exp: "Chương 'cuối cùng' của cuốn sách (để biết kết thúc) -> last." },
+            { q: "This software gives you the _____ updates on weather conditions.", opts: ["latest", "last"], ans: 0, exp: "Cập nhật 'mới nhất / gần đây nhất' -> latest updates." },
+            { q: "He is 95 years old. This will probably be his _____ performance.", opts: ["latest", "last"], ans: 1, exp: "Màn trình diễn 'cuối cùng' trong sự nghiệp -> last." },
+            { q: "Keep me informed of the _____ developments in this project.", opts: ["latest", "last"], ans: 0, exp: "Những diễn biến / sự kiện 'mới nhất' -> latest developments." },
+            { q: "Who was the _____ person to leave the office yesterday?", opts: ["latest", "last"], ans: 1, exp: "Người 'cuối cùng' rời khỏi văn phòng (Thứ tự chốt sổ) -> last." },
+            { q: "She bought the _____ edition of the dictionary because it has new words.", opts: ["latest", "last"], ans: 0, exp: "Phiên bản 'mới nhất' (có chứa từ mới) -> latest edition." }
+        ];
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            
+            quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                container.innerHTML += quizHtml;
+            });
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+        }
+
+        window.onload = initQuiz;
+    </script>
+</body>
+</html>
