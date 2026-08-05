@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Time & Schedule - Basic Communication</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Slide Transition */
+        .slide-panel {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide-panel.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* --- PRINT CSS: FIXING PDF ISSUES --- */
+        @media print {
+            @page {
+                size: A4 landscape;
+                margin: 0;
+            }
+            body {
+                background: white !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+                text-rendering: optimizeLegibility;
+            }
+            #toolbar, .nav-btn, .no-print, button, .settings-modal {
+                display: none !important;
+            }
+            #app-container {
+                height: auto !important;
+                overflow: visible !important;
+                background: white !important;
+            }
+            #slide-container {
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+            }
+            .slide-panel {
+                display: flex !important;
+                opacity: 1 !important;
+                position: relative !important;
+                width: 100vw !important;
+                height: 100vh !important;
+                page-break-after: always !important;
+                page-break-inside: avoid !important;
+                box-shadow: none !important;
+                border-radius: 0 !important;
+                margin: 0 !important;
+                padding: 40px !important;
+                align-items: center !important;
+                justify-content: center !important;
+                background: white !important;
+            }
+            input[type="text"] {
+                border: none !important;
+                border-bottom: 1px solid black !important;
+                background: transparent !important;
+            }
+            .hidden-content {
+                display: block !important;
+                color: #4a5568 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-sky-50 text-gray-800 h-screen overflow-hidden flex flex-col" id="app-container">
+
+    <!-- Toolbar -->
+    <header id="toolbar" class="bg-white shadow-sm px-6 py-3 flex justify-between items-center z-50 shrink-0 border-b border-sky-100">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-sky-400 rounded-full flex items-center justify-center text-white font-bold shadow-sm">
+                BC
+            </div>
+            <div>
+                <h1 class="text-xl font-bold text-gray-800">Basic Communication</h1>
+                <p class="text-xs text-sky-500 font-semibold uppercase tracking-wider">English Training</p>
+            </div>
+        </div>
+        
+        <!-- Controls -->
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full">
+                Slide <span id="current-slide-num">1</span> / 40
+            </span>
+            <button onclick="openSettings()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center text-gray-600 transition-colors tooltip" title="Voice Settings">
+                <i class="fas fa-cog text-lg"></i>
+            </button>
+            <button onclick="window.print()" class="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded-lg font-semibold flex items-center gap-2 transition-colors shadow-sm">
+                <i class="fas fa-file-pdf"></i> Download PDF
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow relative flex justify-center items-center p-4 md:p-8" id="slide-container">
+        
+        <!-- Navigation Buttons -->
+        <button id="prev-btn" onclick="navigate(-1)" class="nav-btn absolute left-4 md:left-10 z-40 w-12 h-12 bg-white/80 hover:bg-white rounded-full shadow-md flex items-center justify-center text-sky-500 text-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed" title="Previous">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <button id="next-btn" onclick="navigate(1)" class="nav-btn absolute right-4 md:right-10 z-40 w-12 h-12 bg-white/80 hover:bg-white rounded-full shadow-md flex items-center justify-center text-sky-500 text-xl transition-all disabled:opacity-30 disabled:cursor-not-allowed" title="Next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+        <div id="slides-wrapper" class="w-full h-full max-w-5xl bg-white rounded-2xl shadow-xl overflow-hidden relative border-4 border-white">
+            <!-- Dynamic Content -->
+        </div>
+
+    </main>
+
+    <!-- Settings Modal -->
+    <div id="settings-modal" class="settings-modal fixed inset-0 bg-black/50 hidden items-center justify-center z-[100]">
+        <div class="bg-white rounded-xl shadow-2xl p-6 w-[450px] max-w-[90%]">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800"><i class="fas fa-volume-up text-teal-500 mr-2"></i> Voice Settings</h2>
+                <button onclick="closeSettings()" class="text-gray-400 hover:text-red-500 transition-colors">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            
+            <div class="space-y-4">
+                <p class="text-sm text-gray-600 mb-2">Select AI voices available on your device. Recommended: "Natural" or "Online" voices.</p>
+                
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Speaker 1 Voice (Alex)</label>
+                    <select id="voice-speaker1" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-teal-500 outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Speaker 2 Voice (Sarah)</label>
+                    <select id="voice-speaker2" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-teal-500 outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-1">Speaker 3 Voice (Emma - Manager)</label>
+                    <select id="voice-speaker3" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-teal-500 outline-none"></select>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-end">
+                <button onclick="closeSettings()" class="bg-teal-500 text-white px-6 py-2 rounded-lg font-semibold hover:bg-teal-600 transition-colors">Save & Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Data and Logic -->
+    <script>
+        // --- DIALOGUES ARRAYS ---
+        const dialogue1 = [
+            { r: "Alex", t: "Hi Sarah. Do you have a minute to talk about our work schedule for next week?" },
+            { r: "Sarah", t: "Yes, of course. I have some free time right now. What do we need to discuss?" },
+            { r: "Alex", t: "We have a big meeting on Monday morning, so we need to prepare the room." },
+            { r: "Sarah", t: "Okay. I will come to the office early on Monday to set up the chairs." },
+            { r: "Alex", t: "Thank you. Also, we need to change our lunch break time on Wednesday." },
+            { r: "Sarah", t: "Oh, really? What time is our lunch break on Wednesday now?" },
+            { r: "Alex", t: "It will be at one o'clock in the afternoon because of the training session." },
+            { r: "Sarah", t: "That works for me. I will update my calendar and set an alarm." }
+        ];
+        const ipa_d1 = [
+            "/haɪ ˈserə. duː juː hæv ə ˈmɪnɪt tuː tɔːk əˈbaʊt aʊər wɜːrk ˈskedʒuːl fɔːr nekst wiːk/",
+            "/jes, əv kɔːrs. aɪ hæv sʌm friː taɪm raɪt naʊ. hwʌt duː wiː niːd tuː dɪˈskʌs/",
+            "/wiː hæv ə bɪɡ ˈmiːtɪŋ ɑːn ˈmʌndeɪ ˈmɔːrnɪŋ, səʊ wiː niːd tuː prɪˈper ðə ruːm/",
+            "/ˈəʊkeɪ. aɪ wɪl kʌm tuː ði ˈɔːfɪs ˈɜːrli ɑːn ˈmʌndeɪ tuː set ʌp ðə tʃerz/",
+            "/θæŋk juː. ˈɔːlsəʊ, wiː niːd tuː tʃeɪndʒ aʊər lʌntʃ breɪk taɪm ɑːn ˈwenzdeɪ/",
+            "/əʊ, ˈriːəli? hwʌt taɪm ɪz aʊər lʌntʃ breɪk ɑːn ˈwenzdeɪ naʊ/",
+            "/ɪt wɪl biː æt wʌn əˈklɑːk ɪn ði ˌæftərˈnuːn bɪˈkʌz əv ðə ˈtreɪnɪŋ ˈseʃn/",
+            "/ðæt wɜːrks fɔːr miː. aɪ wɪl ʌpˈdeɪt maɪ ˈkæləndər ænd set ən əˈlɑːrm/"
+        ];
+        const qs_d1 = [
+            { type: "Yes/No", q: "Are they talking about their weekend plans?", ans: "No, they are talking about their work schedule for next week.", ipa: "/nəʊ, ðeɪ ɑːr ˈtɔːkɪŋ əˈbaʊt ðer wɜːrk ˈskedʒuːl fɔːr nekst wiːk/" },
+            { type: "Yes/No", q: "Does Sarah have free time right now?", ans: "Yes, she does.", ipa: "/jes, ʃiː dʌz/" },
+            { type: "Wh-", q: "When is the big meeting?", ans: "It is on Monday morning.", ipa: "/ɪt ɪz ɑːn ˈmʌndeɪ ˈmɔːrnɪŋ/" },
+            { type: "Yes/No", q: "Will Sarah come to the office late on Monday?", ans: "No, she will come early to set up the chairs.", ipa: "/nəʊ, ʃiː wɪl kʌm ˈɜːrli tuː set ʌp ðə tʃerz/" },
+            { type: "Yes/No", q: "Do they need to change their dinner time?", ans: "No, they need to change their lunch break time.", ipa: "/nəʊ, ðeɪ niːd tuː tʃeɪndʒ ðer lʌntʃ breɪk taɪm/" },
+            { type: "Wh-", q: "What day is the lunch break changing?", ans: "On Wednesday.", ipa: "/ɑːn ˈwenzdeɪ/" },
+            { type: "Wh-", q: "Why is the lunch break at one o'clock?", ans: "Because of the training session.", ipa: "/bɪˈkʌz əv ðə ˈtreɪnɪŋ ˈseʃn/" },
+            { type: "Wh-", q: "What will Sarah do?", ans: "She will update her calendar and set an alarm.", ipa: "/ʃiː wɪl ʌpˈdeɪt hər ˈkæləndər ænd set ən əˈlɑːrm/" }
+        ];
+
+        const dialogue2 = [
+            { r: "Alex", t: "Another thing we need to check is the Friday afternoon team activity." },
+            { r: "Sarah", t: "Right, the team activity. What time does it usually start on Fridays?" },
+            { r: "Alex", t: "It usually starts at three o'clock, but this week we have a lot of work." },
+            { r: "Sarah", t: "Should we move the activity to the late afternoon or cancel it?" },
+            { r: "Alex", t: "Let's move it to four o'clock so everyone can finish their tasks first." },
+            { r: "Sarah", t: "That is a good idea. Will it last for one hour or two hours?" },
+            { r: "Alex", t: "It will only last for one hour, so we can all go home on time." },
+            { r: "Sarah", t: "Perfect. I will send a message to the team about this new schedule." }
+        ];
+        const ipa_d2 = [
+            "/əˈnʌðər θɪŋ wiː niːd tuː tʃek ɪz ðə ˈfraɪdeɪ ˌæftərˈnuːn tiːm ækˈtɪvəti/",
+            "/raɪt, ðə tiːm ækˈtɪvəti. hwʌt taɪm dʌz ɪt ˈjuːʒuəli stɑːrt ɑːn ˈfraɪdeɪz/",
+            "/ɪt ˈjuːʒuəli stɑːrts æt θriː əˈklɑːk, bʌt ðɪs wiːk wiː hæv ə lɑːt əv wɜːrk/",
+            "/ʃʊd wiː muːv ði ækˈtɪvəti tuː ðə leɪt ˌæftərˈnuːn ɔːr ˈkænsl ɪt/",
+            "/lets muːv ɪt tuː fɔːr əˈklɑːk səʊ ˈevriwʌn kæn ˈfɪnɪʃ ðer tæsks fɜːrst/",
+            "/ðæt ɪz ə ɡʊd aɪˈdiːə. wɪl ɪt læst fɔːr wʌn aʊər ɔːr tuː aʊərz/",
+            "/ɪt wɪl ˈəʊnli læst fɔːr wʌn aʊər, səʊ wiː kæn ɔːl ɡəʊ həʊm ɑːn taɪm/",
+            "/ˈpɜːrfɪkt. aɪ wɪl send ə ˈmesɪdʒ tuː ðə tiːm əˈbaʊt ðɪs nuː ˈskedʒuːl/"
+        ];
+        const qs_d2 = [
+            { type: "Wh-", q: "What do they need to check?", ans: "The Friday afternoon team activity.", ipa: "/ðə ˈfraɪdeɪ ˌæftərˈnuːn tiːm ækˈtɪvəti/" },
+            { type: "Wh-", q: "What is Sarah asking about?", ans: "She is asking what time the activity usually starts.", ipa: "/ʃiː ɪz ˈæskɪŋ hwʌt taɪm ði ækˈtɪvəti ˈjuːʒuəli stɑːrts/" },
+            { type: "Yes/No", q: "Do they have a lot of work this week?", ans: "Yes, they do.", ipa: "/jes, ðeɪ duː/" },
+            { type: "Yes/No", q: "Does Sarah want to move it to the morning?", ans: "No, she asks if they should move it to the late afternoon or cancel it.", ipa: "/nəʊ, ʃiː æsks ɪf ðeɪ ʃʊd muːv ɪt tuː ðə leɪt ˌæftərˈnuːn ɔːr ˈkænsl ɪt/" },
+            { type: "Wh-", q: "What time will they move the activity to?", ans: "To four o'clock.", ipa: "/tuː fɔːr əˈklɑːk/" },
+            { type: "Yes/No", q: "Will the activity last for three hours?", ans: "No, Sarah asks if it will last for one hour or two hours.", ipa: "/nəʊ, ˈserə æsks ɪf ɪt wɪl læst fɔːr wʌn aʊər ɔːr tuː aʊərz/" },
+            { type: "Wh-", q: "How long will the activity last?", ans: "It will only last for one hour.", ipa: "/ɪt wɪl ˈəʊnli læst fɔːr wʌn aʊər/" },
+            { type: "Wh-", q: "What will Sarah do?", ans: "She will send a message to the team about the new schedule.", ipa: "/ʃiː wɪl send ə ˈmesɪdʒ tuː ðə tiːm əˈbaʊt ðə nuː ˈskedʒuːl/" }
+        ];
+
+        const dialogue3 = [
+            { r: "Emma", t: "Hello everyone, I want to talk about managing our time at work." },
+            { r: "Emma", t: "It is very important to have a clear schedule every day." },
+            { r: "Emma", t: "A good schedule helps us finish our work on time and reduces stress." },
+            { r: "Emma", t: "I always make a list of tasks before I start my work morning." },
+            { r: "Emma", t: "Then, I put the most important tasks at the top of my list." },
+            { r: "Emma", t: "It is also necessary to take short breaks to rest our eyes and brain." },
+            { r: "Emma", t: "If you feel tired, a five-minute break can give you more energy." },
+            { r: "Emma", t: "Please remember to check your email calendar every evening for the next day." }
+        ];
+        const ipa_d3 = [
+            "/həˈləʊ ˈevriwʌn, aɪ wɑːnt tuː tɔːk əˈbaʊt ˈmænɪdʒɪŋ aʊər taɪm æt wɜːrk/",
+            "/ɪt ɪz ˈveri ɪmˈpɔːrtnt tuː hæv ə klɪr ˈskedʒuːl ˈevri deɪ/",
+            "/ə ɡʊd ˈskedʒuːl helps ʌs ˈfɪnɪʃ aʊər wɜːrk ɑːn taɪm ænd rɪˈduːsɪz stres/",
+            "/aɪ ˈɔːlweɪz meɪk ə lɪst əv tæsks bɪˈfɔːr aɪ stɑːrt maɪ wɜːrk ˈmɔːrnɪŋ/",
+            "/ðen, aɪ pʊt ðə məʊst ɪmˈpɔːrtnt tæsks æt ðə tɑːp əv maɪ lɪst/",
+            "/ɪt ɪz ˈɔːlsəʊ ˈnesəseri tuː teɪk ʃɔːrt breɪks tuː rest aʊər aɪz ænd breɪn/",
+            "/ɪf juː fiːl ˈtaɪərd, ə faɪv-ˈmɪnɪt breɪk kæn ɡɪv juː mɔːr ˈenərdʒi/",
+            "/pliːz rɪˈmembər tuː tʃek jʊər ˈiːmeɪl ˈkæləndər ˈevri ˈiːvnɪŋ fɔːr ðə nekst deɪ/"
+        ];
+        const qs_d3 = [
+            { type: "Wh-", q: "What does Emma want to talk about?", ans: "Managing time at work.", ipa: "/ˈmænɪdʒɪŋ taɪm æt wɜːrk/" },
+            { type: "Yes/No", q: "Is it important to have a clear schedule?", ans: "Yes, it is very important.", ipa: "/jes, ɪt ɪz ˈveri ɪmˈpɔːrtnt/" },
+            { type: "Wh-", q: "What does a good schedule help us do?", ans: "Finish our work on time and reduce stress.", ipa: "/ˈfɪnɪʃ aʊər wɜːrk ɑːn taɪm ænd rɪˈduːs stres/" },
+            { type: "Wh-", q: "What does Emma make before she starts working?", ans: "She makes a list of tasks.", ipa: "/ʃiː meɪks ə lɪst əv tæsks/" },
+            { type: "Wh-", q: "Where does she put the most important tasks?", ans: "At the top of her list.", ipa: "/æt ðə tɑːp əv hər lɪst/" },
+            { type: "Yes/No", q: "Is it necessary to work without resting?", ans: "No, it is necessary to take short breaks.", ipa: "/nəʊ, ɪt ɪz ˈnesəseri tuː teɪk ʃɔːrt breɪks/" },
+            { type: "Yes/No", q: "Can a five-minute break give you energy?", ans: "Yes, it can give you more energy.", ipa: "/jes, ɪt kæn ɡɪv juː mɔːr ˈenərdʒi/" },
+            { type: "Wh-", q: "What should you check every evening?", ans: "Your email calendar for the next day.", ipa: "/jʊər ˈiːmeɪl ˈkæləndər fɔːr ðə nekst deɪ/" }
+        ];
+
+        const slidesData = [
+            // Slide 1
+            { type: 'title', title: "Time & Schedule", subtitle: "Level: A2", color: 'sky' },
+            // Slide 2
+            { type: 'list', title: "Warm up Questions", level: "A2", items: [
+                "1. Do you use a calendar or a notebook to plan your day?",
+                "2. What time do you usually start and finish your work?",
+                "3. Do you prefer having a busy schedule or a lot of free time?"
+            ]},
+            // Slide 3
+            { type: 'prediction', title: "Prediction Activity", desc: "Look at the pictures. What do you think the two coworkers will discuss?", images: [
+                "https://images.unsplash.com/photo-1506784983877-45594efa4cbe?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+                "https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+                "https://images.unsplash.com/photo-1511882150382-421056c89033?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  
+            ]},
+            // Slide 4
+            { type: 'audio-mcq', title: "Listen and Choose", 
+              script: dialogue1, 
+              question: "What is the main topic of their conversation?", options: ["(A) A birthday party", "(B) Work schedule and meetings", "(C) Buying new chairs", "(D) A vacation plan"], answer: 1 }
+        ];
+
+        // Slide 5-12
+        for(let i=0; i<8; i++){
+            slidesData.push({
+                type: 'breakdown', title: "Conversation Breakdown", num: i+1, 
+                role: dialogue1[i].r, sentence: dialogue1[i].t, blankRatio: 0.35,
+                ipa: ipa_d1[i], voice: dialogue1[i].r === 'Alex' ? 'speaker1' : 'speaker2',
+                qType: qs_d1[i].type, qText: qs_d1[i].q, qAns: qs_d1[i].ans, qIpa: qs_d1[i].ipa
+            });
+        }
+
+        // Slide 13, 14
+        slidesData.push({ type: 'full-script', title: "Conversation: Script", script: dialogue1 });
+        slidesData.push({ type: 'speaking', title: "Speaking Activity", icon: "comments", text: "Tell me about your schedule for tomorrow. What time will you wake up and what is your most important task?" });
+
+        // Slide 15
+        slidesData.push({ type: 'prediction', title: "Prediction Activity", desc: "They continue talking. What do you think they will discuss next?", images: [
+            "https://images.unsplash.com/photo-1552581234-26160f608093?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+            "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+            "https://images.unsplash.com/photo-1521737711867-e3b97375f902?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  
+        ]});
+
+        // Slide 16
+        slidesData.push({ type: 'audio-mcq', title: "Listen and Choose", 
+              script: dialogue2, 
+              question: "What are they planning to do with the Friday activity?", options: ["(A) Move it to four o'clock", "(B) Move it to Monday", "(C) Cancel it completely", "(D) Make it three hours long"], answer: 0 });
+
+        // Slide 17-24
+        for(let i=0; i<8; i++){
+            slidesData.push({
+                type: 'breakdown', title: "Conversation Part 2 Breakdown", num: i+1, 
+                role: dialogue2[i].r, sentence: dialogue2[i].t, blankRatio: 0.35,
+                ipa: ipa_d2[i], voice: dialogue2[i].r === 'Alex' ? 'speaker1' : 'speaker2',
+                qType: qs_d2[i].type, qText: qs_d2[i].q, qAns: qs_d2[i].ans, qIpa: qs_d2[i].ipa
+            });
+        }
+
+        // Slide 25, 26
+        slidesData.push({ type: 'full-script', title: "Conversation Part 2: Script", script: dialogue2 });
+        slidesData.push({ type: 'speaking', title: "Speaking Activity", icon: "users", text: "Do you often have team activities at work? What do you usually do?" });
+
+        // Slide 27
+        slidesData.push({ type: 'prediction', title: "Prediction Activity", desc: "Now, listen to Emma, a manager. What do you think she will talk about?", images: [
+            "https://images.unsplash.com/photo-1499750310107-5fef28a66643?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+            "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80", 
+            "https://images.unsplash.com/photo-1507925922893-87310a76ed20?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"  
+        ]});
+
+        // Slide 28
+        slidesData.push({ type: 'audio-mcq', title: "Listen and Choose", 
+              script: dialogue3, 
+              question: "What is Emma's main advice?", options: ["(A) Work without taking any breaks", "(B) Read emails all day long", "(C) Manage time well with a clear schedule", "(D) Always start working in the afternoon"], answer: 2 });
+
+        // Slide 29-36
+        for(let i=0; i<8; i++){
+            slidesData.push({
+                type: 'breakdown', title: "Monologue Breakdown", num: i+1, 
+                role: dialogue3[i].r, sentence: dialogue3[i].t, blankRatio: 0.35,
+                ipa: ipa_d3[i], voice: 'speaker3',
+                qType: qs_d3[i].type, qText: qs_d3[i].q, qAns: qs_d3[i].ans, qIpa: qs_d3[i].ipa
+            });
+        }
+
+        // Slide 37, 38
+        slidesData.push({ type: 'full-script', title: "Monologue: Script", script: dialogue3 });
+        slidesData.push({ type: 'speaking', title: "Speaking Activity", icon: "clock", text: "How do you remember your important tasks? Do you make a list or use an app?" });
+
+        // Slide 39, 40
+        slidesData.push({ type: 'list', title: "Application & Expansion (Part 1)", level: "Level A2", items: [
+            "1. How can you ask a colleague if they have free time?",
+            "2. Tell me how to change an appointment time in English.",
+            "3. Why is it helpful to update your calendar often?",
+            "4. Describe your perfect lunch break.",
+            "5. What do you do if you have too much work and little time?"
+        ]});
+        slidesData.push({ type: 'list', title: "Application & Expansion (Part 2)", level: "Level A2", items: [
+            "1. Roleplay: Ask your manager to move a meeting from 2 PM to 4 PM.",
+            "2. How do you feel when someone is late for a meeting?",
+            "3. Talk about a time when you had to cancel a plan.",
+            "4. Do you agree that taking breaks makes you work better? Why?",
+            "5. What is the best way to start your Monday morning?"
+        ]});
+
+
+        // --- RENDER LOGIC ---
+        const container = document.getElementById('slides-wrapper');
+        
+        function escapeHTML(str) {
+            return str.replace(/[&<>'"]/g, 
+                tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+            );
+        }
+
+        let hiddenTargetWords = new Set();
+
+        function generateBlankSentence(sentence, ratio) {
+            const targetWords = [
+                'schedule', 'week', 'minute', 'free', 'discuss', 'meeting', 'monday', 'morning', 'prepare', 'room', 
+                'office', 'early', 'chairs', 'change', 'lunch', 'break', 'wednesday', 'time', 'afternoon', 'training', 
+                'session', 'update', 'calendar', 'alarm', 'friday', 'team', 'activity', 'starts', 'usually', 'work', 
+                'move', 'late', 'cancel', 'finish', 'tasks', 'idea', 'hour', 'hours', 'home', 'perfect', 'message', 
+                'managing', 'important', 'clear', 'reduces', 'stress', 'list', 'start', 'top', 'necessary', 'short', 
+                'breaks', 'rest', 'eyes', 'brain', 'tired', 'energy', 'remember', 'check', 'email', 'evening'
+            ];
+            const words = sentence.split(' ');
+            const numToHide = Math.max(1, Math.round(words.length * ratio));
+            
+            const wordData = words.map((w, i) => {
+                const cleanWord = w.replace(/[^a-zA-Z]/g, '');
+                return { index: i, original: w, clean: cleanWord, length: cleanWord.length };
+            });
+            
+            const sortedByLen = [...wordData].sort((a, b) => {
+                const aClean = a.clean.toLowerCase();
+                const bClean = b.clean.toLowerCase();
+                const aIsTarget = (targetWords.includes(aClean) && !hiddenTargetWords.has(aClean)) ? 1 : 0;
+                const bIsTarget = (targetWords.includes(bClean) && !hiddenTargetWords.has(bClean)) ? 1 : 0;
+                if (aIsTarget !== bIsTarget) return bIsTarget - aIsTarget;
+                return b.length - a.length;
+            });
+            const hideIndices = sortedByLen.slice(0, numToHide).map(w => w.index);
+            
+            hideIndices.forEach(idx => {
+                const cleanWord = wordData[idx].clean.toLowerCase();
+                if (targetWords.includes(cleanWord)) {
+                    hiddenTargetWords.add(cleanWord);
+                }
+            });
+            
+            let html = '<div class="flex flex-wrap items-center gap-x-2 gap-y-4 leading-loose text-xl font-medium text-gray-800 w-full">';
+            
+            words.forEach((w, index) => {
+                if (hideIndices.includes(index) && wordData[index].length > 0) {
+                    const match = w.match(/^([^a-zA-Z]*)([a-zA-Z\-\']+)([^a-zA-Z]*)$/);
+                    if (match) {
+                        const prefix = match[1];
+                        const word = match[2];
+                        const suffix = match[3];
+                        const wPx = Math.max(40, word.length * 15 + 10); 
+                        html += `<span class="inline-flex items-center">${prefix}<input type="text" class="dictation-input border-b-2 border-gray-300 focus:border-sky-500 bg-transparent text-center text-sky-600 font-bold outline-none px-1" style="width: ${wPx}px;" data-answer="${escapeHTML(word.toLowerCase())}">${suffix}</span>`;
+                    } else { html += `<span>${w}</span>`; }
+                } else { html += `<span>${w}</span>`; }
+            });
+
+            html += `<button class="check-btn ml-2 shrink-0 w-9 h-9 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-500 transition-colors tooltip" title="Check All"><i class="fas fa-check"></i></button></div>`;
+            return html;
+        }
+
+        function renderSlides() {
+            hiddenTargetWords.clear();
+            let html = '';
+            slidesData.forEach((slide, index) => {
+                html += `<div class="slide-panel w-full h-full p-8 md:p-12 flex-col justify-center relative bg-white" id="slide-${index}">`;
+                
+                if (slide.type === 'title') {
+                    html += `
+                        <div class="text-center">
+                            <div class="w-24 h-24 bg-${slide.color}-100 rounded-full flex items-center justify-center mx-auto mb-6 shadow-inner">
+                                <i class="fas fa-calendar-alt text-4xl text-${slide.color}-500"></i>
+                            </div>
+                            <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">${slide.title}</h1>
+                            <p class="text-xl text-gray-500">${slide.subtitle}</p>
+                        </div>
+                    `;
+                } 
+                else if (slide.type === 'list') {
+                    html += `
+                        <h2 class="text-3xl font-bold text-sky-600 mb-2">${slide.title}</h2>
+                        <span class="inline-block bg-sky-100 text-sky-800 text-xs px-2 py-1 rounded mb-8 uppercase font-bold tracking-wider">${slide.level}</span>
+                        <ul class="space-y-6 text-lg text-gray-700">
+                            ${slide.items.map(item => `<li class="flex items-start gap-4"><i class="fas fa-check-circle text-sky-400 mt-1"></i> <span>${item}</span></li>`).join('')}
+                        </ul>
+                    `;
+                }
+                else if (slide.type === 'prediction') {
+                    html += `
+                        <h2 class="text-3xl font-bold text-purple-500 mb-4">${slide.title}</h2>
+                        <p class="text-lg text-gray-600 mb-8">${slide.desc}</p>
+                        <div class="grid grid-cols-3 gap-6 w-full max-w-4xl mx-auto">
+                            ${slide.images.map(img => `
+                                <div class="aspect-square rounded-2xl overflow-hidden shadow-md border-4 border-purple-50">
+                                    <img src="${img}" class="w-full h-full object-cover" alt="Prediction image" loading="lazy">
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                }
+                else if (slide.type === 'audio-mcq') {
+                    html += `
+                        <div class="flex justify-between items-center mb-8">
+                            <h2 class="text-3xl font-bold text-sky-600">${slide.title}</h2>
+                            <button class="bg-purple-500 hover:bg-purple-600 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 tts-dialogue-btn" 
+                                    data-slide-index="${index}">
+                                <i class="fas fa-play text-xl ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="bg-sky-50 p-6 rounded-xl border border-sky-100">
+                            <p class="text-xl font-semibold text-gray-800 mb-6">${slide.question}</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mcq-container">
+                                ${slide.options.map((opt, i) => `
+                                    <button class="mcq-btn text-left p-4 rounded-lg border-2 border-gray-200 hover:border-sky-400 bg-white transition-all flex items-center justify-between" 
+                                            data-correct="${i === slide.answer}">
+                                        <span class="text-lg">${opt}</span>
+                                        <i class="fas fa-circle text-gray-300 status-icon"></i>
+                                    </button>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                else if (slide.type === 'breakdown') {
+                    const roleColor = slide.role === 'Alex' ? 'sky' : (slide.role === 'Emma' ? 'indigo' : 'purple');
+                    html += `
+                        <div class="absolute top-8 left-8 text-sm font-bold text-gray-400">Sentence ${slide.num}</div>
+                        <h2 class="text-2xl font-bold text-gray-800 mb-8 border-b pb-4">${slide.title}</h2>
+                        
+                        <div class="mb-10 p-6 bg-${roleColor}-50 rounded-xl border border-${roleColor}-100 relative">
+                            <span class="absolute -top-3 left-6 bg-${roleColor}-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-sm uppercase">${slide.role}</span>
+                            
+                            <div class="mt-4 mb-6 flex flex-col gap-4 w-full">
+                                ${generateBlankSentence(slide.sentence, slide.blankRatio)}
+                            </div>
+                            
+                            <div class="flex gap-3 no-print mt-2">
+                                <button class="toggle-btn bg-white border border-gray-300 text-gray-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-50 flex items-center gap-2">
+                                    <i class="fas fa-eye"></i> Show Text & IPA
+                                </button>
+                                <button class="tts-btn bg-${roleColor}-100 text-${roleColor}-700 px-4 py-2 rounded-lg text-sm font-bold hover:bg-${roleColor}-200 flex items-center gap-2"
+                                        data-text="${escapeHTML(slide.sentence)}" data-voice="${slide.voice}">
+                                    <i class="fas fa-volume-up"></i> Listen
+                                </button>
+                                <button class="bg-gray-800 text-white w-10 h-10 rounded-lg flex items-center justify-center hover:bg-red-500 transition-colors tooltip" title="Record (Mock)">
+                                    <i class="fas fa-microphone"></i>
+                                </button>
+                            </div>
+                            
+                            <div class="hidden-content hidden mt-6 p-4 bg-white rounded-lg border border-gray-100 shadow-inner">
+                                <p class="text-gray-800 font-medium mb-1">${slide.sentence}</p>
+                                <p class="text-gray-500 font-mono text-sm">${slide.ipa}</p>
+                            </div>
+                        </div>
+
+                        <!-- Comprehension Question -->
+                        <div class="bg-gray-50 p-5 rounded-xl border border-gray-200">
+                            <div class="flex items-center gap-2 mb-3">
+                                <span class="bg-gray-700 text-white text-xs px-2 py-1 rounded font-bold">${slide.qType} Q</span>
+                                <p class="font-semibold text-gray-800">${slide.qText}</p>
+                            </div>
+                            <div class="flex items-center gap-3 no-print">
+                                <button class="toggle-btn bg-white border border-gray-300 text-gray-600 px-3 py-1.5 rounded-md text-sm hover:bg-gray-100 flex items-center gap-2">
+                                    <i class="fas fa-eye"></i> Answer
+                                </button>
+                            </div>
+                            <div class="hidden-content hidden mt-3 bg-white p-3 rounded border border-gray-100">
+                                <div class="flex items-center gap-3">
+                                    <p class="text-sky-600 font-bold flex-grow">${slide.qAns}</p>
+                                    <button class="tts-btn text-gray-400 hover:text-sky-500 transition-colors" data-text="${escapeHTML(slide.qAns)}" data-voice="${slide.voice}">
+                                        <i class="fas fa-volume-up"></i>
+                                    </button>
+                                </div>
+                                <p class="text-gray-400 font-mono text-xs mt-1">${slide.qIpa}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                else if (slide.type === 'full-script') {
+                    html += `
+                        <div class="flex justify-between items-center mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">${slide.title}</h2>
+                            <button class="bg-sky-500 hover:bg-sky-600 text-white w-12 h-12 rounded-full flex items-center justify-center shadow-lg transition-transform hover:scale-105 tts-dialogue-btn"
+                                    data-slide-index="${index}">
+                                <i class="fas fa-play ml-1"></i>
+                            </button>
+                        </div>
+                        <div class="bg-gray-50 rounded-xl p-6 h-[60vh] overflow-y-auto custom-scrollbar border border-gray-200">
+                            <div class="space-y-4">
+                                ${slide.script.map(line => {
+                                    const c = line.r === 'Alex' ? 'text-sky-600' : (line.r === 'Emma' ? 'text-indigo-600' : 'text-purple-500');
+                                    return `<div class="flex gap-4">
+                                        <span class="font-bold w-16 shrink-0 ${c}">${line.r}:</span>
+                                        <span class="text-gray-700">${line.t}</span>
+                                    </div>`;
+                                }).join('')}
+                            </div>
+                        </div>
+                    `;
+                }
+                else if (slide.type === 'speaking') {
+                    html += `
+                        <div class="flex flex-col items-center justify-center h-full text-center">
+                            <div class="w-24 h-24 bg-amber-100 rounded-full flex items-center justify-center mb-8 shadow-inner">
+                                <i class="fas fa-${slide.icon} text-5xl text-amber-500"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-gray-800 mb-6">${slide.title}</h2>
+                            <div class="bg-white p-8 rounded-2xl shadow-lg border border-amber-50 max-w-3xl relative overflow-hidden">
+                                <div class="absolute top-0 left-0 w-2 h-full bg-amber-400"></div>
+                                <p class="text-2xl text-gray-700 font-medium leading-relaxed italic">"${slide.text}"</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                html += `</div>`;
+            });
+            container.innerHTML = html;
+            attachEventListeners();
+        }
+
+        // --- INTERACTIVITY LOGIC ---
+        let currentSlide = 0;
+        const totalSlides = slidesData.length;
+
+        function updateNav() {
+            document.querySelectorAll('.slide-panel').forEach((el, index) => {
+                el.classList.toggle('active', index === currentSlide);
+            });
+            document.getElementById('current-slide-num').innerText = currentSlide + 1;
+            document.getElementById('prev-btn').disabled = currentSlide === 0;
+            document.getElementById('next-btn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function navigate(dir) {
+            cancelAudioSafe(); 
+            currentSlide += dir;
+            if (currentSlide < 0) currentSlide = 0;
+            if (currentSlide >= totalSlides) currentSlide = totalSlides - 1;
+            updateNav();
+        }
+
+        function attachEventListeners() {
+            document.querySelectorAll('.mcq-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const parent = this.closest('.mcq-container');
+                    parent.querySelectorAll('.mcq-btn').forEach(b => {
+                        b.classList.remove('border-green-500', 'bg-green-50', 'border-red-500', 'bg-red-50');
+                        b.querySelector('.status-icon').className = 'fas fa-circle text-gray-300 status-icon';
+                    });
+                    
+                    const isCorrect = this.dataset.correct === 'true';
+                    const icon = this.querySelector('.status-icon');
+                    
+                    if (isCorrect) {
+                        this.classList.add('border-green-500', 'bg-green-50');
+                        icon.className = 'fas fa-check-circle text-green-500 status-icon text-xl';
+                    } else {
+                        this.classList.add('border-red-500', 'bg-red-50');
+                        icon.className = 'fas fa-times-circle text-red-500 status-icon text-xl';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.check-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.parentElement;
+                    const inputs = container.querySelectorAll('.dictation-input');
+                    let allCorrect = true;
+
+                    inputs.forEach(input => {
+                        const correctAns = input.dataset.answer.toLowerCase();
+                        const userAns = input.value.trim().toLowerCase();
+                        if (userAns === correctAns) {
+                            input.classList.remove('text-sky-600', 'border-gray-300', 'text-red-600');
+                            input.classList.add('text-green-600', 'border-green-500');
+                        } else {
+                            input.classList.remove('text-sky-600', 'border-gray-300', 'text-green-600', 'border-green-500');
+                            input.classList.add('text-red-600', 'border-red-500');
+                            allCorrect = false;
+                        }
+                    });
+
+                    const icon = this.querySelector('i');
+                    if (allCorrect && inputs.length > 0) {
+                        this.classList.replace('bg-gray-100', 'bg-green-100');
+                        this.classList.replace('text-gray-500', 'text-green-600');
+                        icon.className = 'fas fa-check';
+                    } else {
+                        this.classList.replace('bg-gray-100', 'bg-red-100');
+                        this.classList.replace('text-gray-500', 'text-red-600');
+                        icon.className = 'fas fa-times';
+                    }
+                });
+            });
+
+            document.querySelectorAll('.dictation-input').forEach(input => {
+                input.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        const container = this.closest('div');
+                        if (container) {
+                            const checkBtn = container.querySelector('.check-btn');
+                            if (checkBtn) checkBtn.click();
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.toggle-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const target = this.parentElement.nextElementSibling;
+                    if(target && target.classList.contains('hidden-content')){
+                        target.classList.toggle('hidden');
+                        const icon = this.querySelector('i');
+                        if (target.classList.contains('hidden')) {
+                            icon.classList.replace('fa-eye-slash', 'fa-eye');
+                        } else {
+                            icon.classList.replace('fa-eye', 'fa-eye-slash');
+                        }
+                    }
+                });
+            });
+
+            document.querySelectorAll('.tts-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const text = this.getAttribute('data-text');
+                    const voiceRole = this.getAttribute('data-voice');
+                    playTTS(text, voiceRole);
+                });
+            });
+
+            document.querySelectorAll('.tts-dialogue-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    cancelAudioSafe(); 
+                    const index = parseInt(this.getAttribute('data-slide-index'));
+                    if (slidesData[index] && slidesData[index].script) {
+                        currentDialogue = slidesData[index].script;
+                        dialogueIndex = 0;
+                        setTimeout(playDialogueSequence, 50);
+                    }
+                });
+            });
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName.toLowerCase() === 'input') return;
+            if (e.key === 'ArrowRight') navigate(1);
+            else if (e.key === 'ArrowLeft') navigate(-1);
+        });
+
+        // --- WEB SPEECH API & TTS LOGIC ---
+        let synth = window.speechSynthesis;
+        let availableVoices = [];
+        
+        let currentDialogue = [];
+        let dialogueIndex = 0;
+        
+        window.speechUtterances = []; 
+
+        function populateVoiceList() {
+            availableVoices = synth.getVoices();
+            if (availableVoices.length === 0) return;
+
+            const enVoices = availableVoices.filter(v => v.lang.startsWith('en-'));
+            
+            const strictVoices = enVoices.filter(v => 
+                v.name.includes('Emma') || 
+                v.name.includes('Jenny') || 
+                v.name.includes('Andrew') || 
+                v.name.includes('Brian')
+            );
+            
+            const displayList = strictVoices.length > 0 ? strictVoices : enVoices;
+
+            const configs = [
+                { id: 'voice-speaker1', priorities: ['Andrew', 'Brian Natural', 'Male'] },
+                { id: 'voice-speaker2', priorities: ['Jenny', 'Emma', 'Female'] },
+                { id: 'voice-speaker3', priorities: ['Emma', 'Jenny', 'Female'] }
+            ];
+            
+            configs.forEach(config => {
+                const selectEl = document.getElementById(config.id);
+                if (!selectEl) return;
+                
+                const prevValue = selectEl.value; 
+                selectEl.innerHTML = ''; 
+                
+                displayList.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    option.value = voice.voiceURI;
+                    selectEl.appendChild(option);
+                });
+                
+                let bestMatchIndex = -1;
+                for (let keyword of config.priorities) {
+                    bestMatchIndex = Array.from(selectEl.options).findIndex(opt => opt.textContent.includes(keyword));
+                    if (bestMatchIndex !== -1) {
+                        break;
+                    }
+                }
+                
+                if (bestMatchIndex !== -1) {
+                    selectEl.selectedIndex = bestMatchIndex;
+                } else if (selectEl.options.length > 0) {
+                    selectEl.selectedIndex = 0;
+                }
+
+                if (prevValue && selectEl.querySelector(`option[value="${prevValue}"]`)) {
+                    selectEl.value = prevValue;
+                }
+            });
+        }
+
+        if (speechSynthesis.onvoiceschanged !== undefined) {
+            speechSynthesis.onvoiceschanged = populateVoiceList;
+        }
+
+        function getVoiceForRole(role) {
+            if (!role || availableVoices.length === 0) return null;
+            
+            const selectId = `voice-${role.toLowerCase()}`;
+            const selectEl = document.getElementById(selectId);
+            
+            if (selectEl && selectEl.value) {
+                const voice = availableVoices.find(v => v.voiceURI === selectEl.value);
+                if (voice) return voice;
+            }
+            
+            return availableVoices.find(v => v.lang.startsWith('en-')) || availableVoices[0];
+        }
+
+        function cancelAudioSafe() {
+            window.speechSynthesis.pause();
+            window.speechSynthesis.cancel();
+            currentDialogue = [];
+            dialogueIndex = 0;
+            window.speechUtterances = []; 
+        }
+
+        function playTTS(text, voiceRole) {
+            cancelAudioSafe();
+            setTimeout(() => {
+                if (text !== '') {
+                    const utterThis = new SpeechSynthesisUtterance(text);
+                    const voice = getVoiceForRole(voiceRole);
+                    if (voice) {
+                        utterThis.voice = voice;
+                    }
+                    utterThis.rate = 0.8; // User requested voice rate 0.8
+                    window.speechUtterances.push(utterThis);
+                    synth.speak(utterThis);
+                }
+            }, 50);
+        }
+
+        function playDialogueSequence() {
+            if (dialogueIndex >= currentDialogue.length) {
+                return;
+            }
+            const line = currentDialogue[dialogueIndex];
+            const utterThis = new SpeechSynthesisUtterance(line.t);
+            utterThis.rate = 0.8; // Voice rate 0.8
+            
+            // Map character names to voice roles
+            let voiceRole = 'speaker1';
+            if (line.r === 'Sarah') voiceRole = 'speaker2';
+            else if (line.r === 'Emma') voiceRole = 'speaker3';
+            
+            const voice = getVoiceForRole(voiceRole);
+            if (voice) {
+                utterThis.voice = voice;
+            }
+            
+            utterThis.onend = function() {
+                dialogueIndex++;
+                setTimeout(playDialogueSequence, 300);
+            };
+            
+            utterThis.onerror = function() {
+                dialogueIndex++;
+                setTimeout(playDialogueSequence, 300);
+            };
+
+            window.speechUtterances.push(utterThis);
+            synth.speak(utterThis);
+        }
+
+        // Settings Modal
+        function openSettings() {
+            document.getElementById('settings-modal').classList.remove('hidden');
+            document.getElementById('settings-modal').classList.add('flex');
+            populateVoiceList(); 
+        }
+
+        function closeSettings() {
+            document.getElementById('settings-modal').classList.add('hidden');
+            document.getElementById('settings-modal').classList.remove('flex');
+        }
+
+        // Initialization
+        window.addEventListener('load', () => {
+            renderSlides();
+            updateNav();
+            setTimeout(populateVoiceList, 100); 
+        });
+
+    </script>
+</body>
+</html>

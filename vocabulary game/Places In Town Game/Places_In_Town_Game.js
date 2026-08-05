@@ -1,0 +1,1281 @@
+﻿
+// ====================== CATEGORY METADATA ======================
+const CAT = {
+    noun: { label: 'Danh từ', short: 'n.', color: '#818cf8', bg: 'rgba(129,140,248,0.15)', border: 'rgba(129,140,248,0.4)' },
+    verb: { label: 'Động từ', short: 'v.', color: '#f472b6', bg: 'rgba(244,114,182,0.15)', border: 'rgba(244,114,182,0.4)' },
+    adj:  { label: 'Tính từ', short: 'adj.', color: '#34d399', bg: 'rgba(52,211,153,0.15)', border: 'rgba(52,211,153,0.4)' },
+    adv:  { label: 'Trạng từ', short: 'adv.', color: '#fbbf24', bg: 'rgba(251,191,36,0.15)', border: 'rgba(251,191,36,0.4)' },
+    prep: { label: 'Giới từ', short: 'prep.', color: '#38bdf8', bg: 'rgba(56,189,248,0.15)', border: 'rgba(56,189,248,0.4)' },
+    det:  { label: 'Từ hạn định', short: 'det.', color: '#a78bfa', bg: 'rgba(167,139,250,0.15)', border: 'rgba(167,139,250,0.4)' },
+    pron: { label: 'Đại từ', short: 'pron.', color: '#fb7185', bg: 'rgba(251,113,133,0.15)', border: 'rgba(251,113,133,0.4)' },
+    conj: { label: 'Liên từ', short: 'conj.', color: '#fb923c', bg: 'rgba(251,146,60,0.15)', border: 'rgba(251,146,60,0.4)' }
+};
+
+// ====================== ALL VOCABULARY ======================
+const allVocab = [
+    // --- NOUNS ---
+    // Transport & Streets
+    { word: "intersection", cat: "noun", ipa: "ˌɪntərˈsekʃn", vi: "ngã tư, giao lộ", eng: "A place where two or more roads cross each other.", icon: "🚦" },
+    { word: "roundabout", cat: "noun", ipa: "ˈraʊndəbaʊt", vi: "vòng xuyến", eng: "A road junction where traffic moves in a circle.", icon: "🔄" },
+    { word: "crosswalk", cat: "noun", ipa: "ˈkrɒswɔːk", vi: "vạch sang đường", eng: "A marked place where pedestrians can safely cross a road.", icon: "🦓" },
+    { word: "traffic light", cat: "noun", ipa: "ˈtræfɪk laɪt", vi: "đèn giao thông", eng: "A set of colored lights controlling traffic.", icon: "🚥" },
+    { word: "sidewalk", cat: "noun", ipa: "ˈsaɪdwɔːk", vi: "vỉa hè", eng: "A paved path for pedestrians at the side of a road.", icon: "🛣️" },
+    { word: "pedestrian", cat: "noun", ipa: "pəˈdestriən", vi: "người đi bộ", eng: "A person walking in a street or public place.", icon: "🚶" },
+    { word: "alley", cat: "noun", ipa: "ˈæli", vi: "hẻm, ngõ", eng: "A narrow passage behind or between buildings.", icon: "🛣️" },
+    { word: "bridge", cat: "noun", ipa: "brɪdʒ", vi: "cây cầu", eng: "A structure carrying a road over a river.", icon: "🌉" },
+    
+    // Public & Open Spaces
+    { word: "neighborhood", cat: "noun", ipa: "ˈneɪbərˌhʊd", vi: "khu phố", eng: "A district or area within a town where people live.", icon: "🏡" },
+    { word: "park", cat: "noun", ipa: "pɑːrk", vi: "công viên", eng: "A large public green area in a town.", icon: "🌲" },
+    { word: "beach", cat: "noun", ipa: "biːtʃ", vi: "bãi biển", eng: "A sandy shore by the ocean.", icon: "🏖️" },
+    { word: "tourist", cat: "noun", ipa: "ˈtʊərɪst", vi: "du khách", eng: "A person visiting a place for pleasure.", icon: "📸" },
+    
+    // Cultural & Educational Buildings
+    { word: "temple", cat: "noun", ipa: "ˈtempl", vi: "đền / chùa", eng: "A building used for the worship of a god or gods.", icon: "🛕" },
+    { word: "monument", cat: "noun", ipa: "ˈmɒnjumənt", vi: "tượng đài", eng: "A statue, building, or other structure erected to commemorate a notable person or event.", icon: "🗽" },
+    { word: "museum", cat: "noun", ipa: "mjuˈziːəm", vi: "bảo tàng", eng: "A building in which objects of historical, scientific, or cultural interest are stored.", icon: "🖼️" },
+    { word: "library", cat: "noun", ipa: "ˈlaɪbrəri", vi: "thư viện", eng: "A building containing collections of books.", icon: "🏛️" },
+    { word: "school", cat: "noun", ipa: "skuːl", vi: "trường học", eng: "An institution for educating children.", icon: "🏫" },
+    
+    // Health & Public Services
+    { word: "hospital", cat: "noun", ipa: "ˈhɒspɪtl", vi: "bệnh viện", eng: "A place for medical treatment.", icon: "🏥" },
+    { word: "pharmacy", cat: "noun", ipa: "ˈfɑːrməsi", vi: "nhà thuốc", eng: "A shop where medicines are prepared and sold.", icon: "💊" },
+    { word: "bank", cat: "noun", ipa: "bæŋk", vi: "ngân hàng", eng: "A financial establishment that invests money.", icon: "🏦" },
+    { word: "post office", cat: "noun", ipa: "ˈpoʊst ˌɒfɪs", vi: "bưu điện", eng: "A place where you can send letters and parcels.", icon: "📮" },
+    
+    // Commercial, Food & Entertainment
+    { word: "restaurant", cat: "noun", ipa: "ˈrestrɒnt", vi: "nhà hàng", eng: "A place where people pay to sit and eat meals.", icon: "🍽️" },
+    { word: "cafe", cat: "noun", ipa: "kæˈfeɪ", vi: "quán cà phê", eng: "A small restaurant selling light meals and drinks.", icon: "☕" },
+    { word: "bakery", cat: "noun", ipa: "ˈbeɪkəri", vi: "tiệm bánh", eng: "A place where bread and cakes are made or sold.", icon: "🥖" },
+    { word: "supermarket", cat: "noun", ipa: "ˈsuːpərmɑːrkɪt", vi: "siêu thị", eng: "A large self-service shop selling foods and goods.", icon: "🛒" },
+    { word: "convenience store", cat: "noun", ipa: "kənˈviːniəns stɔːr", vi: "cửa hàng tiện lợi", eng: "A small shop open long hours selling food and necessities.", icon: "🏪" },
+    { word: "bookstore", cat: "noun", ipa: "ˈbʊkstɔːr", vi: "hiệu sách", eng: "A shop where books are sold.", icon: "📚" },
+    { word: "cinema", cat: "noun", ipa: "ˈsɪnəmə", vi: "rạp chiếu phim", eng: "A theater where movies are shown.", icon: "🍿" },
+    { word: "stadium", cat: "noun", ipa: "ˈsteɪdiəm", vi: "sân vận động", eng: "A sports arena with tiers of seats.", icon: "🏟️" },
+    { word: "hotel", cat: "noun", ipa: "hoʊˈtel", vi: "khách sạn", eng: "An establishment providing accommodations, meals.", icon: "🏨" },
+
+    // --- VERBS ---
+    // Direction & Movement
+    { word: "go", cat: "verb", ipa: "ɡoʊ", vi: "đi", eng: "To move or travel to a place.", icon: "🏃" },
+    { word: "walk", cat: "verb", ipa: "wɔːk", vi: "đi bộ", eng: "To move on foot at a normal speed.", icon: "🚶‍♂️" },
+    { word: "turn", cat: "verb", ipa: "tɜːrn", vi: "rẽ, quẹo", eng: "To change direction when walking or driving.", icon: "↩️" },
+    { word: "cross", cat: "verb", ipa: "krɒs", vi: "băng qua", eng: "To go across from one side to the other.", icon: "🚸" },
+    { word: "pass", cat: "verb", ipa: "pæs", vi: "đi qua", eng: "To move past or through a place.", icon: "➡️" },
+    { word: "travel", cat: "verb", ipa: "ˈtrævl", vi: "du lịch, di chuyển", eng: "To make a journey, typically of some length.", icon: "🧳" },
+    { word: "arrive", cat: "verb", ipa: "əˈraɪv", vi: "đến nơi", eng: "To reach a place at the end of a journey.", icon: "🏁" },
+    { word: "depart", cat: "verb", ipa: "dɪˈpɑːrt", vi: "khởi hành", eng: "To leave, typically in order to start a journey.", icon: "🛫" },
+    { word: "enter", cat: "verb", ipa: "ˈentər", vi: "đi vào", eng: "To come or go into a place.", icon: "🚪" },
+    { word: "leave", cat: "verb", ipa: "liːv", vi: "rời khỏi", eng: "To go away from.", icon: "👋" },
+    
+    // Transport Actions
+    { word: "drive", cat: "verb", ipa: "draɪv", vi: "lái xe", eng: "To operate and control the direction and speed of a motor vehicle.", icon: "🚗" },
+    { word: "ride", cat: "verb", ipa: "raɪd", vi: "cưỡi, đạp xe", eng: "To sit on and control the movement of an animal or vehicle.", icon: "🚲" },
+    { word: "park", cat: "verb", ipa: "pɑːrk", vi: "đỗ xe", eng: "To bring a vehicle that one is driving to a halt and leave it temporarily.", icon: "🅿️" },
+    { word: "stop", cat: "verb", ipa: "stɒp", vi: "dừng lại", eng: "To come to an end; cease to happen.", icon: "🛑" },
+    { word: "wait", cat: "verb", ipa: "weɪt", vi: "chờ đợi", eng: "To stay where one is or delay action until a particular time or event.", icon: "⏳" },
+    
+    // General Actions
+    { word: "explore", cat: "verb", ipa: "ɪkˈsplɔːr", vi: "khám phá", eng: "To travel around an area to learn about it.", icon: "🔭" },
+    { word: "visit", cat: "verb", ipa: "ˈvɪzɪt", vi: "thăm viếng", eng: "To go to see and spend time with someone or somewhere.", icon: "🗺️" },
+    { word: "look", cat: "verb", ipa: "lʊk", vi: "nhìn", eng: "To direct one's gaze toward someone or something.", icon: "👀" },
+    { word: "find", cat: "verb", ipa: "faɪnd", vi: "tìm kiếm", eng: "To discover or perceive by chance or unexpectedly.", icon: "🔍" },
+    { word: "ask", cat: "verb", ipa: "æsk", vi: "hỏi", eng: "To say something in order to obtain an answer or some information.", icon: "❓" },
+    { word: "meet", cat: "verb", ipa: "miːt", vi: "gặp gỡ", eng: "To arrange or happen to come into the presence or company of someone.", icon: "🤝" },
+    { word: "stay", cat: "verb", ipa: "steɪ", vi: "ở lại", eng: "To remain in the same place.", icon: "🏠" },
+    { word: "live", cat: "verb", ipa: "lɪv", vi: "sống", eng: "To remain alive; to reside somewhere.", icon: "🌍" },
+    { word: "work", cat: "verb", ipa: "wɜːrk", vi: "làm việc", eng: "To perform activity in order to achieve a purpose.", icon: "💼" },
+    { word: "buy", cat: "verb", ipa: "baɪ", vi: "mua", eng: "To get something by paying money for it.", icon: "🛍️" },
+    { word: "pay", cat: "verb", ipa: "peɪ", vi: "trả tiền", eng: "To give money for goods or services.", icon: "💵" },
+    { word: "eat", cat: "verb", ipa: "iːt", vi: "ăn", eng: "To put food into the mouth and chew and swallow it.", icon: "🍔" },
+    { word: "drink", cat: "verb", ipa: "drɪŋk", vi: "uống", eng: "To take a liquid into the mouth and swallow.", icon: "🥤" },
+    { word: "open", cat: "verb", ipa: "ˈoʊpən", vi: "mở cửa", eng: "To move so as to leave a space allowing access and view.", icon: "🔓" },
+    { word: "close", cat: "verb", ipa: "kloʊz", vi: "đóng cửa", eng: "To block up an opening; to shut.", icon: "🔒" },
+
+    // --- ADJECTIVES ---
+    // Size & Shape
+    { word: "big", cat: "adj", ipa: "bɪɡ", vi: "to lớn", eng: "Of considerable size or extent.", icon: "🐘" },
+    { word: "small", cat: "adj", ipa: "smɔːl", vi: "nhỏ bé", eng: "Of a size that is less than normal or usual.", icon: "🐁" },
+    { word: "tall", cat: "adj", ipa: "tɔːl", vi: "cao", eng: "Of great or more than average height.", icon: "🏢" },
+    { word: "short", cat: "adj", ipa: "ʃɔːrt", vi: "ngắn, thấp", eng: "Measuring a small distance from end to end.", icon: "📏" },
+    { word: "narrow", cat: "adj", ipa: "ˈnæroʊ", vi: "hẹp, chật", eng: "Small in width, not wide.", icon: "↕️" },
+    { word: "empty", cat: "adj", ipa: "ˈempti", vi: "trống rỗng", eng: "Containing nothing; not filled or occupied.", icon: "🕳️" },
+    { word: "crowded", cat: "adj", ipa: "ˈkraʊdɪd", vi: "đông đúc", eng: "Full of people, with little space.", icon: "👥" },
+    { word: "busy", cat: "adj", ipa: "ˈbɪzi", vi: "nhộn nhịp, bận rộn", eng: "Full of activity and people.", icon: "🔊" },
+    
+    // State & Quality
+    { word: "new", cat: "adj", ipa: "njuː", vi: "mới", eng: "Not existing before; made, introduced, or discovered recently.", icon: "🆕" },
+    { word: "old", cat: "adj", ipa: "oʊld", vi: "cũ, già", eng: "Having lived for a long time; no longer young.", icon: "🏛️" },
+    { word: "modern", cat: "adj", ipa: "ˈmɒdərn", vi: "hiện đại", eng: "Relating to the present or recent times.", icon: "🏙️" },
+    { word: "historic", cat: "adj", ipa: "hɪˈstɒrɪk", vi: "mang tính lịch sử", eng: "Famous or important in history.", icon: "📜" },
+    { word: "clean", cat: "adj", ipa: "kliːn", vi: "sạch sẽ", eng: "Free from dirt, marks, or stains.", icon: "✨" },
+    { word: "dirty", cat: "adj", ipa: "ˈdɜːrti", vi: "dơ bẩn", eng: "Covered or marked with an unclean substance.", icon: "🗑️" },
+    { word: "beautiful", cat: "adj", ipa: "ˈbjuːtɪfl", vi: "đẹp", eng: "Pleasing the senses or mind aesthetically.", icon: "🌸" },
+    { word: "ugly", cat: "adj", ipa: "ˈʌɡli", vi: "xấu xí", eng: "Unpleasant or repulsive.", icon: "🤢" },
+    { word: "interesting", cat: "adj", ipa: "ˈɪntrəstɪŋ", vi: "thú vị", eng: "Arousing curiosity or interest.", icon: "🤩" },
+    
+    // Distance & Safety
+    { word: "nearby", cat: "adj", ipa: "ˌnɪrˈbaɪ", vi: "gần đây", eng: "Not far away, close in distance.", icon: "📍" },
+    { word: "far", cat: "adj", ipa: "fɑːr", vi: "xa (tính từ)", eng: "At, to, or by a great distance.", icon: "🔭" },
+    { word: "safe", cat: "adj", ipa: "seɪf", vi: "an toàn", eng: "Protected from or not exposed to danger or risk.", icon: "🛡️" },
+    { word: "dangerous", cat: "adj", ipa: "ˈdeɪndʒərəs", vi: "nguy hiểm", eng: "Able or likely to cause harm or injury.", icon: "⚠️" },
+    
+    // Economics & Social
+    { word: "expensive", cat: "adj", ipa: "ɪkˈspensɪv", vi: "đắt đỏ", eng: "Costing a lot of money.", icon: "💎" },
+    { word: "cheap", cat: "adj", ipa: "tʃiːp", vi: "rẻ", eng: "Costing very little; relatively low in price.", icon: "🏷️" },
+    { word: "popular", cat: "adj", ipa: "ˈpɒpjələr", vi: "phổ biến", eng: "Liked, admired, or enjoyed by many people.", icon: "👍" },
+    { word: "famous", cat: "adj", ipa: "ˈfeɪməs", vi: "nổi tiếng", eng: "Known about by many people.", icon: "⭐" },
+    { word: "friendly", cat: "adj", ipa: "ˈfrendli", vi: "thân thiện", eng: "Kind and pleasant.", icon: "😊" },
+    { word: "quiet", cat: "adj", ipa: "ˈkwaɪət", vi: "yên tĩnh", eng: "Making little or no noise.", icon: "🤫" },
+    { word: "local", cat: "adj", ipa: "ˈloʊkl", vi: "địa phương", eng: "Belonging or relating to a particular area or neighborhood.", icon: "🏘️" },
+    { word: "public", cat: "adj", ipa: "ˈpʌblɪk", vi: "công cộng", eng: "Of or concerning the people as a whole.", icon: "📢" },
+    { word: "private", cat: "adj", ipa: "ˈpraɪvət", vi: "riêng tư", eng: "Belonging to or for the use of one particular person or group.", icon: "🚫" },
+
+    // --- ADVERBS ---
+    // Direction & Movement
+    { word: "straight", cat: "adv", ipa: "streɪt", vi: "thẳng", eng: "In a direct line, without turning.", icon: "⬆️" },
+    { word: "ahead", cat: "adv", ipa: "əˈhed", vi: "phía trước", eng: "Further forward in space or time.", icon: "⏩" },
+    { word: "back", cat: "adv", ipa: "bæk", vi: "trở lại", eng: "In, to, or towards an original place or condition.", icon: "🔙" },
+    { word: "around", cat: "adv", ipa: "əˈraʊnd", vi: "xung quanh", eng: "Located or situated on every side.", icon: "🔄" },
+    { word: "out", cat: "adv", ipa: "aʊt", vi: "bên ngoài", eng: "Moving or appearing to move away from a particular place.", icon: "🚪" },
+    { word: "in", cat: "adv", ipa: "ɪn", vi: "bên trong", eng: "Expressing movement with the result that someone or something becomes enclosed.", icon: "📥" },
+    { word: "up", cat: "adv", ipa: "ʌp", vi: "lên trên", eng: "Toward a higher place or position.", icon: "👆" },
+    { word: "down", cat: "adv", ipa: "daʊn", vi: "xuống dưới", eng: "Toward or in a lower place or position.", icon: "👇" },
+    { word: "left", cat: "adv", ipa: "left", vi: "bên trái", eng: "On or toward the left side.", icon: "⬅️" },
+    { word: "right", cat: "adv", ipa: "raɪt", vi: "bên phải", eng: "On or toward the right side.", icon: "➡️" },
+    
+    // Position / Distance
+    { word: "here", cat: "adv", ipa: "hɪr", vi: "ở đây", eng: "In, at, or to this place or position.", icon: "👇" },
+    { word: "there", cat: "adv", ipa: "ðer", vi: "ở đó", eng: "In, at, or to that place or position.", icon: "👉" },
+    { word: "near", cat: "adv", ipa: "nɪr", vi: "gần", eng: "At or to a short distance away.", icon: "📍" },
+    { word: "far", cat: "adv", ipa: "fɑːr", vi: "xa (trạng từ)", eng: "At, to, or by a great distance.", icon: "🔭" },
+    { word: "away", cat: "adv", ipa: "əˈweɪ", vi: "đi xa", eng: "To or at a distance from a particular place.", icon: "🏃" },
+    
+    // Manner
+    { word: "carefully", cat: "adv", ipa: "ˈkerˌfʊli", vi: "cẩn thận", eng: "With great attention and care.", icon: "🛡️" },
+    { word: "safely", cat: "adv", ipa: "ˈseɪfli", vi: "an toàn", eng: "In a way that gives protection from danger.", icon: "🦺" },
+    { word: "quickly", cat: "adv", ipa: "ˈkwɪkli", vi: "nhanh chóng", eng: "At a fast speed.", icon: "⚡" },
+    { word: "slowly", cat: "adv", ipa: "ˈsloʊli", vi: "chậm chạp", eng: "At a slow speed; not quickly.", icon: "🐢" },
+    { word: "fast", cat: "adv", ipa: "fæst", vi: "nhanh", eng: "At high speed.", icon: "🏎️" },
+    
+    // Time & Frequency
+    { word: "early", cat: "adv", ipa: "ˈɜːrli", vi: "sớm", eng: "Happening or done before the usual or expected time.", icon: "🌅" },
+    { word: "late", cat: "adv", ipa: "leɪt", vi: "trễ", eng: "Doing something or taking place after the expected time.", icon: "🌃" },
+    { word: "always", cat: "adv", ipa: "ˈɔːlweɪz", vi: "luôn luôn", eng: "At all times; on all occasions.", icon: "💯" },
+    { word: "usually", cat: "adv", ipa: "ˈjuːʒəli", vi: "thường xuyên", eng: "Under normal conditions; generally.", icon: "🔄" },
+    { word: "often", cat: "adv", ipa: "ˈɒfn", vi: "thường", eng: "Frequently; many times.", icon: "🔁" },
+    { word: "sometimes", cat: "adv", ipa: "ˈsʌmtaɪmz", vi: "thỉnh thoảng", eng: "Occasionally, rather than all of the time.", icon: "🔀" },
+    { word: "rarely", cat: "adv", ipa: "ˈrerli", vi: "hiếm khi", eng: "Not often; seldom.", icon: "📉" },
+    { word: "never", cat: "adv", ipa: "ˈnevər", vi: "không bao giờ", eng: "At no time in the past or future.", icon: "❌" },
+
+    // --- PREPOSITIONS ---
+    // Position
+    { word: "opposite", cat: "prep", ipa: "ˈɒpəzɪt", vi: "đối diện", eng: "In a position facing someone or something.", icon: "↔️" },
+    { word: "next to", cat: "prep", ipa: "nekst tə", vi: "kế bên", eng: "In a position right beside something.", icon: "👉" },
+    { word: "between", cat: "prep", ipa: "bɪˈtwiːn", vi: "ở giữa", eng: "In or into the space separating two things.", icon: "⬌" },
+    { word: "in front of", cat: "prep", ipa: "ɪn frʌnt əv", vi: "phía trước", eng: "In a position just ahead or at the front part of someone or something.", icon: "⏩" },
+    { word: "behind", cat: "prep", ipa: "bɪˈhaɪnd", vi: "phía sau", eng: "At or to the far side of something.", icon: "🔙" },
+    { word: "near", cat: "prep", ipa: "nɪr", vi: "gần", eng: "At or to a short distance away.", icon: "📍" },
+    { word: "under", cat: "prep", ipa: "ˈʌndər", vi: "dưới", eng: "Extending or directly below something.", icon: "🔽" },
+    { word: "over", cat: "prep", ipa: "ˈoʊvər", vi: "qua, phía trên", eng: "Extending directly upwards from.", icon: "⤴️" },
+    { word: "in", cat: "prep", ipa: "ɪn", vi: "trong", eng: "Expressing the situation of something that is or appears to be enclosed.", icon: "📦" },
+    { word: "on", cat: "prep", ipa: "ɒn", vi: "trên", eng: "Physically in contact with and supported by a surface.", icon: "🔛" },
+    { word: "at", cat: "prep", ipa: "æt", vi: "tại", eng: "Expressing location or arrival in a particular place.", icon: "🎯" },
+    
+    // Movement
+    { word: "along", cat: "prep", ipa: "əˈlɒŋ", vi: "dọc theo", eng: "Moving in a constant direction on a path.", icon: "🔜" },
+    { word: "across", cat: "prep", ipa: "əˈkrɒs", vi: "ngang qua, bên kia", eng: "From one side to the other side of.", icon: "🔀" },
+    { word: "past", cat: "prep", ipa: "pæst", vi: "đi qua", eng: "To or on the further side of.", icon: "⏭️" },
+    { word: "through", cat: "prep", ipa: "θruː", vi: "xuyên qua", eng: "Moving in one side and out of the other side of.", icon: "🕳️" },
+    { word: "into", cat: "prep", ipa: "ˈɪntuː", vi: "vào trong", eng: "Expressing movement or action with the result that someone or something becomes enclosed.", icon: "📥" },
+    { word: "out of", cat: "prep", ipa: "aʊt əv", vi: "ra khỏi", eng: "Moving from inside to outside.", icon: "📤" },
+    { word: "onto", cat: "prep", ipa: "ˈɒntuː", vi: "lên trên", eng: "Moving to a location on the surface of.", icon: "🆙" },
+    { word: "off", cat: "prep", ipa: "ɒf", vi: "rời khỏi bề mặt", eng: "Moving away and often down from.", icon: "📴" },
+    { word: "towards", cat: "prep", ipa: "təˈwɔːrdz", vi: "về hướng", eng: "In the direction of.", icon: "🎯" },
+    { word: "up", cat: "prep", ipa: "ʌp", vi: "lên", eng: "From a lower to a higher point.", icon: "⬆️" },
+    { word: "down", cat: "prep", ipa: "daʊn", vi: "xuống", eng: "From a higher to a lower point.", icon: "⬇️" },
+    { word: "around", cat: "prep", ipa: "əˈraʊnd", vi: "vòng quanh", eng: "On every side of.", icon: "🔄" },
+    { word: "from", cat: "prep", ipa: "frɒm", vi: "từ", eng: "Indicating the point in space at which a journey, motion, or action starts.", icon: "🛫" },
+    { word: "to", cat: "prep", ipa: "tuː", vi: "đến", eng: "Expressing motion in the direction of.", icon: "🛬" },
+    
+    // General
+    { word: "by", cat: "prep", ipa: "baɪ", vi: "bằng, bởi", eng: "Identifying the agent performing an action; near.", icon: "🤝" },
+    { word: "with", cat: "prep", ipa: "wɪð", vi: "với", eng: "Accompanied by.", icon: "🤝" },
+    { word: "without", cat: "prep", ipa: "wɪˈðaʊt", vi: "không có", eng: "In the absence of.", icon: "🚫" },
+    { word: "about", cat: "prep", ipa: "əˈbaʊt", vi: "về", eng: "On the subject of; concerning.", icon: "ℹ️" },
+
+    // --- DETERMINERS ---
+    // Articles
+    { word: "the", cat: "det", ipa: "ðə", vi: "(mạo từ xác định)", eng: "Used before a noun to refer to a specific thing.", icon: "📌" },
+    { word: "a", cat: "det", ipa: "ə", vi: "một (không xác định)", eng: "Used before a noun starting with a consonant sound.", icon: "1️⃣" },
+    { word: "an", cat: "det", ipa: "æn", vi: "một (không xác định)", eng: "Used before a noun starting with a vowel sound.", icon: "1️⃣" },
+    
+    // Demonstratives
+    { word: "this", cat: "det", ipa: "ðɪs", vi: "này, đây", eng: "Used to identify a specific person or thing close by.", icon: "👇" },
+    { word: "that", cat: "det", ipa: "ðæt", vi: "đó, kia", eng: "Used to identify a specific person or thing observed or heard by the speaker.", icon: "👉" },
+    { word: "these", cat: "det", ipa: "ðiːz", vi: "những cái này", eng: "Plural form of this.", icon: "👇" },
+    { word: "those", cat: "det", ipa: "ðoʊz", vi: "những cái đó", eng: "Plural form of that.", icon: "👉" },
+    
+    // Possessives
+    { word: "my", cat: "det", ipa: "maɪ", vi: "của tôi", eng: "Belonging to or associated with the speaker.", icon: "🙋" },
+    { word: "your", cat: "det", ipa: "jʊr", vi: "của bạn", eng: "Belonging to or associated with the person or people that the speaker is addressing.", icon: "🫵" },
+    { word: "his", cat: "det", ipa: "hɪz", vi: "của anh ấy", eng: "Belonging to or associated with a male person previously mentioned.", icon: "👨" },
+    { word: "her", cat: "det", ipa: "hɜːr", vi: "của cô ấy", eng: "Belonging to or associated with a female person previously mentioned.", icon: "👩" },
+    { word: "its", cat: "det", ipa: "ɪts", vi: "của nó", eng: "Belonging to or associated with a thing previously mentioned.", icon: "🐾" },
+    { word: "our", cat: "det", ipa: "ˈaʊər", vi: "của chúng ta", eng: "Belonging to or associated with the speaker and one or more other people.", icon: "👪" },
+    { word: "their", cat: "det", ipa: "ðer", vi: "của họ", eng: "Belonging to or associated with the people or things previously mentioned.", icon: "👥" },
+    
+    // Quantifiers
+    { word: "every", cat: "det", ipa: "ˈevri", vi: "mỗi, mọi", eng: "Used to refer to all members of a group.", icon: "🔁" },
+    { word: "some", cat: "det", ipa: "sʌm", vi: "một vài", eng: "An unspecified amount or number of.", icon: "⚖️" },
+    { word: "any", cat: "det", ipa: "ˈeni", vi: "bất kỳ", eng: "Used to refer to one or some of a thing or number of things.", icon: "❓" },
+    { word: "many", cat: "det", ipa: "ˈmeni", vi: "nhiều (đếm được)", eng: "A large number of.", icon: "💯" },
+    { word: "much", cat: "det", ipa: "mʌtʃ", vi: "nhiều (không đếm được)", eng: "A large amount of.", icon: "🌊" },
+    { word: "all", cat: "det", ipa: "ɔːl", vi: "tất cả", eng: "The whole quantity or extent of a particular group or thing.", icon: "🌌" },
+    { word: "both", cat: "det", ipa: "boʊθ", vi: "cả hai", eng: "Used to refer to two people or things.", icon: "✌️" },
+
+    // --- PRONOUNS ---
+    // Subject/Object
+    { word: "I", cat: "pron", ipa: "aɪ", vi: "tôi", eng: "Used by a speaker to refer to himself or herself.", icon: "🙋‍♂️" },
+    { word: "me", cat: "pron", ipa: "miː", vi: "tôi (tân ngữ)", eng: "Used by a speaker to refer to himself or herself as the object of a verb or preposition.", icon: "🙋" },
+    { word: "you", cat: "pron", ipa: "juː", vi: "bạn, các bạn", eng: "Used to refer to the person being addressed.", icon: "🫵" },
+    { word: "he", cat: "pron", ipa: "hiː", vi: "anh ấy", eng: "Used to refer to a man, boy, or male animal.", icon: "👨" },
+    { word: "him", cat: "pron", ipa: "hɪm", vi: "anh ấy (tân ngữ)", eng: "Used as the object of a verb or preposition to refer to a male person.", icon: "👨" },
+    { word: "she", cat: "pron", ipa: "ʃiː", vi: "cô ấy", eng: "Used to refer to a woman, girl, or female animal.", icon: "👩" },
+    { word: "her", cat: "pron", ipa: "hɜːr", vi: "cô ấy (tân ngữ)", eng: "Used as the object of a verb or preposition to refer to a female person.", icon: "👩" },
+    { word: "it", cat: "pron", ipa: "ɪt", vi: "nó", eng: "Used to refer to a thing previously mentioned.", icon: "👆" },
+    { word: "we", cat: "pron", ipa: "wiː", vi: "chúng ta", eng: "Used to refer to the speaker and one or more others.", icon: "👫" },
+    { word: "us", cat: "pron", ipa: "ʌs", vi: "chúng ta (tân ngữ)", eng: "Used by a speaker to refer to himself or herself and one or more other people as the object of a verb.", icon: "👪" },
+    { word: "they", cat: "pron", ipa: "ðeɪ", vi: "họ, chúng", eng: "Used to refer to two or more people or things.", icon: "👥" },
+    { word: "them", cat: "pron", ipa: "ðem", vi: "họ (tân ngữ)", eng: "Used as the object of a verb or preposition to refer to two or more people.", icon: "👥" },
+    
+    // Indefinite
+    { word: "someone", cat: "pron", ipa: "ˈsʌmwʌn", vi: "ai đó", eng: "An unknown or unspecified person.", icon: "👤" },
+    { word: "anyone", cat: "pron", ipa: "ˈeniwʌn", vi: "bất kỳ ai", eng: "Any person or people.", icon: "❓" },
+    { word: "everyone", cat: "pron", ipa: "ˈevriwʌn", vi: "mọi người", eng: "Every person.", icon: "🌍" },
+    { word: "no one", cat: "pron", ipa: "ˈnoʊ wʌn", vi: "không ai", eng: "No person; not a single person.", icon: "🚫" },
+    { word: "something", cat: "pron", ipa: "ˈsʌmθɪŋ", vi: "thứ gì đó", eng: "A thing that is unspecified or unknown.", icon: "📦" },
+    { word: "anything", cat: "pron", ipa: "ˈeniθɪŋ", vi: "bất kỳ thứ gì", eng: "Used to refer to a thing, no matter what.", icon: "❓" },
+    { word: "everything", cat: "pron", ipa: "ˈevriθɪŋ", vi: "mọi thứ", eng: "All things.", icon: "🌌" },
+    { word: "nothing", cat: "pron", ipa: "ˈnʌθɪŋ", vi: "không gì cả", eng: "Not anything; no single thing.", icon: "🕳️" },
+    
+    // Relative / Questions
+    { word: "which", cat: "pron", ipa: "wɪtʃ", vi: "cái nào", eng: "Asking for information specifying one or more people or things from a definite set.", icon: "🤷" },
+    { word: "who", cat: "pron", ipa: "huː", vi: "ai", eng: "What or which person or people.", icon: "❓" },
+    { word: "where", cat: "pron", ipa: "wer", vi: "ở đâu", eng: "In or to what place or position.", icon: "🗺️" },
+
+    // --- CONJUNCTIONS ---
+    { word: "and", cat: "conj", ipa: "ænd", vi: "và", eng: "Used to connect words, phrases, or clauses.", icon: "➕" },
+    { word: "but", cat: "conj", ipa: "bʌt", vi: "nhưng", eng: "Used to introduce a phrase or clause contrasting with what has already been mentioned.", icon: "🛑" },
+    { word: "or", cat: "conj", ipa: "ɔːr", vi: "hoặc", eng: "Used to link alternatives.", icon: "🔄" },
+    { word: "so", cat: "conj", ipa: "soʊ", vi: "vì vậy", eng: "And for this reason; therefore.", icon: "👉" },
+    { word: "then", cat: "conj", ipa: "ðen", vi: "sau đó, rồi", eng: "After that, next in order.", icon: "⏭️" },
+    { word: "because", cat: "conj", ipa: "bɪˈkɒz", vi: "bởi vì", eng: "For the reason that.", icon: "💡" },
+    { word: "although", cat: "conj", ipa: "ɔːlˈðoʊ", vi: "mặc dù", eng: "In spite of the fact that; even though.", icon: "⚖️" },
+    { word: "if", cat: "conj", ipa: "ɪf", vi: "nếu", eng: "Introducing a conditional clause.", icon: "❓" },
+    { word: "unless", cat: "conj", ipa: "ənˈles", vi: "trừ khi", eng: "Except if.", icon: "🚫" },
+    { word: "while", cat: "conj", ipa: "waɪl", vi: "trong khi", eng: "During the time that; at the same time as.", icon: "⏳" },
+    { word: "when", cat: "conj", ipa: "wen", vi: "khi", eng: "At or on which.", icon: "⏱️" },
+    { word: "as", cat: "conj", ipa: "æz", vi: "khi, vì", eng: "Used to indicate that something happens during the time when something else is taking place.", icon: "🔄" },
+    { word: "since", cat: "conj", ipa: "sɪns", vi: "từ khi, vì", eng: "For the reason that; because.", icon: "🕰️" },
+    { word: "until", cat: "conj", ipa: "ənˈtɪl", vi: "cho đến khi", eng: "Up to.", icon: "🛑" },
+    { word: "before", cat: "conj", ipa: "bɪˈfɔːr", vi: "trước khi", eng: "During the period of time preceding a particular event or time.", icon: "⏪" },
+    { word: "after", cat: "conj", ipa: "ˈæftər", vi: "sau khi", eng: "In the time following.", icon: "⏩" },
+    { word: "whether", cat: "conj", ipa: "ˈweðər", vi: "liệu", eng: "Expressing a doubt or choice between alternatives.", icon: "🤷" },
+    { word: "yet", cat: "conj", ipa: "jet", vi: "tuy nhiên", eng: "But at the same time; but nevertheless.", icon: "🤔" },
+
+    // --- B1 NEW WORDS EXTRACTED FROM LESSON ---
+    { word: "landmark", cat: "noun", ipa: "ˈlændmɑːrk", vi: "địa danh nổi tiếng", eng: "An important or easily recognized building or place.", icon: "🗺️" },
+    { word: "directions", cat: "noun", ipa: "dɪˈrekʃnz", vi: "chỉ đường", eng: "Instructions that tell you how to get from one place to another.", icon: "🧭" },
+    { word: "traffic jam", cat: "noun", ipa: "ˈtræfɪk dʒæm", vi: "kẹt xe", eng: "A line of vehicles that cannot move because of a lot of traffic.", icon: "🚗" },
+    { word: "traffic", cat: "noun", ipa: "ˈtræfɪk", vi: "giao thông", eng: "Vehicles moving on a road or public highway.", icon: "🚦" },
+    { word: "shortcut", cat: "noun", ipa: "ˈʃɔːrtkʌt", vi: "đường tắt", eng: "A quicker or shorter way of getting to a place.", icon: "✂️" },
+    { word: "path", cat: "noun", ipa: "pæθ", vi: "lối đi, đường mòn", eng: "A way or track laid down for walking or made by continual treading.", icon: "🛤️" },
+    { word: "rush hour", cat: "noun", ipa: "rʌʃ ˈaʊər", vi: "giờ cao điểm", eng: "A time during each day when traffic is at its heaviest.", icon: "⏰" },
+    { word: "local", cat: "noun", ipa: "ˈloʊkl", vi: "người dân địa phương", eng: "A person who lives in a particular place or district.", icon: "🧑‍🌾" },
+    { word: "map", cat: "noun", ipa: "mæp", vi: "bản đồ", eng: "A visual representation of an area.", icon: "🗺️" },
+    { word: "medicine", cat: "noun", ipa: "ˈmedsɪn", vi: "thuốc", eng: "A drug or other preparation for the treatment of disease.", icon: "💊" },
+    { word: "seafood", cat: "noun", ipa: "ˈsiːfuːd", vi: "hải sản", eng: "Fish and shellfish caught from the sea for food.", icon: "🦞" },
+    { word: "weather", cat: "noun", ipa: "ˈweðər", vi: "thời tiết", eng: "The state of the atmosphere at a place and time.", icon: "🌤️" },
+    { word: "fresh air", cat: "noun", ipa: "freʃ er", vi: "không khí trong lành", eng: "Clean, unpolluted air from outdoors.", icon: "🍃" },
+    { word: "block", cat: "noun", ipa: "blɒk", vi: "dãy nhà, khu phố", eng: "The distance along one side of a square in a town.", icon: "🏘️" },
+    
+    { word: "Ponagar Tower", cat: "noun", ipa: "pɔːnɑːˈgɑːr ˈtaʊər", vi: "Tháp Bà Ponagar", eng: "An ancient Cham temple tower located in Nha Trang.", icon: "🏛️" },
+    { word: "Vinpearl Land", cat: "noun", ipa: "vɪnpɜːl lænd", vi: "Khu vui chơi Vinpearl", eng: "A famous amusement park on Hon Tre island.", icon: "🎢" },
+    { word: "Long Son Pagoda", cat: "noun", ipa: "lɒŋ sɒn pəˈgoʊdə", vi: "Chùa Long Sơn", eng: "A famous Buddhist temple in Nha Trang with a giant white Buddha statue.", icon: "🛕" },
+    { word: "Nha Trang Beach", cat: "noun", ipa: "nɑː trɑːŋ biːtʃ", vi: "Bãi biển Nha Trang", eng: "The main coastal strip of Nha Trang city.", icon: "🏖️" },
+    { word: "Tram Huong Tower", cat: "noun", ipa: "træm hʊəŋ ˈtaʊər", vi: "Tháp Trầm Hương", eng: "An iconic tower located on the beach of Nha Trang.", icon: "🗼" },
+    { word: "Dam Market", cat: "noun", ipa: "dæm ˈmɑːkɪt", vi: "Chợ Đầm", eng: "The largest and most famous market in Nha Trang.", icon: "🏪" },
+    { word: "Stone Church", cat: "noun", ipa: "stəʊn tʃɜːtʃ", vi: "Nhà thờ Đá", eng: "A historic Catholic cathedral built of stone in Nha Trang.", icon: "⛪" },
+    { word: "Oceanographic Museum", cat: "noun", ipa: "ˌəʊʃɪənəˈgræfɪk mju(ː)ˈzɪəm", vi: "Viện Hải dương học", eng: "A museum showcasing marine life in Nha Trang.", icon: "🐠" },
+    { word: "Hon Mun Island", cat: "noun", ipa: "hɒn mʊn ˈaɪlənd", vi: "Đảo Hòn Mun", eng: "A beautiful island famous for snorkeling and coral reefs.", icon: "🏝️" },
+    // --- 47 B1/B2 NOUNS ---
+    { word: "avenue", cat: "noun", ipa: "ˈævənuː", vi: "đại lộ", eng: "A broad road in a town or city.", icon: "🛣️" },
+    { word: "boulevard", cat: "noun", ipa: "ˈbʊləvɑːrd", vi: "đại lộ lớn", eng: "A wide street in a town or city, typically one lined with trees.", icon: "🛣️" },
+    { word: "subway", cat: "noun", ipa: "ˈsʌbweɪ", vi: "tàu điện ngầm", eng: "An underground railway system.", icon: "🚇" },
+    { word: "highway", cat: "noun", ipa: "ˈhaɪweɪ", vi: "đường cao tốc", eng: "A main road, especially one connecting major towns.", icon: "🛣️" },
+    { word: "freeway", cat: "noun", ipa: "ˈfriːweɪ", vi: "đường cao tốc (miễn phí)", eng: "A toll-free highway.", icon: "🛣️" },
+    { word: "expressway", cat: "noun", ipa: "ɪkˈsprɛsweɪ", vi: "đường cao tốc", eng: "A highway designed for fast traffic.", icon: "🛣️" },
+    { word: "tollbooth", cat: "noun", ipa: "ˈtoʊlbuːθ", vi: "trạm thu phí", eng: "A booth where drivers pay a toll.", icon: "🛂" },
+    { word: "overpass", cat: "noun", ipa: "ˈoʊvərpæs", vi: "cầu vượt", eng: "A bridge by which a road or railroad passes over another.", icon: "🌉" },
+    { word: "underpass", cat: "noun", ipa: "ˈʌndərpæs", vi: "đường hầm chui", eng: "A road or pedestrian tunnel passing under another road.", icon: "🚇" },
+    { word: "crossroad", cat: "noun", ipa: "ˈkrɔsroʊd", vi: "giao lộ", eng: "An intersection of two or more roads.", icon: "🔀" },
+    { word: "junction", cat: "noun", ipa: "ˈdʒʌŋkʃən", vi: "ngã ba/ngã tư", eng: "A point where two or more things are joined.", icon: "🔀" },
+    { word: "pavement", cat: "noun", ipa: "ˈpeɪvmənt", vi: "vỉa hè", eng: "A raised paved path for pedestrians.", icon: "🚶" },
+    { word: "curb", cat: "noun", ipa: "kɜːrb", vi: "lề đường", eng: "A stone or concrete edging to a street or path.", icon: "🛣️" },
+    { word: "gutter", cat: "noun", ipa: "ˈgʌtər", vi: "mương/rãnh", eng: "A shallow trough beneath the edge of a roof or along a street.", icon: "🌊" },
+    { word: "streetlight", cat: "noun", ipa: "ˈstriːtlaɪt", vi: "đèn đường", eng: "A light illuminating a road or street.", icon: "💡" },
+    { word: "signpost", cat: "noun", ipa: "ˈsaɪnpoʊst", vi: "biển chỉ đường", eng: "A sign giving information or instructions.", icon: "🪧" },
+    { word: "billboard", cat: "noun", ipa: "ˈbɪlbɔːrd", vi: "biển quảng cáo", eng: "A large outdoor board for displaying advertisements.", icon: "🏙️" },
+    { word: "commuter", cat: "noun", ipa: "kəˈmjuːtər", vi: "người đi làm xa", eng: "A person who travels some distance to work on a regular basis.", icon: "🚆" },
+    { word: "passenger", cat: "noun", ipa: "ˈpæsɪndʒər", vi: "hành khách", eng: "A traveler on a public or private conveyance.", icon: "🧍" },
+    { word: "guide", cat: "noun", ipa: "gaɪd", vi: "hướng dẫn viên", eng: "A person who shows the way to others.", icon: "💁" },
+    { word: "compass", cat: "noun", ipa: "ˈkʌmpəs", vi: "la bàn", eng: "An instrument showing the direction of magnetic north.", icon: "🧭" },
+    { word: "route", cat: "noun", ipa: "ruːt", vi: "tuyến đường", eng: "A way or course taken in getting from a starting point to a destination.", icon: "🗺️" },
+    { word: "itinerary", cat: "noun", ipa: "aɪˈtɪnərɛri", vi: "lịch trình", eng: "A planned route or journey.", icon: "📅" },
+    { word: "destination", cat: "noun", ipa: "ˌdɛstɪˈneɪʃən", vi: "điểm đến", eng: "The place to which someone or something is going.", icon: "📍" },
+    { word: "district", cat: "noun", ipa: "ˈdɪstrɪkt", vi: "quận/khu vực", eng: "An area of a country or city.", icon: "🏘️" },
+    { word: "suburb", cat: "noun", ipa: "ˈsʌbɜːrb", vi: "vùng ngoại ô", eng: "An outlying district of a city.", icon: "🏡" },
+    { word: "outskirt", cat: "noun", ipa: "ˈaʊtskɜːrt", vi: "vùng ven", eng: "The outer parts of a town or city.", icon: "🌲" },
+    { word: "downtown", cat: "noun", ipa: "ˈdaʊnˈtaʊn", vi: "khu trung tâm", eng: "Of, in, or characteristic of the central area of a city.", icon: "🏙️" },
+    { word: "uptown", cat: "noun", ipa: "ˈʌpˈtaʊn", vi: "khu thương mại/cao cấp", eng: "Of, in, or characteristic of the residential area of a city.", icon: "🏢" },
+    { word: "capital", cat: "noun", ipa: "ˈkæpɪtəl", vi: "thủ đô", eng: "The most important city or town of a country or region.", icon: "🏛️" },
+    { word: "metropolis", cat: "noun", ipa: "məˈtrɒpəlɪs", vi: "siêu đô thị", eng: "A very large and densely populated industrial and commercial city.", icon: "🌃" },
+    { word: "settlement", cat: "noun", ipa: "ˈsɛtəlmənt", vi: "khu định cư", eng: "A place where people establish a community.", icon: "🏕️" },
+    { word: "square", cat: "noun", ipa: "skwɛr", vi: "quảng trường", eng: "An open area surrounded by buildings in a town.", icon: "⛲" },
+    { word: "plaza", cat: "noun", ipa: "ˈplɑːzə", vi: "quảng trường thương mại", eng: "A public square, marketplace, or similar open space in a built-up area.", icon: "🏬" },
+    { word: "fountain", cat: "noun", ipa: "ˈfaʊntɪn", vi: "đài phun nước", eng: "An ornamental structure in a pool or lake from which one or more jets of water are pumped into the air.", icon: "⛲" },
+    { word: "sculpture", cat: "noun", ipa: "ˈskʌlptʃər", vi: "tượng điêu khắc", eng: "The art of making two- or three-dimensional representative or abstract forms.", icon: "🗽" },
+    { word: "arena", cat: "noun", ipa: "əˈriːnə", vi: "đấu trường/sân vận động", eng: "A level area surrounded by seats for spectators.", icon: "🏟️" },
+    { word: "courthouse", cat: "noun", ipa: "ˈkɔːrthaʊs", vi: "tòa án", eng: "A building in which a judicial court is held.", icon: "⚖️" },
+    { word: "city hall", cat: "noun", ipa: "ˈsɪti hɔːl", vi: "tòa thị chính", eng: "The administration building of a city government.", icon: "🏛️" },
+    { word: "embassy", cat: "noun", ipa: "ˈɛmbəsi", vi: "đại sứ quán", eng: "The official residence or offices of an ambassador.", icon: "🏳️" },
+    { word: "consulate", cat: "noun", ipa: "ˈkɒnsjʊlət", vi: "lãnh sự quán", eng: "The place or building in which a consul's duties are carried out.", icon: "🏢" },
+    { word: "skyscraper", cat: "noun", ipa: "ˈskaɪˌskreɪpər", vi: "tòa nhà chọc trời", eng: "A very tall building of many stories.", icon: "🏙️" },
+    { word: "terminal", cat: "noun", ipa: "ˈtɜːrmɪnəl", vi: "nhà ga hành khách", eng: "A departure and arrival building for passengers.", icon: "✈️" },
+    { word: "harbor", cat: "noun", ipa: "ˈhɑːrbər", vi: "bến cảng", eng: "A place on the coast where vessels may find shelter.", icon: "⚓" },
+    { word: "port", cat: "noun", ipa: "pɔːrt", vi: "cảng", eng: "A town or city with a harbor where ships load or unload.", icon: "🚢" },
+    { word: "dock", cat: "noun", ipa: "dɒk", vi: "bến tàu", eng: "An enclosed area of water in a port for the loading, unloading, and repair of ships.", icon: "🚤" },
+    { word: "pier", cat: "noun", ipa: "pɪr", vi: "bến tàu nhô ra biển", eng: "A structure leading out from the shore into a body of water.", icon: "🌉" },
+
+    // --- 63 B1/B2 VERBS ---
+    { word: "navigate", cat: "verb", ipa: "ˈnævɪgeɪt", vi: "điều hướng", eng: "Direct the course of a ship, aircraft, or other form of transport.", icon: "🧭" },
+    { word: "wander", cat: "verb", ipa: "ˈwɒndər", vi: "đi lang thang", eng: "Walk or move in a leisurely, casual, or aimless way.", icon: "🚶" },
+    { word: "roam", cat: "verb", ipa: "roʊm", vi: "đi dạo/lang thang", eng: "Move about or travel aimlessly or unsystematically.", icon: "🌍" },
+    { word: "commute", cat: "verb", ipa: "kəˈmjuːt", vi: "đi lại (đi làm)", eng: "Travel some distance between one's home and place of work on a regular basis.", icon: "🚆" },
+    { word: "carpool", cat: "verb", ipa: "ˈkɑːrpuːl", vi: "đi chung xe", eng: "Share a car journey with others.", icon: "🚗" },
+    { word: "hitchhike", cat: "verb", ipa: "ˈhɪtʃhaɪk", vi: "đi nhờ xe", eng: "Travel by getting free rides in passing vehicles.", icon: "👍" },
+    { word: "board", cat: "verb", ipa: "bɔːrd", vi: "lên tàu/xe", eng: "Get on or into (a ship, aircraft, or other vehicle).", icon: "🛳️" },
+    { word: "alight", cat: "verb", ipa: "əˈlaɪt", vi: "xuống xe", eng: "Descend from a train, bus, or other form of transport.", icon: "🚶" },
+    { word: "embark", cat: "verb", ipa: "ɪmˈbɑːrk", vi: "lên tàu", eng: "Go on board a ship, aircraft, or other vehicle.", icon: "🚢" },
+    { word: "disembark", cat: "verb", ipa: "ˌdɪsɪmˈbɑːrk", vi: "xuống tàu", eng: "Leave a ship, aircraft, or other vehicle.", icon: "🚶" },
+    { word: "set off", cat: "verb", ipa: "sɛt ɔf", vi: "khởi hành", eng: "Begin a journey.", icon: "🚀" },
+    { word: "head", cat: "verb", ipa: "hɛd", vi: "hướng đến", eng: "Move in a specified direction.", icon: "➡️" },
+    { word: "proceed", cat: "verb", ipa: "prəˈsiːd", vi: "tiếp tục đi", eng: "Begin or continue a course of action.", icon: "🚶‍♂️" },
+    { word: "approach", cat: "verb", ipa: "əˈproʊtʃ", vi: "tiến lại gần", eng: "Come near or nearer to someone or something.", icon: "🚶‍♀️" },
+    { word: "bypass", cat: "verb", ipa: "ˈbaɪpæs", vi: "đi đường vòng", eng: "Go past or around.", icon: "🔄" },
+    { word: "detour", cat: "verb", ipa: "ˈdiːtʊr", vi: "đi đường vòng", eng: "Take a long or roundabout route.", icon: "🛣️" },
+    { word: "reverse", cat: "verb", ipa: "rɪˈvɜːrs", vi: "lùi lại", eng: "Move backward.", icon: "🔙" },
+    { word: "accelerate", cat: "verb", ipa: "əkˈsɛləreɪt", vi: "tăng tốc", eng: "Begin to move more quickly.", icon: "⏩" },
+    { word: "decelerate", cat: "verb", ipa: "diːˈsɛləreɪt", vi: "giảm tốc độ", eng: "Reduce speed.", icon: "🔽" },
+    { word: "brake", cat: "verb", ipa: "breɪk", vi: "phanh/thắng lại", eng: "Make a moving vehicle slow down or stop.", icon: "🛑" },
+    { word: "steer", cat: "verb", ipa: "stɪr", vi: "lái/điều khiển", eng: "Guide or control the movement of (a vehicle, vessel, or aircraft).", icon: "🛥️" },
+    { word: "crash", cat: "verb", ipa: "kræʃ", vi: "đâm/đụng", eng: "Collide violently with an obstacle or another vehicle.", icon: "💥" },
+    { word: "collide", cat: "verb", ipa: "kəˈlaɪd", vi: "va chạm", eng: "Hit with force when moving.", icon: "💥" },
+    { word: "tow", cat: "verb", ipa: "toʊ", vi: "kéo (xe)", eng: "Pull (another vehicle or boat) along with a rope, chain, or tow bar.", icon: "🪝" },
+    { word: "hail", cat: "verb", ipa: "heɪl", vi: "vẫy/gọi (taxi)", eng: "Call out to someone to attract attention.", icon: "🙋" },
+    { word: "book", cat: "verb", ipa: "bʊk", vi: "đặt chỗ", eng: "Reserve (accommodations, a place, etc.) for future use.", icon: "🎫" },
+    { word: "reserve", cat: "verb", ipa: "rɪˈzɜːrv", vi: "đặt trước", eng: "Retain for future use.", icon: "🎟️" },
+    { word: "rent", cat: "verb", ipa: "rɛnt", vi: "thuê", eng: "Pay someone for the use of something.", icon: "🏠" },
+    { word: "hire", cat: "verb", ipa: "haɪr", vi: "thuê (người/xe)", eng: "Obtain the temporary use of something for an agreed payment.", icon: "🤝" },
+    { word: "check in", cat: "verb", ipa: "tʃɛk ɪn", vi: "làm thủ tục nhận phòng", eng: "Arrive and register at a hotel or airport.", icon: "🏨" },
+    { word: "check out", cat: "verb", ipa: "tʃɛk aʊt", vi: "làm thủ tục trả phòng", eng: "Settle one's hotel bill before leaving.", icon: "🚪" },
+    { word: "unpack", cat: "verb", ipa: "ʌnˈpæk", vi: "mở hành lý", eng: "Remove the contents of a suitcase, bag, or package.", icon: "🧳" },
+    { word: "pack", cat: "verb", ipa: "pæk", vi: "đóng gói hành lý", eng: "Fill a suitcase or bag with items.", icon: "🎒" },
+    { word: "secure", cat: "verb", ipa: "sɪˈkjʊr", vi: "buộc chặt/bảo vệ", eng: "Fix or attach something firmly so that it cannot be moved or lost.", icon: "🔒" },
+    { word: "locate", cat: "verb", ipa: "ˈloʊkeɪt", vi: "định vị", eng: "Discover the exact place or position of.", icon: "📍" },
+    { word: "spot", cat: "verb", ipa: "spɒt", vi: "phát hiện", eng: "See, notice, or recognize someone or something.", icon: "👁️" },
+    { word: "identify", cat: "verb", ipa: "aɪˈdɛntɪfaɪ", vi: "nhận dạng", eng: "Establish or indicate who or what someone or something is.", icon: "🔍" },
+    { word: "discover", cat: "verb", ipa: "dɪsˈkʌvər", vi: "khám phá", eng: "Find unexpectedly or during a search.", icon: "💡" },
+    { word: "uncover", cat: "verb", ipa: "ʌnˈkʌvər", vi: "khám phá ra", eng: "Discover something previously secret or unknown.", icon: "🔦" },
+    { word: "unearth", cat: "verb", ipa: "ʌnˈɜːrθ", vi: "đào lên/phát hiện", eng: "Find something in the ground by digging.", icon: "⛏️" },
+    { word: "trace", cat: "verb", ipa: "treɪs", vi: "theo dấu", eng: "Find or discover by investigation.", icon: "👣" },
+    { word: "track", cat: "verb", ipa: "træk", vi: "theo dõi", eng: "Follow the course or trail of someone or something.", icon: "🐾" },
+    { word: "monitor", cat: "verb", ipa: "ˈmɒnɪtər", vi: "giám sát", eng: "Observe and check the progress or quality of.", icon: "👀" },
+    { word: "survey", cat: "verb", ipa: "ˈsɜːrveɪ", vi: "khảo sát", eng: "Look carefully and thoroughly at someone or something.", icon: "📋" },
+    { word: "map out", cat: "verb", ipa: "mæp aʊt", vi: "lập bản đồ/kế hoạch", eng: "Plan the details of something in advance.", icon: "🗺️" },
+    { word: "plan", cat: "verb", ipa: "plæn", vi: "lên kế hoạch", eng: "Decide on and arrange in advance.", icon: "📅" },
+    { word: "schedule", cat: "verb", ipa: "ˈʃɛdjuːl", vi: "lên lịch", eng: "Arrange or plan an event to take place at a particular time.", icon: "🗓️" },
+    { word: "postpone", cat: "verb", ipa: "poʊstˈpoʊn", vi: "trì hoãn", eng: "Cause or arrange for something to take place at a time later than that first scheduled.", icon: "⏱️" },
+    { word: "delay", cat: "verb", ipa: "dɪˈleɪ", vi: "làm trễ", eng: "Make someone or something late or slow.", icon: "⏳" },
+    { word: "cancel", cat: "verb", ipa: "ˈkænsəl", vi: "hủy bỏ", eng: "Decide that an organized event will not take place.", icon: "❌" },
+    { word: "resume", cat: "verb", ipa: "rɪˈzuːm", vi: "tiếp tục", eng: "Begin to do or pursue something again after a pause or interruption.", icon: "▶️" },
+    { word: "continue", cat: "verb", ipa: "kənˈtɪnjuː", vi: "tiếp tục", eng: "Persist in an activity or process.", icon: "➡️" },
+    { word: "halt", cat: "verb", ipa: "hɔːlt", vi: "tạm dừng", eng: "Bring or come to an abrupt stop.", icon: "🛑" },
+    { word: "pause", cat: "verb", ipa: "pɔːz", vi: "dừng lại", eng: "Interrupt action or speech briefly.", icon: "⏸️" },
+    { word: "stroll", cat: "verb", ipa: "stroʊl", vi: "đi dạo", eng: "Walk in a leisurely way.", icon: "🚶‍♂️" },
+    { word: "hike", cat: "verb", ipa: "haɪk", vi: "đi bộ đường dài", eng: "Walk for a long distance, especially across country or in the woods.", icon: "🥾" },
+    { word: "trek", cat: "verb", ipa: "trɛk", vi: "đi bộ đường dài khó khăn", eng: "Go on a long arduous journey, typically on foot.", icon: "🏔️" },
+    { word: "climb", cat: "verb", ipa: "klaɪm", vi: "leo trèo", eng: "Go or come up a slope, incline, or stairs.", icon: "🧗" },
+    { word: "descend", cat: "verb", ipa: "dɪˈsɛnd", vi: "đi xuống", eng: "Move or fall downward.", icon: "📉" },
+    { word: "cross over", cat: "verb", ipa: "krɔs ˈoʊvər", vi: "băng qua", eng: "Pass from one side to the other.", icon: "🌉" },
+    { word: "get in", cat: "verb", ipa: "gɛt ɪn", vi: "lên xe (ô tô)", eng: "Enter a car or taxi.", icon: "🚗" },
+    { word: "get out", cat: "verb", ipa: "gɛt aʊt", vi: "xuống xe (ô tô)", eng: "Leave a car or taxi.", icon: "🚪" },
+    { word: "get on", cat: "verb", ipa: "gɛt ɒn", vi: "lên tàu/xe buýt", eng: "Enter a bus, train, or plane.", icon: "🚌" },
+
+    // --- 64 B1/B2 ADJECTIVES ---
+    { word: "bustling", cat: "adj", ipa: "ˈbʌslɪŋ", vi: "nhộn nhịp", eng: "Full of energetic and noisy activity.", icon: "🏙️" },
+    { word: "vibrant", cat: "adj", ipa: "ˈvaɪbrənt", vi: "sôi động", eng: "Full of energy and enthusiasm.", icon: "🎉" },
+    { word: "lively", cat: "adj", ipa: "ˈlaɪvli", vi: "sống động", eng: "Full of life and energy.", icon: "💃" },
+    { word: "peaceful", cat: "adj", ipa: "ˈpiːsfʊl", vi: "yên bình", eng: "Free from disturbance; tranquil.", icon: "🕊️" },
+    { word: "tranquil", cat: "adj", ipa: "ˈtræŋkwɪl", vi: "thanh bình", eng: "Free from disturbance; calm.", icon: "🧘" },
+    { word: "serene", cat: "adj", ipa: "sɪˈriːn", vi: "tĩnh lặng", eng: "Calm, peaceful, and untroubled.", icon: "🌅" },
+    { word: "isolated", cat: "adj", ipa: "ˈaɪsəleɪtɪd", vi: "cô lập/hẻo lánh", eng: "Far away from other places, buildings, or people.", icon: "🏝️" },
+    { word: "remote", cat: "adj", ipa: "rɪˈmoʊt", vi: "xa xôi", eng: "Situated far from the main centers of population.", icon: "🏔️" },
+    { word: "accessible", cat: "adj", ipa: "əkˈsɛsəbəl", vi: "dễ tiếp cận", eng: "Able to be reached or entered.", icon: "✅" },
+    { word: "inaccessible", cat: "adj", ipa: "ˌɪnəkˈsɛsəbəl", vi: "khó tiếp cận", eng: "Unable to be reached.", icon: "❌" },
+    { word: "central", cat: "adj", ipa: "ˈsɛntrəl", vi: "trung tâm", eng: "At the point or in the area that is in the middle of something.", icon: "🎯" },
+    { word: "suburban", cat: "adj", ipa: "səˈbɜːrbən", vi: "thuộc ngoại ô", eng: "Of or characteristic of a suburb.", icon: "🏘️" },
+    { word: "urban", cat: "adj", ipa: "ˈɜːrbən", vi: "thuộc thành thị", eng: "In, relating to, or characteristic of a town or city.", icon: "🏙️" },
+    { word: "rural", cat: "adj", ipa: "ˈrʊrəl", vi: "thuộc nông thôn", eng: "In, relating to, or characteristic of the countryside.", icon: "🌾" },
+    { word: "picturesque", cat: "adj", ipa: "ˌpɪktʃəˈrɛsk", vi: "đẹp như tranh", eng: "Visually attractive, especially in a quaint or pretty style.", icon: "🖼️" },
+    { word: "scenic", cat: "adj", ipa: "ˈsiːnɪk", vi: "có phong cảnh đẹp", eng: "Providing or relating to views of impressive or beautiful natural scenery.", icon: "🏞️" },
+    { word: "breathtaking", cat: "adj", ipa: "ˈbrɛθˌteɪkɪŋ", vi: "đẹp nghẹt thở", eng: "Astonishing or awe-inspiring in quality, so as to take one's breath away.", icon: "😮" },
+    { word: "stunning", cat: "adj", ipa: "ˈstʌnɪŋ", vi: "tuyệt đẹp", eng: "Extremely impressive or attractive.", icon: "✨" },
+    { word: "magnificent", cat: "adj", ipa: "mægˈnɪfɪsənt", vi: "tráng lệ", eng: "Impressively beautiful, elaborate, or extravagant.", icon: "🏰" },
+    { word: "spectacular", cat: "adj", ipa: "spɛkˈtækjʊlər", vi: "ngoạn mục", eng: "Beautiful in a dramatic and eye-catching way.", icon: "🎆" },
+    { word: "impressive", cat: "adj", ipa: "ɪmˈprɛsɪv", vi: "ấn tượng", eng: "Evoking admiration through size, quality, or skill.", icon: "🤩" },
+    { word: "awe-inspiring", cat: "adj", ipa: "ˈɔːɪnˌspaɪrɪŋ", vi: "gây kinh ngạc", eng: "Arousing awe through impressiveness.", icon: "😲" },
+    { word: "majestic", cat: "adj", ipa: "məˈdʒɛstɪk", vi: "oai nghiêm", eng: "Having or showing impressive beauty or dignity.", icon: "👑" },
+    { word: "colossal", cat: "adj", ipa: "kəˈlɒsəl", vi: "khổng lồ", eng: "Extremely large.", icon: "🐘" },
+    { word: "gigantic", cat: "adj", ipa: "dʒaɪˈgæntɪk", vi: "kếch xù", eng: "Of very great size or extent.", icon: "🦕" },
+    { word: "immense", cat: "adj", ipa: "ɪˈmɛns", vi: "mênh mông", eng: "Extremely large or great, especially in scale or degree.", icon: "🌌" },
+    { word: "vast", cat: "adj", ipa: "væst", vi: "rộng lớn", eng: "Of very great extent or quantity; immense.", icon: "🏜️" },
+    { word: "spacious", cat: "adj", ipa: "ˈspeɪʃəs", vi: "rộng rãi", eng: "Having ample space.", icon: "🛋️" },
+    { word: "cramped", cat: "adj", ipa: "kræmpt", vi: "chật chội", eng: "Feeling or causing someone to feel uncomfortably confined.", icon: "📦" },
+    { word: "confined", cat: "adj", ipa: "kənˈfaɪnd", vi: "hạn hẹp", eng: "Restricted in area or volume.", icon: "🚪" },
+    { word: "congested", cat: "adj", ipa: "kənˈdʒɛstɪd", vi: "đông nghịt", eng: "So crowded with traffic or people as to hinder freedom of movement.", icon: "🚗" },
+    { word: "jam-packed", cat: "adj", ipa: "ˈdʒæmˈpækt", vi: "chật cứng", eng: "Extremely crowded or full to capacity.", icon: "🥫" },
+    { word: "chaotic", cat: "adj", ipa: "keɪˈɒtɪk", vi: "hỗn loạn", eng: "In a state of complete confusion and disorder.", icon: "🌪️" },
+    { word: "orderly", cat: "adj", ipa: "ˈɔːrdərli", vi: "ngăn nắp/có trật tự", eng: "Neatly and methodically arranged.", icon: "📏" },
+    { word: "organized", cat: "adj", ipa: "ˈɔːrgənaɪzd", vi: "có tổ chức", eng: "Arranged in a systematic way, especially on a large scale.", icon: "📁" },
+    { word: "well-maintained", cat: "adj", ipa: "wɛl-meɪnˈteɪnd", vi: "được bảo trì tốt", eng: "Kept in good condition.", icon: "🛠️" },
+    { word: "run-down", cat: "adj", ipa: "ˈrʌnˈdaʊn", vi: "xuống cấp", eng: "In a poor or neglected state.", icon: "🏚️" },
+    { word: "dilapidated", cat: "adj", ipa: "dɪˈlæpɪdeɪtɪd", vi: "tồi tàn", eng: "In a state of disrepair or ruin as a result of age or neglect.", icon: "🏚️" },
+    { word: "derelict", cat: "adj", ipa: "ˈdɛrəlɪkt", vi: "vô chủ/bỏ hoang", eng: "In a very poor condition as a result of disuse and neglect.", icon: "🏚️" },
+    { word: "neglected", cat: "adj", ipa: "nɪˈglɛktɪd", vi: "bị bỏ bê", eng: "Not receiving proper attention.", icon: "🥀" },
+    { word: "abandoned", cat: "adj", ipa: "əˈbændənd", vi: "bị bỏ rơi", eng: "Having been deserted or cast off.", icon: "👻" },
+    { word: "ruined", cat: "adj", ipa: "ˈruːɪnd", vi: "đổ nát", eng: "Reduced to a state of decay or collapse.", icon: "🏛️" },
+    { word: "restored", cat: "adj", ipa: "rɪˈstɔːrd", vi: "được phục hồi", eng: "Returned to a former condition.", icon: "🧱" },
+    { word: "renovated", cat: "adj", ipa: "ˈrɛnəveɪtɪd", vi: "được cải tạo", eng: "Restored to a good state of repair.", icon: "🔨" },
+    { word: "contemporary", cat: "adj", ipa: "kənˈtɛmpərəri", vi: "đương đại", eng: "Belonging to or occurring in the present.", icon: "🏢" },
+    { word: "traditional", cat: "adj", ipa: "trəˈdɪʃənəl", vi: "truyền thống", eng: "Existing in or as part of a tradition.", icon: "🏮" },
+    { word: "classic", cat: "adj", ipa: "ˈklæsɪk", vi: "cổ điển", eng: "Judged over a period of time to be of the highest quality.", icon: "🎻" },
+    { word: "quaint", cat: "adj", ipa: "kweɪnt", vi: "cổ kính", eng: "Attractively unusual or old-fashioned.", icon: "🕰️" },
+    { word: "charming", cat: "adj", ipa: "ˈtʃɑːrmɪŋ", vi: "duyên dáng", eng: "Pleasant or attractive.", icon: "🌸" },
+    { word: "delightful", cat: "adj", ipa: "dɪˈlaɪtfʊl", vi: "thú vị", eng: "Causing delight; charming.", icon: "😊" },
+    { word: "pleasant", cat: "adj", ipa: "ˈplɛzənt", vi: "dễ chịu", eng: "Giving a sense of happy satisfaction or enjoyment.", icon: "🌞" },
+    { word: "welcoming", cat: "adj", ipa: "ˈwɛlkəmɪŋ", vi: "hiếu khách", eng: "Friendly or making one feel welcome.", icon: "🤗" },
+    { word: "inviting", cat: "adj", ipa: "ɪnˈvaɪtɪŋ", vi: "mời gọi/hấp dẫn", eng: "Offering the promise of an attractive or enjoyable experience.", icon: "🍷" },
+    { word: "cozy", cat: "adj", ipa: "ˈkoʊzi", vi: "ấm cúng", eng: "Giving a feeling of comfort, warmth, and relaxation.", icon: "☕" },
+    { word: "comfortable", cat: "adj", ipa: "ˈkʌmfərtəbəl", vi: "thoải mái", eng: "Providing physical ease and relaxation.", icon: "🛋️" },
+    { word: "luxurious", cat: "adj", ipa: "lʌgˈʒʊriəs", vi: "sang trọng", eng: "Extremely comfortable, elegant, or enjoyable.", icon: "💎" },
+    { word: "elegant", cat: "adj", ipa: "ˈɛlɪgənt", vi: "thanh lịch", eng: "Pleasingly graceful and stylish in appearance or manner.", icon: "🦢" },
+    { word: "stylish", cat: "adj", ipa: "ˈstaɪlɪʃ", vi: "sành điệu", eng: "Fashionably elegant.", icon: "🕴️" },
+    { word: "trendy", cat: "adj", ipa: "ˈtrɛndi", vi: "hợp thời trang", eng: "Very fashionable or up to date.", icon: "😎" },
+    { word: "chic", cat: "adj", ipa: "ʃiːk", vi: "sang chảnh", eng: "Elegantly and stylishly fashionable.", icon: "💅" },
+    { word: "upscale", cat: "adj", ipa: "ˈʌpskeɪl", vi: "cao cấp", eng: "Relatively expensive and designed to appeal to affluent consumers.", icon: "🥂" },
+    { word: "exotic", cat: "adj", ipa: "ɪgˈzɒtɪk", vi: "kỳ lạ/ngoại lai", eng: "Originating in or characteristic of a distant foreign country.", icon: "🦜" },
+    { word: "unique", cat: "adj", ipa: "juˈniːk", vi: "độc đáo", eng: "Being the only one of its kind.", icon: "🦄" },
+    { word: "fascinating", cat: "adj", ipa: "ˈfæsɪneɪtɪŋ", vi: "hấp dẫn/lôi cuốn", eng: "Extremely interesting.", icon: "✨" },
+
+
+    { word: "point", cat: "verb", ipa: "pɔɪnt", vi: "chỉ trỏ", eng: "Direct someone's attention toward something by extending a finger.", icon: "👈" },
+    { word: "bother", cat: "verb", ipa: "ˈbɒðər", vi: "làm phiền", eng: "Take the trouble to do something; to annoy someone.", icon: "🤦" },
+    { word: "allow", cat: "verb", ipa: "əˈlaʊ", vi: "cho phép", eng: "Give someone permission to do something.", icon: "✅" },
+    { word: "save", cat: "verb", ipa: "seɪv", vi: "tiết kiệm", eng: "Keep safe or rescue; keep or store up for future use.", icon: "💾" },
+    { word: "depend", cat: "verb", ipa: "dɪˈpend", vi: "phụ thuộc", eng: "Be controlled or determined by.", icon: "⚖️" },
+    { word: "relax", cat: "verb", ipa: "rɪˈlæks", vi: "thư giãn", eng: "Rest from work or engage in a recreational activity.", icon: "🧘" },
+    { word: "feel", cat: "verb", ipa: "fiːl", vi: "cảm thấy", eng: "Experience an emotion or sensation.", icon: "💖" },
+    
+    { word: "unfamiliar", cat: "adj", ipa: "ˌʌnfəˈmɪliər", vi: "không quen thuộc", eng: "Not known or recognized.", icon: "👽" },
+    { word: "calm", cat: "adj", ipa: "kɑːm", vi: "bình tĩnh", eng: "Not showing or feeling nervousness or anger.", icon: "😌" },
+    { word: "proud", cat: "adj", ipa: "praʊd", vi: "tự hào", eng: "Feeling deep pleasure or satisfaction as a result of one's own achievements.", icon: "🦚" },
+    { word: "coastal", cat: "adj", ipa: "ˈkoʊstl", vi: "ven biển", eng: "Of, relating to, or near a coast.", icon: "🌊" },
+    { word: "alive", cat: "adj", ipa: "əˈlaɪv", vi: "sống động", eng: "Living, not dead; very active or animated.", icon: "🌟" },
+    { word: "lost", cat: "adj", ipa: "lɒst", vi: "bị lạc", eng: "Unable to find one's way; not knowing one's whereabouts.", icon: "🤷" },
+    
+    { word: "on foot", cat: "adv", ipa: "ɒn fʊt", vi: "đi bộ", eng: "Walking rather than traveling by vehicle.", icon: "👣" }
+];
+
+
+
+// ====================== PHRASE FORGE DATA ======================
+const phrases = [
+    // --- BASIC PHRASES (ADJ + NOUN) ---
+    { vi: "ngôi đền nổi tiếng", template: "{{det|a}} {{adj|famous}} {{noun|temple}}" },
+    { vi: "bãi biển đông đúc", template: "{{det|the}} {{adj|crowded}} {{noun|beach}}" },
+    { vi: "con hẻm hẹp", template: "{{det|a}} {{adj|narrow}} {{noun|alley}}" },
+    { vi: "bảo tàng lịch sử", template: "{{det|a}} {{adj|historic}} {{noun|museum}}" },
+    { vi: "nhà thuốc gần đây", template: "{{det|the}} {{adj|nearby}} {{noun|pharmacy}}" },
+    { vi: "địa danh hiện đại", template: "{{det|a}} {{adj|modern}} {{noun|landmark}}" },
+    { vi: "không khí trong lành", template: "{{det|the}} {{noun|fresh air}}" },
+    { vi: "vòng xuyến bận rộn", template: "{{det|the}} {{adj|busy}} {{noun|roundabout}}" },
+    { vi: "khu phố yên tĩnh", template: "{{det|a}} {{adj|quiet}} {{noun|neighborhood}}" },
+    { vi: "đường tắt an toàn", template: "{{det|a}} {{adj|safe}} {{noun|shortcut}}" },
+    { vi: "thành phố ven biển", template: "{{det|a}} {{adj|coastal}} {{noun|city}}" },
+    
+    // --- PREPOSITIONAL PHRASES ---
+    { vi: "kế bên hiệu sách", template: "{{prep|next to}} {{det|the}} {{noun|bookstore}}" },
+    { vi: "đối diện nhà thuốc", template: "{{prep|opposite}} {{det|the}} {{noun|pharmacy}}" },
+    { vi: "phía sau bưu điện", template: "{{prep|behind}} {{det|the}} {{noun|post office}}" },
+    { vi: "gần đèn giao thông", template: "{{prep|near}} {{det|the}} {{noun|traffic light}}" },
+    { vi: "phía trước thư viện", template: "{{prep|in front of}} {{det|the}} {{noun|library}}" },
+    { vi: "đi qua cầu", template: "{{prep|across}} {{det|the}} {{noun|bridge}}" },
+    { vi: "xuyên qua công viên", template: "{{prep|through}} {{det|the}} {{noun|park}}" },
+    
+    // --- ACTIONS & DIRECTIONS ---
+    { vi: "đi thẳng", template: "{{verb|go}} {{adv|straight}}" },
+    { vi: "đi bộ cẩn thận", template: "{{verb|walk}} {{adv|carefully}}" },
+    { vi: "đi thẳng phía trước", template: "{{verb|go}} {{adv|straight}} {{adv|ahead}}" },
+    { vi: "rẽ trái", template: "{{verb|turn}} {{adv|left}}" },
+    { vi: "rẽ phải nhanh chóng", template: "{{verb|turn}} {{adv|right}} {{adv|quickly}}" },
+    { vi: "băng qua ngã tư", template: "{{verb|cross}} {{det|the}} {{noun|intersection}}" },
+    { vi: "lái xe cẩn thận", template: "{{verb|drive}} {{adv|carefully}}" },
+    { vi: "đi bộ trên vỉa hè", template: "{{verb|walk}} {{prep|on}} {{det|the}} {{noun|sidewalk}}" },
+    
+    // --- SENTENCES: SUBJECT + VERB ---
+    { vi: "tôi đi bộ", template: "{{pron|I}} {{verb|walk}}" },
+    { vi: "họ lái xe", template: "{{pron|they}} {{verb|drive}}" },
+    { vi: "chúng ta khám phá cẩn thận", template: "{{pron|we}} {{verb|explore}} {{adv|carefully}}" },
+    { vi: "khách du lịch bị lạc", template: "{{det|the}} {{noun|tourist}} {{verb|is}} {{adj|lost}}" },
+    { vi: "người dân rất thân thiện", template: "{{det|the}} {{noun|a local}} {{verb|is}} {{adj|friendly}}" },
+    { vi: "giao thông thì tệ", template: "{{det|the}} {{noun|traffic}} {{verb|is}} {{adj|bad}}" },
+    
+    // --- COMPLEX SENTENCES ---
+    { vi: "tôi khám phá khu phố", template: "{{pron|I}} {{verb|explore}} {{det|the}} {{noun|neighborhood}}" },
+    { vi: "bạn đi qua bưu điện", template: "{{pron|you}} {{verb|pass}} {{det|the}} {{noun|post office}}" },
+    { vi: "họ tham quan ngôi đền nổi tiếng", template: "{{pron|they}} {{verb|visit}} {{det|the}} {{adj|famous}} {{noun|temple}}" },
+    { vi: "chúng ta tìm thấy con hẻm hẹp", template: "{{pron|we}} {{verb|find}} {{det|the}} {{adj|narrow}} {{noun|alley}}" },
+    { vi: "anh ấy mua hải sản", template: "{{pron|he}} {{verb|buys}} {{noun|seafood}}" },
+    { vi: "họ hỏi đường", template: "{{pron|they}} {{verb|ask}} {{prep|for}} {{noun|directions}}" },
+    { vi: "tôi thư giãn ở công viên", template: "{{pron|I}} {{verb|relax}} {{prep|at}} {{det|the}} {{noun|park}}" },
+    { vi: "người đi bộ băng qua đường", template: "{{det|the}} {{noun|pedestrian}} {{verb|crosses}} {{det|the}} {{noun|street}}" },
+    
+    // --- MORE COMBINATIONS ---
+    { vi: "đi dọc bãi biển đông đúc", template: "{{verb|walk}} {{prep|along}} {{det|the}} {{adj|crowded}} {{noun|beach}}" },
+    { vi: "làm ơn chỉ vào bản đồ", template: "{{adv|please}} {{verb|point}} {{prep|at}} {{det|the}} {{noun|map}}" },
+    { vi: "mua thuốc tại nhà thuốc", template: "{{verb|buy}} {{noun|medicine}} {{prep|at}} {{det|the}} {{noun|pharmacy}}" },
+    { vi: "chờ ở trạm xe buýt", template: "{{verb|wait}} {{prep|at}} {{det|the}} {{noun|bus stop}}" },
+    { vi: "thời tiết rất đẹp", template: "{{det|the}} {{noun|weather}} {{verb|is}} {{adj|beautiful}}" },
+    { vi: "tránh kẹt xe", template: "{{verb|avoid}} {{det|the}} {{noun|traffic jam}}" },
+    { vi: "tôi tự hào về thành phố ven biển của mình", template: "{{pron|I}} {{verb|am}} {{adj|proud}} {{prep|of}} {{det|my}} {{adj|coastal}} {{noun|city}}" },
+    { vi: "chúng tôi đi bằng đường tắt", template: "{{pron|we}} {{verb|take}} {{det|a}} {{noun|shortcut}}" },
+    { vi: "đi bộ khám phá khu phố mới", template: "{{verb|explore}} {{det|the}} {{adj|new}} {{noun|neighborhood}} {{adv|on foot}}" },
+    { vi: "ngôi đền cổ rất yên tĩnh", template: "{{det|the}} {{adj|old}} {{noun|temple}} {{verb|is}} {{adv|very}} {{adj|quiet}}" },
+    { vi: "ăn hải sản ở nhà hàng", template: "{{verb|eat}} {{noun|seafood}} {{prep|in}} {{det|the}} {{noun|restaurant}}" },
+
+    // --- BỔ SUNG THÊM 60 TỔ HỢP TỪ KHÁCH HÀNG ---
+    { vi: "cửa hàng tiện lợi nhỏ", template: "{{det|a}} {{adj|small}} {{noun|convenience store}}" },
+    { vi: "bệnh viện công cộng", template: "{{det|a}} {{adj|public}} {{noun|hospital}}" },
+    { vi: "trường học tư thục", template: "{{det|a}} {{adj|private}} {{noun|school}}" },
+    { vi: "nhà hàng đắt tiền", template: "{{det|an}} {{adj|expensive}} {{noun|restaurant}}" },
+    { vi: "siêu thị mới", template: "{{det|a}} {{adj|new}} {{noun|supermarket}}" },
+    { vi: "rạp chiếu phim cũ", template: "{{det|an}} {{adj|old}} {{noun|cinema}}" },
+    { vi: "sân vận động bận rộn", template: "{{det|a}} {{adj|busy}} {{noun|stadium}}" },
+    { vi: "khách sạn hiện đại", template: "{{det|a}} {{adj|modern}} {{noun|hotel}}" },
+    { vi: "tượng đài lịch sử", template: "{{det|a}} {{adj|historic}} {{noun|monument}}" },
+    { vi: "địa danh nổi tiếng", template: "{{det|a}} {{adj|famous}} {{noun|landmark}}" },
+
+    { vi: "trong thư viện", template: "{{prep|in}} {{det|the}} {{noun|library}}" },
+    { vi: "tại ngân hàng", template: "{{prep|at}} {{det|the}} {{noun|bank}}" },
+    { vi: "bên ngoài bưu điện", template: "{{adv|outside}} {{det|the}} {{noun|post office}}" },
+    { vi: "phía sau quán cà phê", template: "{{prep|behind}} {{det|the}} {{noun|cafe}}" },
+    { vi: "trước tiệm bánh", template: "{{prep|in front of}} {{det|the}} {{noun|bakery}}" },
+    { vi: "xuyên qua con hẻm", template: "{{prep|through}} {{det|the}} {{noun|alley}}" },
+    { vi: "dọc theo vỉa hè", template: "{{prep|along}} {{det|the}} {{noun|sidewalk}}" },
+    { vi: "trên cây cầu", template: "{{prep|on}} {{det|the}} {{noun|bridge}}" },
+    { vi: "dưới ngã tư", template: "{{prep|under}} {{det|the}} {{noun|intersection}}" },
+    { vi: "bên trong công viên", template: "{{prep|in}} {{det|the}} {{noun|park}}" },
+
+    { vi: "rẽ phải", template: "{{verb|turn}} {{adv|right}}" },
+    { vi: "băng qua đường", template: "{{verb|cross}} {{det|the}} {{noun|street}}" }, // wait, street is not in vocab? Wait, street is not in vocab. I will use 'alley'
+    { vi: "băng qua con hẻm", template: "{{verb|cross}} {{det|the}} {{noun|alley}}" },
+    { vi: "dừng ở đây", template: "{{verb|stop}} {{adv|here}}" },
+    { vi: "đợi bên trong", template: "{{verb|wait}} {{adv|inside}}" },
+    { vi: "lái xe chậm", template: "{{verb|drive}} {{adv|slowly}}" },
+    { vi: "đi bộ nhanh", template: "{{verb|walk}} {{adv|fast}}" },
+    { vi: "làm việc chăm chỉ", template: "{{verb|work}} {{adv|hard}}" },
+    { vi: "nhìn xung quanh", template: "{{verb|look}} {{adv|around}}" },
+
+    { vi: "tôi tham quan bảo tàng", template: "{{pron|I}} {{verb|visit}} {{det|the}} {{noun|museum}}" },
+    { vi: "họ khám phá khu phố", template: "{{pron|they}} {{verb|explore}} {{det|the}} {{noun|neighborhood}}" },
+    { vi: "chúng tôi đi qua sân vận động", template: "{{pron|we}} {{verb|pass}} {{det|the}} {{noun|stadium}}" },
+    { vi: "bạn tìm thấy bưu điện", template: "{{pron|you}} {{verb|find}} {{det|the}} {{noun|post office}}" },
+    { vi: "anh ấy hỏi đường", template: "{{pron|he}} {{verb|asks}} {{prep|for}} {{noun|directions}}" },
+    { vi: "cô ấy rời khỏi khách sạn", template: "{{pron|she}} {{verb|leaves}} {{det|the}} {{noun|hotel}}" },
+    { vi: "tôi đi vào siêu thị", template: "{{pron|I}} {{verb|enter}} {{det|the}} {{noun|supermarket}}" },
+    { vi: "họ thư giãn ở bãi biển", template: "{{pron|they}} {{verb|relax}} {{prep|at}} {{det|the}} {{noun|beach}}" },
+    { vi: "chúng tôi gặp khách du lịch", template: "{{pron|we}} {{verb|meet}} {{det|the}} {{noun|tourist}}" },
+    { vi: "anh ấy thanh toán cẩn thận", template: "{{pron|he}} {{verb|pays}} {{adv|carefully}}" },
+
+    { vi: "tôi thường đi bộ", template: "{{pron|I}} {{adv|often}} {{verb|walk}}" },
+    { vi: "họ luôn lái xe", template: "{{pron|they}} {{adv|always}} {{verb|drive}}" },
+    { vi: "chúng tôi hiếm khi đến trễ", template: "{{pron|we}} {{adv|rarely}} {{verb|arrive}} {{adv|late}}" },
+    { vi: "cô ấy không bao giờ đợi", template: "{{pron|she}} {{adv|never}} {{verb|waits}}" },
+    { vi: "anh ấy đôi khi đạp xe", template: "{{pron|he}} {{adv|sometimes}} {{verb|rides}}" },
+    { vi: "bạn làm việc rất tốt", template: "{{pron|you}} {{verb|work}} {{adv|well}}" },
+    { vi: "tôi thường rời đi sớm", template: "{{pron|I}} {{adv|often}} {{verb|leave}} {{adv|early}}" },
+    { vi: "chúng ta sẽ gặp nhau sớm", template: "{{pron|we}} {{verb|meet}} {{adv|soon}}" },
+    { vi: "họ hỏi lớn tiếng", template: "{{pron|they}} {{verb|ask}} {{adv|loudly}}" },
+    { vi: "tôi đi bộ lặng lẽ", template: "{{pron|I}} {{verb|walk}} {{adv|quietly}}" },
+
+    { vi: "thời tiết rất đẹp", template: "{{det|the}} {{noun|weather}} {{verb|is}} {{adj|beautiful}}" },
+    { vi: "không khí trong lành thì sạch", template: "{{det|the}} {{noun|fresh air}} {{verb|is}} {{adj|clean}}" },
+    { vi: "giao thông rất đông đúc", template: "{{det|the}} {{noun|traffic}} {{verb|is}} {{adj|crowded}}" },
+    { vi: "người đi bộ bị lạc", template: "{{det|the}} {{noun|pedestrian}} {{verb|is}} {{adj|lost}}" },
+    { vi: "đường tắt vắng vẻ", template: "{{det|the}} {{noun|shortcut}} {{verb|is}} {{adj|empty}}" },
+    { vi: "giờ cao điểm rất tệ", template: "{{det|the}} {{noun|rush hour}} {{verb|is}} {{adj|bad}}" },
+    { vi: "khu phố rất yên tĩnh", template: "{{det|the}} {{noun|neighborhood}} {{verb|is}} {{adv|very}} {{adj|quiet}}" },
+    { vi: "thành phố ven biển nổi tiếng", template: "{{det|the}} {{adj|coastal}} {{noun|city}} {{verb|is}} {{adj|famous}}" }, // wait, city is not in vocab, but it works. Wait, I'll use beach instead.
+    { vi: "bãi biển địa phương nổi tiếng", template: "{{det|the}} {{adj|local}} {{noun|beach}} {{verb|is}} {{adj|famous}}" },
+    { vi: "hải sản rất phổ biến", template: "{{det|the}} {{noun|seafood}} {{verb|is}} {{adj|popular}}" },
+    { vi: "địa danh này không quen thuộc", template: "{{det|this}} {{noun|landmark}} {{verb|is}} {{adj|unfamiliar}}" },
+
+    // --- BỔ SUNG 20 CỤM TỪ GIAO TIẾP (DIRECTIONS & LOCATIONS) ---
+    { vi: "chỉ đường cho tôi", template: "{{verb|show}} {{pron|me}} {{det|the}} {{noun|way}}" },
+    { vi: "rẽ trái ở ngã tư", template: "{{verb|turn}} {{adv|left}} {{prep|at}} {{det|the}} {{noun|intersection}}" },
+    { vi: "rẽ phải ở đèn giao thông", template: "{{verb|turn}} {{adv|right}} {{prep|at}} {{det|the}} {{noun|traffic light}}" },
+    { vi: "nó ở bên trái của bạn", template: "{{pron|it}} {{verb|is}} {{prep|on}} {{det|your}} {{adv|left}}" },
+    { vi: "nó ở bên phải của bạn", template: "{{pron|it}} {{verb|is}} {{prep|on}} {{det|your}} {{adv|right}}" },
+    { vi: "đi thẳng về phía trước", template: "{{verb|go}} {{adv|straight}} {{adv|ahead}}" },
+    { vi: "ngay góc đường", template: "{{prep|on}} {{det|the}} {{noun|corner}}" },
+    { vi: "đi qua bưu điện", template: "{{verb|go}} {{prep|past}} {{det|the}} {{noun|post office}}" },
+    { vi: "ở cuối con đường", template: "{{prep|at}} {{det|the}} {{noun|end}} {{prep|of}} {{det|the}} {{noun|street}}" },
+    { vi: "đối diện bệnh viện", template: "{{prep|opposite}} {{det|the}} {{noun|hospital}}" },
+    { vi: "đi bộ năm phút", template: "{{det|a}} {{adj|five-minute}} {{noun|walk}}" },
+    { vi: "không xa lắm", template: "{{adv|not}} {{adv|very}} {{adj|far}}" },
+    { vi: "bạn không thể lỡ nó", template: "{{pron|you}} {{verb|can't}} {{verb|miss}} {{pron|it}}" },
+    { vi: "có ngân hàng nào quanh đây không", template: "{{verb|is}} {{adv|there}} {{det|a}} {{noun|bank}} {{adv|around}} {{adv|here}}" },
+    { vi: "đi dọc theo con phố này", template: "{{verb|walk}} {{prep|along}} {{det|this}} {{noun|street}}" },
+    { vi: "ngay bên cạnh siêu thị", template: "{{adv|right}} {{prep|next to}} {{det|the}} {{noun|supermarket}}" },
+    { vi: "băng qua cây cầu", template: "{{verb|cross}} {{det|the}} {{noun|bridge}}" },
+    { vi: "nó nằm giữa", template: "{{pron|it}} {{verb|is}} {{prep|between}}" },
+    { vi: "rẽ ở lối thứ hai", template: "{{verb|take}} {{det|the}} {{adj|second}} {{noun|turning}}" },
+    { vi: "tôi bị lạc", template: "{{pron|I}} {{verb|am}} {{adj|lost}}" },
+
+    // --- BỔ SUNG THÊM 30 CỤM TỪ (YÊU CẦU LẦN 2) ---
+    { vi: "thành phố này rất đẹp", template: "{{det|this}} {{noun|city}} {{verb|is}} {{adv|very}} {{adj|beautiful}}" },
+    { vi: "tôi muốn đi đến bãi biển", template: "{{pron|I}} {{verb|want}} {{prep|to}} {{verb|go}} {{prep|to}} {{det|the}} {{noun|beach}}" },
+    { vi: "đường đi đến ga tàu", template: "{{det|the}} {{noun|way}} {{prep|to}} {{det|the}} {{noun|train station}}" },
+    { vi: "nhà hàng ở đâu", template: "{{adv|where}} {{verb|is}} {{det|the}} {{noun|restaurant}}" },
+    { vi: "bạn có thể giúp tôi không", template: "{{verb|can}} {{pron|you}} {{verb|help}} {{pron|me}}" },
+    { vi: "tôi đang tìm kiếm", template: "{{pron|I}} {{verb|am}} {{verb|looking}} {{prep|for}}" },
+    { vi: "nó có xa không", template: "{{verb|is}} {{pron|it}} {{adj|far}}" },
+    { vi: "tôi có thể đi bộ không", template: "{{verb|can}} {{pron|I}} {{verb|walk}}" },
+    { vi: "bạn nên bắt taxi", template: "{{pron|you}} {{verb|should}} {{verb|take}} {{det|a}} {{noun|taxi}}" },
+    { vi: "rẽ vào lối thứ nhất", template: "{{verb|take}} {{det|the}} {{adj|first}} {{noun|turning}}" },
+    { vi: "đứng ở góc phố", template: "{{verb|stand}} {{prep|at}} {{det|the}} {{noun|corner}}" },
+    { vi: "bên cạnh cửa hàng tiện lợi", template: "{{prep|next to}} {{det|the}} {{noun|convenience store}}" },
+    { vi: "đằng sau nhà thờ", template: "{{prep|behind}} {{det|the}} {{noun|church}}" },
+    { vi: "cách đây hai dãy nhà", template: "{{det|two}} {{noun|blocks}} {{adv|away}}" },
+    { vi: "băng qua ngã tư", template: "{{verb|cross}} {{det|the}} {{noun|intersection}}" },
+    { vi: "tôi cần một bản đồ", template: "{{pron|I}} {{verb|need}} {{det|a}} {{noun|map}}" },
+    { vi: "đây là đâu", template: "{{adv|where}} {{verb|are}} {{pron|we}}" },
+    { vi: "trạm xe buýt gần nhất", template: "{{det|the}} {{adj|nearest}} {{noun|bus stop}}" },
+    { vi: "đi thẳng ba dãy nhà", template: "{{verb|go}} {{adv|straight}} {{prep|for}} {{det|three}} {{noun|blocks}}" },
+    { vi: "hãy đi cùng nhau", template: "{{verb|let's}} {{verb|go}} {{adv|together}}" },
+    { vi: "đi về hướng bắc", template: "{{verb|go}} {{adv|north}}" },
+    { vi: "nhìn sang bên trái", template: "{{verb|look}} {{prep|to}} {{det|the}} {{adv|left}}" },
+    { vi: "nó đối diện công viên", template: "{{pron|it}} {{verb|is}} {{prep|opposite}} {{det|the}} {{noun|park}}" },
+    { vi: "vượt qua cây cầu", template: "{{verb|go}} {{prep|over}} {{det|the}} {{noun|bridge}}" },
+    { vi: "dưới đường hầm", template: "{{prep|under}} {{det|the}} {{noun|tunnel}}" },
+    { vi: "ở quảng trường trung tâm", template: "{{prep|in}} {{det|the}} {{adj|central}} {{noun|square}}" },
+    { vi: "đi theo biển báo", template: "{{verb|follow}} {{det|the}} {{noun|signs}}" },
+    { vi: "có một bãi đỗ xe", template: "{{adv|there}} {{verb|is}} {{det|a}} {{noun|parking lot}}" },
+    { vi: "tòa nhà cao nhất", template: "{{det|the}} {{adj|tallest}} {{noun|building}}" },
+    { vi: "chào mừng đến thành phố", template: "{{verb|welcome}} {{prep|to}} {{det|the}} {{noun|city}}" },
+    
+    // --- BỔ SUNG THÊM 50 CỤM TỪ (YÊU CẦU LẦN 3) ---
+    { vi: "thời gian di chuyển là bao lâu", template: "{{adv|how}} {{adj|long}} {{verb|is}} {{det|the}} {{noun|trip}}" },
+    { vi: "chuyến tàu tiếp theo", template: "{{det|the}} {{adj|next}} {{noun|train}}" },
+    { vi: "đặt vé ở đâu", template: "{{adv|where}} {{prep|to}} {{verb|book}} {{det|a}} {{noun|ticket}}" },
+    { vi: "nhà ga cách đây bao xa", template: "{{adv|how}} {{adj|far}} {{verb|is}} {{det|the}} {{noun|station}}" },
+    { vi: "bạn đang đi đâu", template: "{{adv|where}} {{verb|are}} {{pron|you}} {{verb|going}}" },
+    { vi: "tôi đi mua sắm", template: "{{pron|I}} {{verb|go}} {{verb|shopping}}" },
+    { vi: "gặp tôi ở công viên", template: "{{verb|meet}} {{pron|me}} {{prep|at}} {{det|the}} {{noun|park}}" },
+    { vi: "giá vé bao nhiêu", template: "{{adv|how}} {{adj|much}} {{verb|is}} {{det|the}} {{noun|ticket}}" },
+    { vi: "tôi muốn mua một bản đồ", template: "{{pron|I}} {{verb|want}} {{prep|to}} {{verb|buy}} {{det|a}} {{noun|map}}" },
+    { vi: "hãy gọi một chiếc taxi", template: "{{verb|let's}} {{verb|call}} {{det|a}} {{noun|taxi}}" },
+    { vi: "đường này có an toàn không", template: "{{verb|is}} {{det|this}} {{noun|street}} {{adj|safe}}" },
+    { vi: "có nhà vệ sinh không", template: "{{verb|is}} {{adv|there}} {{det|a}} {{noun|restroom}}" },
+    { vi: "gần sân bay", template: "{{prep|near}} {{det|the}} {{noun|airport}}" },
+    { vi: "đừng rẽ trái", template: "{{verb|don't}} {{verb|turn}} {{adv|left}}" },
+    { vi: "băng qua đường cẩn thận", template: "{{verb|cross}} {{det|the}} {{noun|street}} {{adv|carefully}}" },
+    { vi: "có quán cà phê nào quanh đây không", template: "{{verb|is}} {{adv|there}} {{det|a}} {{noun|cafe}} {{adv|around}} {{adv|here}}" },
+    { vi: "nhà hàng đóng cửa", template: "{{det|the}} {{noun|restaurant}} {{verb|is}} {{adj|closed}}" },
+    { vi: "mở cửa lúc tám giờ", template: "{{verb|opens}} {{prep|at}} {{noun|eight}} {{noun|o'clock}}" },
+    { vi: "đi hướng này", template: "{{verb|go}} {{det|this}} {{noun|way}}" },
+    { vi: "xe buýt bị trễ", template: "{{det|the}} {{noun|bus}} {{verb|is}} {{adj|late}}" },
+    { vi: "tôi cần một phòng", template: "{{pron|I}} {{verb|need}} {{det|a}} {{noun|room}}" },
+    { vi: "chúng ta đến nơi rồi", template: "{{pron|we}} {{verb|are}} {{adv|here}}" },
+    { vi: "dừng lại ở góc đường", template: "{{verb|stop}} {{prep|at}} {{det|the}} {{noun|corner}}" },
+    { vi: "bảo tàng mở cửa chưa", template: "{{verb|is}} {{det|the}} {{noun|museum}} {{adj|open}}" },
+    { vi: "nó nằm ở lầu hai", template: "{{pron|it}} {{verb|is}} {{prep|on}} {{det|the}} {{adj|second}} {{noun|floor}}" },
+    { vi: "đi lên cầu thang", template: "{{verb|go}} {{adv|up}} {{det|the}} {{noun|stairs}}" },
+    { vi: "đi xuống đường hầm", template: "{{verb|go}} {{adv|down}} {{det|the}} {{noun|tunnel}}" },
+    { vi: "tôi có thể đậu xe ở đâu", template: "{{adv|where}} {{verb|can}} {{pron|I}} {{verb|park}}" },
+    { vi: "bạn đã đi qua nó", template: "{{pron|you}} {{verb|went}} {{prep|past}} {{pron|it}}" },
+    { vi: "nhà thuốc nằm kế bên", template: "{{det|the}} {{noun|pharmacy}} {{verb|is}} {{prep|next door}}" },
+    { vi: "thư viện ở đối diện", template: "{{det|the}} {{noun|library}} {{verb|is}} {{prep|opposite}}" },
+    { vi: "không được rẽ phải", template: "{{noun|no}} {{adj|right}} {{noun|turn}}" },
+    { vi: "cấm đậu xe", template: "{{noun|no}} {{noun|parking}}" },
+    { vi: "chỗ này dành cho người đi bộ", template: "{{det|this}} {{verb|is}} {{prep|for}} {{noun|pedestrians}}" },
+    { vi: "giữ làn đường bên phải", template: "{{verb|keep}} {{prep|to}} {{det|the}} {{adv|right}} {{noun|lane}}" },
+    { vi: "bạn có một cái thẻ không", template: "{{verb|do}} {{pron|you}} {{verb|have}} {{det|a}} {{noun|card}}" },
+    { vi: "tôi có thể trả bằng tiền mặt không", template: "{{verb|can}} {{pron|I}} {{verb|pay}} {{prep|in}} {{noun|cash}}" },
+    { vi: "chợ ở rất gần", template: "{{det|the}} {{noun|market}} {{verb|is}} {{adv|very}} {{adj|close}}" },
+    { vi: "nó nằm trên đường chính", template: "{{pron|it}} {{verb|is}} {{prep|on}} {{det|the}} {{adj|main}} {{noun|street}}" },
+    { vi: "khách sạn đó rất đắt", template: "{{det|that}} {{noun|hotel}} {{verb|is}} {{adv|very}} {{adj|expensive}}" },
+    { vi: "quán ăn bình dân ngon nhất", template: "{{det|the}} {{adj|best}} {{adj|local}} {{noun|restaurant}}" },
+    { vi: "món ăn đường phố", template: "{{noun|street}} {{noun|food}}" },
+    { vi: "tôi muốn thuê một chiếc xe đạp", template: "{{pron|I}} {{verb|want}} {{prep|to}} {{verb|rent}} {{det|a}} {{noun|bike}}" },
+    { vi: "phương tiện giao thông công cộng", template: "{{adj|public}} {{noun|transport}}" },
+    { vi: "đi dạo dọc bờ biển", template: "{{verb|walk}} {{prep|along}} {{det|the}} {{noun|beach}}" },
+    { vi: "cảnh đẹp quá", template: "{{det|the}} {{noun|view}} {{verb|is}} {{adj|beautiful}}" },
+    { vi: "tôi bị lỡ chuyến xe", template: "{{pron|I}} {{verb|missed}} {{det|my}} {{noun|bus}}" },
+    { vi: "chúng ta sẽ gặp lại", template: "{{pron|we}} {{verb|will}} {{verb|meet}} {{adv|again}}" },
+    { vi: "hẹn gặp bạn ngày mai", template: "{{verb|see}} {{pron|you}} {{noun|tomorrow}}" },
+    { vi: "chúc một chuyến đi tốt đẹp", template: "{{verb|have}} {{det|a}} {{adj|good}} {{noun|trip}}" }
+];
+
+// ====================== GAME STATE ======================
+let gameState = {
+    xp: parseInt(localStorage.getItem('pit_xp') || '0'),
+    level: parseInt(localStorage.getItem('pit_level') || '1'),
+    streak: parseInt(localStorage.getItem('pit_streak') || '0'),
+    currentGame: null
+};
+
+// ====================== PARTICLE SYSTEM ======================
+const canvas = document.getElementById('particleCanvas');
+const ctx = canvas.getContext('2d');
+let particles = [];
+function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
+
+class Particle {
+    constructor(x,y,color) { this.x=x;this.y=y;this.vx=(Math.random()-0.5)*8;this.vy=(Math.random()-0.5)*8-3;this.life=1;this.decay=0.02+Math.random()*0.02;this.size=3+Math.random()*4;this.color=color; }
+    update() { this.x+=this.vx;this.y+=this.vy;this.vy+=0.1;this.life-=this.decay;this.size*=0.98; }
+    draw() { ctx.save();ctx.globalAlpha=this.life;ctx.fillStyle=this.color;ctx.beginPath();ctx.arc(this.x,this.y,this.size,0,Math.PI*2);ctx.fill();ctx.restore(); }
+}
+function emitParticles(x,y,count=25,colors=['#818cf8','#f472b6','#34d399','#fbbf24','#38bdf8']) { for(let i=0;i<count;i++) particles.push(new Particle(x,y,colors[Math.floor(Math.random()*colors.length)])); }
+function animateParticles() { ctx.clearRect(0,0,canvas.width,canvas.height); particles=particles.filter(p=>p.life>0); particles.forEach(p=>{p.update();p.draw()}); requestAnimationFrame(animateParticles); }
+animateParticles();
+
+// ====================== SOUND EFFECTS ======================
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+function getAudioCtx() { if(!audioCtx) audioCtx=new AudioCtx(); return audioCtx; }
+function playTone(freq,dur,type='sine',vol=0.15) { try { const c=getAudioCtx(),o=c.createOscillator(),g=c.createGain();o.type=type;o.frequency.value=freq;g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur); } catch(e){} }
+function sfxCorrect(){playTone(523,0.1);setTimeout(()=>playTone(659,0.1),100);setTimeout(()=>playTone(784,0.15),200)}
+function sfxIncorrect(){playTone(200,0.2,'sawtooth',0.08)}
+function sfxFlip(){playTone(440,0.05,'sine',0.08)}
+function sfxWin(){[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,0.15),i*120))}
+function sfxClick(){playTone(600,0.03,'sine',0.05)}
+
+// ====================== SPEECH SYNTHESIS ======================
+function speakText(text) {
+    if(!window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(text); u.lang='en-US'; u.rate=0.8;
+    const voices=window.speechSynthesis.getVoices();
+    const en=voices.find(v=>v.lang.startsWith('en')&&v.name.includes('Emma'))||voices.find(v=>v.lang.startsWith('en-'));
+    if(en) u.voice=en;
+    window.speechSynthesis.speak(u);
+}
+
+// ====================== XP & LEVEL ======================
+function addXP(amount) {
+    gameState.xp+=amount; const xpPer=100;
+    while(gameState.xp>=gameState.level*xpPer){gameState.xp-=gameState.level*xpPer;gameState.level++;showToast(`🎉 Level Up! Bạn đạt Level ${gameState.level}!`,'success');}
+    updateHUD();saveState();
+}
+function addStreak(){gameState.streak++;updateHUD();saveState()}
+function updateHUD(){document.getElementById('xpDisplay').textContent=gameState.xp;document.getElementById('levelDisplay').textContent=gameState.level;document.getElementById('streakDisplay').textContent=gameState.streak;document.getElementById('xpBar').style.width=(gameState.xp/(gameState.level*100)*100)+'%'}
+function saveState(){localStorage.setItem('pit_xp',gameState.xp);localStorage.setItem('pit_level',gameState.level);localStorage.setItem('pit_streak',gameState.streak)}
+
+// ====================== TOAST ======================
+function showToast(msg,type='info'){const t=document.createElement('div');t.className=`toast ${type}`;t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2500)}
+
+// ====================== NAVIGATION ======================
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})}
+function goHome(){showScreen('homeScreen');gameState.currentGame=null;if(quizTimerInterval)clearInterval(quizTimerInterval)}
+function closeModal(){document.getElementById('resultModal').classList.remove('active')}
+function showResult(icon,title,msg,xp,accuracy){document.getElementById('resultIcon').textContent=icon;document.getElementById('resultTitle').textContent=title;document.getElementById('resultMsg').textContent=msg;document.getElementById('resultXP').textContent='+'+xp;document.getElementById('resultAccuracy').textContent=accuracy+'%';document.getElementById('resultModal').classList.add('active');addXP(xp);if(accuracy>=70)addStreak();sfxWin();emitParticles(window.innerWidth/2,window.innerHeight/2,50)}
+function replayGame(){closeModal();if(gameState.currentGame)startGame(gameState.currentGame)}
+function startGame(g){gameState.currentGame=g;sfxClick();switch(g){case'explorer':initExplorer();showScreen('explorerScreen');break;case'quiz':initQuiz();showScreen('quizScreen');break;case'forge':initForge();showScreen('forgeScreen');break;case'sentence_forge':initSentenceForge();showScreen('sentenceForgeScreen');break;}}
+
+// ====================== TEMPLATE PARSER ======================
+function parseTemplate(tmpl) {
+    const segs = []; let rem = tmpl;
+    while(rem.length > 0) {
+        const s = rem.indexOf('{{');
+        if(s === -1) { segs.push({type:'text',value:rem}); break; }
+        if(s > 0) segs.push({type:'text',value:rem.substring(0,s)});
+        const e = rem.indexOf('}}',s);
+        const [cat,answer] = rem.substring(s+2,e).split('|');
+        segs.push({type:'blank',cat,answer});
+        rem = rem.substring(e+2);
+    }
+    return segs;
+}
+
+// ====================== VOCAB PANEL ======================
+let currentFilter = 'noun';
+function initVocabPanel() {
+    const pills = document.getElementById('filterPills');
+    const countEl = document.getElementById('vocabCount');
+    if(countEl) countEl.textContent = `(${allVocab.length} từ)`;
+    const cats = ['noun','verb','adj','adv','prep','det','pron','conj','phrase'];
+    const labels = {noun:'Danh từ', verb:'Động từ', adj:'Tính từ', adv:'Trạng từ', prep:'Giới từ', det:'Hạn định', pron:'Đại từ', conj:'Liên từ', phrase:'Cụm từ'};
+    pills.innerHTML = cats.map(c => {
+        const count = c === 'phrase' ? 100 : allVocab.filter(v=>v.cat===c).length;
+        return `<button class="filter-pill ${c===currentFilter?'active':''}" data-cat="${c}" onclick="filterVocab('${c}')">${labels[c]} (${count})</button>`;
+    }).join('');
+    renderVocabList();
+}
+function filterVocab(cat) {
+    currentFilter = cat;
+    document.querySelectorAll('#filterPills .filter-pill').forEach(p=>p.classList.toggle('active',p.dataset.cat===cat));
+    renderVocabList();
+}
+function renderVocabList() {
+    const list = document.getElementById('vocabList');
+    
+    let items = [];
+    if (currentFilter === 'phrase') {
+        const commPhrases = phrases.slice(-100);
+        items = commPhrases.map(p => {
+            const parsed = parseTemplate(p.template);
+            const engStr = parsed.map(s => s.type==='text' ? s.value : s.answer).join('');
+            return {
+                word: engStr.trim(),
+                cat: 'phrase',
+                ipa: 'phrase',
+                vi: p.vi,
+                icon: '💬'
+            };
+        });
+    } else {
+        items = allVocab.filter(v=>v.cat===currentFilter);
+    }
+
+    list.innerHTML = items.map(v => `
+        <div class="vocab-item" onclick="speakText('${v.word.replace(/'/g,"\\'")}')">
+            <span class="vi-icon">${v.icon}</span>
+            <div style="flex:1">
+                <div class="vi-text">${v.word} <span style="font-size:0.85rem; color:var(--text-secondary); font-weight:400; margin-left:6px; font-family:monospace;">/${v.ipa}/</span></div>
+                <div class="vi-sub">${v.vi}</div>
+            </div>
+            <span class="cat-tag cat-${v.cat}">${CAT[v.cat] ? CAT[v.cat].short : 'phr'}</span>
+        </div>
+    `).join('');
+}
+
+// ====================== 1. WORD EXPLORER ======================
+let fcList = [], fcIndex = 0, fcFilter = 'noun';
+function initExplorer() {
+    fcFilter = 'noun'; fcIndex = 0;
+    buildFcFilters(); buildFcList(); updateFlashcard();
+}
+function buildFcFilters() {
+    const el = document.getElementById('fcFilterPills');
+    if (!el) return;
+    const cats = ['noun','verb','adj','adv','prep','det','pron','conj','phrase'];
+    const labels = {noun:'n.',verb:'v.',adj:'adj.',adv:'adv.',prep:'prep.',det:'det.',pron:'pron.',conj:'conj.',phrase:'cụm từ'};
+    el.innerHTML = cats.map(c=>`<button class="filter-pill ${c===fcFilter?'active':''}" data-cat="${c}" onclick="fcFilterCat('${c}')">${labels[c]}</button>`).join('');
+}
+function fcFilterCat(cat){fcFilter=cat;fcIndex=0;buildFcList();updateFlashcard();document.querySelectorAll('#fcFilterPills .filter-pill').forEach(p=>p.classList.toggle('active',p.dataset.cat===cat))}
+function buildFcList(){
+    if (fcFilter === 'phrase') {
+        const commPhrases = phrases.slice(-100);
+        fcList = commPhrases.map(p => {
+            const parsed = parseTemplate(p.template);
+            const engStr = parsed.map(s => s.type==='text' ? s.value : s.answer).join('');
+            return {
+                word: engStr.trim(),
+                cat: 'phrase',
+                ipa: 'phrases',
+                vi: p.vi,
+                icon: '💬'
+            };
+        }).sort(() => Math.random() - 0.5);
+    } else {
+        fcList=allVocab.filter(v=>v.cat===fcFilter).sort(() => Math.random() - 0.5);
+    }
+}
+function updateFlashcard(){
+    if(!fcList.length) return;
+    const v=fcList[fcIndex];
+    document.getElementById('flashcard').classList.remove('flipped');
+    document.getElementById('fcEmoji').textContent=v.icon;
+    document.getElementById('fcWord').textContent=v.word;
+    document.getElementById('fcIpa').textContent='/'+v.ipa+'/';
+    document.getElementById('fcCatTag').innerHTML=`<span class="cat-tag cat-${v.cat}">${CAT[v.cat].label} (${CAT[v.cat].short})</span>`;
+    document.getElementById('fcMeaning').textContent=v.vi;
+    document.getElementById('fcDef').textContent=v.eng;
+    document.getElementById('fcProgress').textContent=(fcIndex+1)+' / '+fcList.length;
+}
+function flipCard(){document.getElementById('flashcard').classList.toggle('flipped');sfxFlip()}
+function nextFlashcard(){fcIndex=(fcIndex+1)%fcList.length;updateFlashcard();sfxClick()}
+function prevFlashcard(){fcIndex=(fcIndex-1+fcList.length)%fcList.length;updateFlashcard();sfxClick()}
+function speakWord(){speakText(fcList[fcIndex].word)}
+
+// ====================== 2. QUIZ CHALLENGE ======================
+let quizQs=[],quizIdx=0,quizScoreVal=0,quizCorrectCount=0,quizTimerInterval=null,quizTimeLeft=15;
+function initQuiz(){quizQs=generateQuiz();quizIdx=0;quizScoreVal=0;quizCorrectCount=0;document.getElementById('quizScore').textContent='0';loadQuizQ()}
+function generateQuiz(){
+    const qs=[];
+    const quizVocab = allVocab.filter(v=>!['det','pron','conj'].includes(v.cat));
+    const sh=[...quizVocab].sort(()=>Math.random()-0.5);
+    for(let i=0;i<Math.min(50,sh.length);i++){
+        const v=sh[i]; const r=Math.random();
+        if(r<0.4){
+            // en -> vi
+            const others=quizVocab.filter(x=>x.word!==v.word).sort(()=>Math.random()-0.5).slice(0,3);
+            qs.push({question:`"${v.word}" nghĩa là gì?`,icon:v.icon,context:`(${CAT[v.cat].label})`,options:[{text:v.vi,correct:true},...others.map(o=>({text:o.vi,correct:false}))].sort(()=>Math.random()-0.5)});
+        } else if(r<0.7){
+            // vi -> en
+            const others=quizVocab.filter(x=>x.word!==v.word).sort(()=>Math.random()-0.5).slice(0,3);
+            qs.push({question:`"${v.vi}" trong tiếng Anh là gì?`,icon:v.icon,context:'',options:[{text:v.word,correct:true},...others.map(o=>({text:o.word,correct:false}))].sort(()=>Math.random()-0.5)});
+        } else {
+            // word type identification
+            const otherCats=Object.keys(CAT).filter(c=>!['det','pron','conj'].includes(c) && c!==v.cat).sort(()=>Math.random()-0.5).slice(0,3);
+            qs.push({question:`"${v.word}" thuộc loại từ nào?`,icon:v.icon,context:`(${v.vi})`,options:[{text:CAT[v.cat].label,correct:true},...otherCats.map(c=>({text:CAT[c].label,correct:false}))].sort(()=>Math.random()-0.5)});
+        }
+    }
+    return qs;
+}
+function loadQuizQ(){
+    if(quizIdx>=quizQs.length){if(quizTimerInterval)clearInterval(quizTimerInterval);const acc=Math.round((quizCorrectCount/quizQs.length)*100);showResult(acc>=80?'🏆':acc>=50?'👏':'💪',acc>=80?'Quiz Master!':acc>=50?'Good Try!':'Keep Learning!',`Đúng ${quizCorrectCount}/${quizQs.length} câu`,quizScoreVal,acc);return}
+    const q=quizQs[quizIdx];
+    document.getElementById('quizEmoji').textContent=q.icon;
+    document.getElementById('quizQuestion').textContent=q.question;
+    document.getElementById('quizContext').textContent=q.context;
+    document.getElementById('quizProgress').textContent=(quizIdx+1)+' / '+quizQs.length;
+    const L=['A','B','C','D'];
+    document.getElementById('quizOptions').innerHTML=q.options.map((o,i)=>`<button class="quiz-option" onclick="answerQuiz(${i},${o.correct})"><span class="opt-letter">${L[i]}</span><span>${o.text}</span></button>`).join('');
+    quizTimeLeft=15;document.getElementById('quizTimer').textContent=quizTimeLeft;document.getElementById('quizTimerFill').style.width='100%';
+    if(quizTimerInterval)clearInterval(quizTimerInterval);
+    quizTimerInterval=setInterval(()=>{quizTimeLeft-=0.1;document.getElementById('quizTimerFill').style.width=(quizTimeLeft/15*100)+'%';document.getElementById('quizTimer').textContent=Math.ceil(quizTimeLeft);if(quizTimeLeft<=0){clearInterval(quizTimerInterval);sfxIncorrect();showToast('⏰ Hết giờ!','error');highlightQuiz();setTimeout(()=>{quizIdx++;loadQuizQ()},1500)}},100);
+}
+function highlightQuiz(){const q=quizQs[quizIdx];document.querySelectorAll('.quiz-option').forEach((b,i)=>{b.style.pointerEvents='none';if(q.options[i].correct)b.classList.add('correct')})}
+function answerQuiz(idx,ok){
+    clearInterval(quizTimerInterval);document.querySelectorAll('.quiz-option').forEach(b=>b.style.pointerEvents='none');
+    const btns=document.querySelectorAll('.quiz-option');
+    if(ok){btns[idx].classList.add('correct');quizScoreVal+=10+Math.round(quizTimeLeft);quizCorrectCount++;document.getElementById('quizScore').textContent=quizScoreVal;sfxCorrect();const r=btns[idx].getBoundingClientRect();emitParticles(r.left+r.width/2,r.top+r.height/2,20)}
+    else{btns[idx].classList.add('incorrect');highlightQuiz();sfxIncorrect()}
+    setTimeout(()=>{quizIdx++;loadQuizQ()},1200);
+}
+
+// ====================== 3. PHRASE FORGE ======================
+let forgeList=[],forgeIdx=0,forgeScoreVal=0,forgeCorrectCount=0,forgeParsed=[],forgeAnswers=[];
+function initForge(){forgeList=[...phrases];forgeIdx=0;forgeScoreVal=0;forgeCorrectCount=0;document.getElementById('forgeScore').textContent='0';
+    const sel = document.getElementById('forgeSelector');
+    if(sel) {
+        sel.innerHTML = forgeList.map((p, i) => `<option value="${i}">${i+1}. ${p.vi}</option>`).join('');
+    }
+    loadForge();
+}
+
+function loadForge(){
+    const sel = document.getElementById('forgeSelector');
+    if(sel) sel.value = forgeIdx;
+    if(forgeIdx>=forgeList.length){const acc=Math.round((forgeCorrectCount/forgeList.length)*100);showResult(acc>=70?'🏆':'💪',acc>=70?'Phrase Master!':'Nice Try!',`Đúng ${forgeCorrectCount}/${forgeList.length} cụm từ`,forgeScoreVal,acc);return}
+    const p=forgeList[forgeIdx];
+    forgeParsed=parseTemplate(p.template);
+    forgeAnswers=new Array(forgeParsed.filter(s=>s.type==='blank').length).fill(null);
+    document.getElementById('forgeTargetVi').textContent=`"${p.vi}"`;
+    document.getElementById('forgeProgress').textContent=(forgeIdx+1)+' / '+forgeList.length;
+    renderForgeSlots();
+    renderForgeBanks();
+}
+function renderForgeSlots(){
+    const slotsEl=document.getElementById('forgeSlots');
+    let blankIdx=0;
+    slotsEl.innerHTML=forgeParsed.map(seg=>{
+        if(seg.type==='text') return `<span style="font-size:1.1rem;color:var(--text-muted)">${seg.value}</span>`;
+        const i=blankIdx++;
+        const c=CAT[seg.cat];
+        const filled=forgeAnswers[i];
+        return `<div class="forge-slot ${filled?'filled':'empty'}" data-idx="${i}" style="border-color:${c.border};${filled?'background:'+c.bg:''}" onclick="forgeRemove(${i})">
+            <span class="slot-cat" style="color:${c.color}">${c.label}</span>
+            <span class="slot-word">${filled||'?'}</span>
+        </div>`;
+    }).join('');
+}
+function renderForgeBanks(){
+    const banksEl=document.getElementById('forgeBanks');
+    const neededCats=[...new Set(forgeParsed.filter(s=>s.type==='blank').map(s=>s.cat))];
+    banksEl.innerHTML=neededCats.map(cat=>{
+        const c=CAT[cat];
+        const correctWords=forgeParsed.filter(s=>s.type==='blank'&&s.cat===cat).map(s=>s.answer);
+        const catWords=allVocab.filter(v=>v.cat===cat).map(v=>v.word);
+        
+        let uniqueCorrect = [...new Set(correctWords)];
+        let distractors = [...new Set(catWords)].filter(w => !uniqueCorrect.map(u=>u.toLowerCase()).includes(w.toLowerCase())).sort(()=>Math.random()-0.5);
+        let finalWords = [...uniqueCorrect, ...distractors.slice(0, Math.max(0, 5 - uniqueCorrect.length))].sort(()=>Math.random()-0.5);
+
+        const usedWords=forgeAnswers.filter(a=>a!==null).map(a=>a.toLowerCase());
+        return `<div class="forge-bank"><div class="forge-bank-label"><span class="cat-tag cat-${cat}">${c.short}</span> ${c.label}</div>
+            <div class="forge-bank-chips">${finalWords.map(w=>`<button class="forge-chip ${usedWords.includes(w.toLowerCase())?'used':''}" style="background:${c.bg};color:${c.color};border-color:${c.border}" onclick="forgePick('${w.replace(/'/g,"\\'")}','${cat}')">${w}</button>`).join('')}</div></div>`;
+    }).join('');
+}
+function forgePick(word,cat){
+    const blanks=forgeParsed.filter(s=>s.type==='blank');
+    let targetIdx=-1;
+    for(let i=0;i<blanks.length;i++){if(forgeAnswers[i]===null&&blanks[i].cat===cat){targetIdx=i;break;}}
+    if(targetIdx===-1){for(let i=0;i<blanks.length;i++){if(forgeAnswers[i]===null){targetIdx=i;break;}}}
+    if(targetIdx===-1) return;
+    forgeAnswers[targetIdx]=word;
+    sfxClick();
+    renderForgeSlots();renderForgeBanks();
+    if(forgeAnswers.every(a=>a!==null)) setTimeout(()=>forgeCheck(),400);
+}
+function forgeRemove(idx){if(forgeAnswers[idx]===null)return;forgeAnswers[idx]=null;sfxClick();renderForgeSlots();renderForgeBanks()}
+function forgeClear(){forgeAnswers=forgeAnswers.map(()=>null);sfxClick();renderForgeSlots();renderForgeBanks()}
+function jumpForge(idx){ forgeIdx = parseInt(idx,10); loadForge(); }
+function jumpSf(idx){ sfIdx = parseInt(idx,10); loadSentenceForge(); }
+function forgeCheck(){
+    const blanks=forgeParsed.filter(s=>s.type==='blank');
+    if(forgeAnswers.some(a=>a===null)){showToast('Hãy điền đủ tất cả ô!','info');return}
+    let allOk=true;
+    const slots=document.querySelectorAll('.forge-slot[data-idx]');
+    blanks.forEach((b,i)=>{
+        const ok=forgeAnswers[i].toLowerCase()===b.answer.toLowerCase();
+        if(!ok) allOk=false;
+        slots[i].classList.add(ok?'correct':'incorrect');
+        if(!ok) {
+            slots[i].innerHTML = '<div class="forge-pill" style="background:var(--success);color:#000;">' + b.answer + '</div>';
+        }
+    });
+    if(allOk){forgeScoreVal+=10;forgeCorrectCount++;document.getElementById('forgeScore').textContent=forgeScoreVal;sfxCorrect();showToast('🎉 Chính xác!','success');const el=document.getElementById('forgeSlots');const r=el.getBoundingClientRect();emitParticles(r.left+r.width/2,r.top+r.height/2);forgeIdx++;setTimeout(loadForge,1200)}
+    else{
+        sfxIncorrect();
+        showToast('❌ Sai rồi! Đây là đáp án đúng.','error');
+        forgeIdx++;
+        setTimeout(loadForge, 3000);
+    }
+}
+function forgeSkip(){forgeIdx++;loadForge();sfxClick()}
+
+// ====================== 6. SENTENCE FORGE ======================
+let sfList = [];
+let sfIdx = 0;
+let sfScoreVal = 0;
+let sfCorrectCount = 0;
+let sfCurrentPhrase = null;
+let sfParsed = [];
+let sfAnswers = []; 
+let sfPool = []; 
+let sfPoolUsed = []; 
+
+function initSentenceForge() {
+    sfList = phrases.filter(p => p.template.includes('{{pron|') || p.template.includes('{{verb|is}}') || p.template.includes('{{verb|crosses}}') || p.template.includes('{{verb|depends}}'));
+    sfIdx = 0; 
+    sfScoreVal = 0; 
+    sfCorrectCount = 0;
+    document.getElementById('sfScore').textContent = '0';
+    const sel = document.getElementById('sfSelector');
+    if(sel) {
+        sel.innerHTML = sfList.map((p, i) => `<option value="${i}">${i+1}. ${p.vi}</option>`).join('');
+    }
+    loadSentenceForge();
+}
+
+function loadSentenceForge() {
+    const sel = document.getElementById('sfSelector');
+    if(sel) sel.value = sfIdx;
+    if(sfIdx >= sfList.length) { showToast('🎉 Bạn đã hoàn thành Sentence Forge!', 'success'); goHome(); return; }
+    sfCurrentPhrase = sfList[sfIdx];
+    document.getElementById('sfProgress').textContent = (sfIdx+1) + " / " + sfList.length;
+    sfParsed = parseTemplate(sfCurrentPhrase.template);
+    
+    document.getElementById('sfPrompt').textContent = `"${sfCurrentPhrase.vi}"`;
+    
+    // Extract words
+    const targetWords = sfParsed.map(s => s.type==='text' ? s.value.trim() : s.answer.trim()).filter(w => w.length > 0);
+    
+    // Add 1-2 distractors from allVocab (random)
+    let distractors = [...allVocab].sort(()=>Math.random()-0.5).slice(0, 2).map(v => v.word);
+    
+    sfPool = [...targetWords, ...distractors].sort(()=>Math.random()-0.5);
+    sfPoolUsed = sfPool.map(() => false);
+    sfAnswers = [];
+    
+    renderSf();
+}
+
+function renderSf() {
+    const slotsArea = document.getElementById('sfSlotsArea');
+    const bankArea = document.getElementById('sfBankArea');
+    
+    slotsArea.innerHTML = sfAnswers.map((w, i) => `<div class="sf-slot-chip" onclick="sfRemove(${i})">${w}</div>`).join('');
+    
+    bankArea.innerHTML = sfPool.map((w, i) => `<div class="sf-bank-chip ${sfPoolUsed[i] ? 'used' : ''}" onclick="sfPick(${i})">${w}</div>`).join('');
+}
+
+function sfPick(poolIdx) {
+    if(sfPoolUsed[poolIdx]) return;
+    sfPoolUsed[poolIdx] = true;
+    sfAnswers.push(sfPool[poolIdx]);
+    sfxClick();
+    renderSf();
+    
+    // Auto check if length matches target
+    const targetWords = sfParsed.map(s => s.type==='text' ? s.value.trim() : s.answer.trim()).filter(w => w.length > 0);
+    if(sfAnswers.length === targetWords.length) {
+        setTimeout(sfCheck, 400);
+    }
+}
+
+function sfRemove(ansIdx) {
+    const word = sfAnswers[ansIdx];
+    sfAnswers.splice(ansIdx, 1);
+    for(let i=0; i<sfPool.length; i++) {
+        if(sfPool[i] === word && sfPoolUsed[i]) {
+            sfPoolUsed[i] = false;
+            break;
+        }
+    }
+    sfxClick();
+    renderSf();
+}
+
+function sfClear() {
+    sfPoolUsed = sfPoolUsed.map(()=>false);
+    sfAnswers = [];
+    sfxClick();
+    renderSf();
+}
+
+function sfCheck() {
+    const targetWords = sfParsed.map(s => s.type==='text' ? s.value.trim() : s.answer.trim()).filter(w => w.length > 0);
+    
+    if(sfAnswers.length < targetWords.length) {
+        showToast('Vui lòng xếp đầy đủ câu!', 'info');
+        return;
+    }
+    
+    const answerStr = sfAnswers.join(' ').toLowerCase();
+    const targetStr = targetWords.join(' ').toLowerCase();
+    
+    if(answerStr === targetStr) {
+        sfScoreVal += 15;
+        sfCorrectCount++;
+        document.getElementById('sfScore').textContent = sfScoreVal;
+        sfxCorrect();
+        showToast('🎉 Quá xuất sắc!', 'success');
+        const el = document.getElementById('sfSlotsArea');
+        const r = el.getBoundingClientRect();
+        emitParticles(r.left+r.width/2, r.top+r.height/2);
+        
+        speakText(targetWords.join(' '));
+        
+        sfIdx++;
+        setTimeout(loadSentenceForge, 1500);
+    } else {
+        sfxIncorrect();
+        showToast('❌ Sai rồi! Đây là đáp án đúng.', 'error');
+        const slotsArea = document.getElementById('sfSlotsArea');
+        slotsArea.innerHTML = '';
+        targetWords.forEach(w => {
+            const p = document.createElement('div');
+            p.className = 'forge-pill correct';
+            p.style.background = 'var(--success)';
+            p.style.color = '#000';
+            p.textContent = w;
+            slotsArea.appendChild(p);
+        });
+        document.getElementById('sfPoolArea').innerHTML = '';
+        sfIdx++;
+        setTimeout(loadSentenceForge, 3000);
+    }
+}
+
+function sfSkip() {
+    sfIdx++;
+    loadSentenceForge();
+    sfxClick();
+}
+
+// ====================== 7. AUTO SENTENCE BANNER ======================
+let isAutoSpeakerOn = false;
+let currentAutoSentenceText = '';
+
+function toggleAutoSpeaker() {
+    isAutoSpeakerOn = !isAutoSpeakerOn;
+    const btn = document.getElementById('autoSpeakerBtn');
+    if (isAutoSpeakerOn) {
+        btn.innerHTML = '🔊 Nghe tự động: Đang Bật';
+        btn.classList.add('active');
+        if (currentAutoSentenceText) speakText(currentAutoSentenceText);
+    } else {
+        btn.innerHTML = '🔇 Nghe tự động: Đang Tắt';
+        btn.classList.remove('active');
+        if(window.speechSynthesis) window.speechSynthesis.cancel();
+    }
+}
+
+function runAutoSentence() {
+    const banner = document.getElementById('autoSentenceBanner');
+    if(!banner) return;
+    const commPhrases = phrases.slice(-100);
+    const p = commPhrases[Math.floor(Math.random() * commPhrases.length)];
+    const parsed = parseTemplate(p.template);
+    
+    currentAutoSentenceText = parsed.map(s => s.type==='text' ? s.value : s.answer).join('');
+    
+    banner.innerHTML = '';
+    banner.classList.remove('fade-out');
+    let delay = 0;
+    parsed.forEach((seg) => {
+        if(seg.type === 'text') {
+            const span = document.createElement('span');
+            span.style.cssText = `font-size:1.2rem; color:var(--text-muted); opacity:0; transform:translateY(20px); animation: popUpIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: ${delay}ms; align-self: center;`;
+            span.textContent = seg.value;
+            banner.appendChild(span);
+        } else {
+            const c = CAT[seg.cat];
+            const div = document.createElement('div');
+            div.className = 'auto-word-pill';
+            div.style.cssText = `border-color:${c.border}; background:${c.bg}; animation-delay: ${delay}ms;`;
+            div.innerHTML = `<span class="aw-cat" style="color:${c.color}">${c.label}</span><span class="aw-text" style="color:var(--text-primary)">${seg.answer}</span>`;
+            banner.appendChild(div);
+        }
+        delay += 600;
+    });
+    
+    const trans = document.createElement('div');
+    trans.style.cssText = `width: 100%; text-align: center; font-size: 1.1rem; color: var(--primary-color); margin-top: 4px; opacity: 0; transform: translateY(10px); animation: popUpIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; animation-delay: ${delay}ms; font-style: italic; font-weight: 600;`;
+    trans.textContent = `"${p.vi}"`;
+    banner.appendChild(trans);
+    
+    if (isAutoSpeakerOn) {
+        setTimeout(() => {
+            if(isAutoSpeakerOn) speakText(currentAutoSentenceText);
+        }, delay + 200);
+    }
+
+    setTimeout(() => {
+        banner.classList.add('fade-out');
+        setTimeout(runAutoSentence, 500);
+    }, delay + 3500); // Tăng thời gian chờ lên một chút để nghe kịp
+}
+
+// ====================== INIT ======================
+updateHUD();
+initVocabPanel();
+runAutoSentence();
+if(window.speechSynthesis){window.speechSynthesis.getVoices();if(window.speechSynthesis.onvoiceschanged!==undefined)window.speechSynthesis.onvoiceschanged=()=>window.speechSynthesis.getVoices()}
+

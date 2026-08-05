@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Khóa Học Mạo Từ (A, An, The) Toàn Tập</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f9f9;
+            --primary: #7ea8e6; /* Pastel Sky Blue */
+            --primary-light: #e6f0fa;
+            --secondary: #90d4c6; /* Pastel Mint */
+            --accent-1: #ffb3ba; /* Pastel Pink */
+            --accent-2: #ffdfba; /* Pastel Peach */
+            --text-main: #3d4a5c;
+            --text-light: #6e7c8c;
+            --card-bg: #ffffff;
+            --success: #6cd99b;
+            --error: #ff7675;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        /* Navbar */
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 700; color: var(--primary); cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .back-btn { background-color: var(--primary-light); color: var(--primary); border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; cursor: pointer; transition: all 0.3s; display: none; }
+        .back-btn:hover { background-color: var(--primary); color: white; }
+
+        /* Main Container */
+        .container { max-width: 1000px; margin: 2rem auto; padding: 0 1rem; }
+
+        /* Views */
+        .view { display: none; animation: fadeIn 0.4s ease; }
+        .view.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Dashboard View */
+        .header-section { text-align: center; margin-bottom: 3rem; }
+        .header-section h1 { color: var(--text-main); font-size: 2.5rem; margin-bottom: 0.5rem; font-weight: 800; }
+        .progress-bar { width: 100%; height: 12px; background-color: #e0e0e0; border-radius: 6px; margin: 1rem auto; max-width: 400px; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.5s ease; }
+        .modules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2rem; }
+        @media (max-width: 768px) { .modules-grid { grid-template-columns: 1fr; } }
+
+        .module-card { background-color: white; border-radius: 20px; padding: 2.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.04); cursor: pointer; transition: all 0.3s ease; border-top: 8px solid; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; }
+        .module-card:hover { transform: translateY(-8px); box-shadow: 0 15px 40px rgba(0,0,0,0.08); }
+        .module-card:nth-child(1) { border-color: var(--primary); }
+        .module-card:nth-child(2) { border-color: var(--secondary); }
+        .module-card:nth-child(3) { border-color: var(--accent-1); }
+        .module-card:nth-child(4) { border-color: var(--accent-2); }
+
+        .module-icon { font-size: 3.5rem; margin-bottom: 1rem; }
+        .module-title { font-size: 1.6rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-main); }
+        .module-desc { color: var(--text-light); font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .module-stats { font-size: 0.9rem; font-weight: 600; color: var(--primary); background: var(--primary-light); padding: 5px 15px; border-radius: 20px; align-self: flex-start; }
+        .status-badge { position: absolute; top: 20px; right: 20px; padding: 6px 15px; border-radius: 15px; font-size: 0.9rem; font-weight: 700; background-color: #f0f0f0; color: #888; }
+        .module-card.completed .status-badge { background-color: var(--success); color: white; }
+
+        /* Module View */
+        .module-header { background: white; padding: 2.5rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); display: flex; align-items: center; gap: 2rem; }
+        .module-header-icon { font-size: 5rem; }
+        .content-card { background: white; padding: 3rem; border-radius: 20px; margin-bottom: 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .content-title { color: var(--primary); font-size: 2rem; font-weight: 800; margin-bottom: 2rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem; }
+
+        /* Theory Styles */
+        h4.sub-heading { font-size: 1.4rem; color: var(--text-main); margin: 2rem 0 1rem 0; padding-left: 1rem; border-left: 5px solid var(--primary); }
+        
+        .grammar-table { width: 100%; border-collapse: separate; border-spacing: 0 8px; margin: 1.5rem 0; }
+        .grammar-table th { background-color: var(--primary-light); color: #3b577d; padding: 15px; text-align: left; border-radius: 10px; font-size: 1.1rem; font-weight: 700;}
+        .grammar-table td { background-color: #fafbfc; padding: 15px; border-bottom: 1px solid #eee; vertical-align: top; }
+        .grammar-table td:first-child { font-weight: 700; border-radius: 10px 0 0 10px; border-left: 5px solid #eee;}
+        .grammar-table td:last-child { border-radius: 0 10px 10px 0; }
+        
+        .grammar-table.style-2 th { background-color: #e4f5f2; color: #3a7569;}
+        .grammar-table.style-2 td:first-child { border-left-color: var(--secondary); }
+
+        .highlight-box { background-color: #f7f9fc; border-left: 5px solid var(--primary); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; font-size: 1.1rem; }
+        .alert-box { background-color: #ffecec; border-left: 5px solid var(--error); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #8a2525; font-size: 1.1rem; }
+        .tip-box { background-color: #eef9f5; border-left: 5px solid var(--success); padding: 1.5rem 2rem; border-radius: 0 10px 10px 0; margin: 2rem 0; color: #1e5c3c; font-size: 1.1rem; }
+
+        /* Quiz Styles */
+        .quiz-status { text-align: right; font-weight: 700; color: var(--primary); font-size: 1.2rem; margin-bottom: 2rem; }
+        .quiz-item { margin-bottom: 2.5rem; padding-bottom: 2rem; border-bottom: 1px dashed #ddd; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 600; margin-bottom: 1.5rem; }
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; }
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); text-align: center; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transform: translateY(-2px); }
+        .opt-btn.correct { background: #e8f8f0; border-color: var(--success); color: #1a7a40; }
+        .opt-btn.incorrect { background: #ffecec; border-color: var(--error); color: #b33131; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.8; }
+        .explanation { display: none; margin-top: 1.5rem; padding: 1.2rem; background: #f0f5fa; border-radius: 10px; border-left: 4px solid var(--primary); color: #354a6e; font-weight: 500; font-size: 1.1rem; animation: fadeIn 0.3s ease; }
+        
+        .complete-btn { display: block; width: 100%; padding: 18px; background-color: var(--success); color: white; border: none; border-radius: 15px; font-size: 1.4rem; font-weight: 800; cursor: pointer; margin-top: 3rem; transition: transform 0.2s; opacity: 0.5; pointer-events: none; }
+        .complete-btn.active { opacity: 1; pointer-events: auto; }
+        .complete-btn.active:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(108, 207, 149, 0.4); }
+
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand" onclick="goHome()">📖 GrammarMaster Pro</div>
+        <button class="back-btn" id="back-btn" onclick="goHome()">← Bảng Điều Khiển</button>
+    </nav>
+
+    <div class="container">
+        
+        <!-- DASHBOARD VIEW -->
+        <div id="view-dashboard" class="view active">
+            <div class="header-section">
+                <h1>Khóa Học Mạo Từ Chuyên Sâu</h1>
+                <p style="font-size: 1.2rem; color: var(--text-light);">Làm chủ hoàn toàn A, An, The và Zero Article (Rỗng) với 4 Module "giải phẫu" mọi ngóc ngách của ngữ pháp.</p>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="main-progress"></div>
+                </div>
+                <p style="font-weight: 700; color: var(--primary); font-size: 1.2rem;">Đã hoàn thành <span id="progress-text">0/4</span> học phần</p>
+            </div>
+
+            <div class="modules-grid">
+                <div class="module-card" id="card-m1" onclick="openModule(1)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">🎭</div>
+                    <div class="module-title">1. Bất Định (A & An)</div>
+                    <div class="module-desc">Kẻ vô danh. Lỗi sai kinh điển về phát âm khi chọn A hay An. (Tại sao lại là A university?).</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m2" onclick="openModule(2)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">👑</div>
+                    <div class="module-title">2. Xác Định (The)</div>
+                    <div class="module-desc">Kẻ thống trị. Hiểu bản chất của sự "Xác định" (Khi cả 2 người cùng biết đó là vật gì). Vật duy nhất trên đời.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m3" onclick="openModule(3)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">👻</div>
+                    <div class="module-title">3. Zero Article (Rỗng)</div>
+                    <div class="module-desc">Tàng hình! Chữa dứt điểm căn bệnh lạm dụng "The" vô tội vạ. Tên quốc gia, môn thể thao, sở thích chung chung.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+
+                <div class="module-card" id="card-m4" onclick="openModule(4)">
+                    <div class="status-badge">Chưa học</div>
+                    <div class="module-icon">💎</div>
+                    <div class="module-title">4. Ngoại Lệ Chuyên Sâu</div>
+                    <div class="module-desc">Đến trường vs Đến cái trường (go to school vs go to the school). The + Tính từ. Phương tiện giao thông.</div>
+                    <div class="module-stats">📝 10 câu hỏi</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODULE CONTENT VIEWS -->
+        <div id="view-module" class="view">
+            <div class="module-header">
+                <div class="module-header-icon" id="m-icon"></div>
+                <div>
+                    <h2 id="m-title" style="font-size: 2.2rem; font-weight: 800;"></h2>
+                    <p id="m-desc" style="color: var(--text-light); font-size: 1.2rem; margin-top: 5px;"></p>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <h3 class="content-title">📖 Lý Thuyết Chuyên Sâu</h3>
+                <div id="m-theory" style="font-size: 1.1rem;">
+                    <!-- Theory content injected via JS -->
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 2rem; border-bottom: 3px dashed #eee; padding-bottom: 1rem;">
+                    <h3 class="content-title" style="border: none; margin: 0; padding: 0;">🎯 Thực Hành</h3>
+                    <div class="quiz-status" id="quiz-status">Tiến độ: 0/10</div>
+                </div>
+                <div id="m-practice">
+                    <!-- Quizzes injected via JS -->
+                </div>
+                <button id="btn-complete-module" class="complete-btn" onclick="completeCurrentModule()">Hoàn Thành Bài Học 🎉</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // --- THEORY CONTENT & QUIZZES --- //
+        
+        const modulesData = {
+            1: {
+                icon: "🎭",
+                title: "1. Mạo Từ Bất Định (A & An)",
+                desc: "Kẻ vô danh - Lần đầu tiên xuất hiện.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">A và An mang nghĩa là "MỘT". Nó được dùng trước danh từ <strong>số ít, đếm được</strong> khi ta nhắc đến vật đó <strong>lần đầu tiên</strong>, người nghe chưa biết nó là cái nào cụ thể.</p>
+                    
+                    <h4 class="sub-heading">Quy tắc vàng phân biệt A và An</h4>
+                    <div class="tip-box">
+                        <strong>DỰA VÀO ÂM THANH (PHÁT ÂM), KHÔNG DỰA VÀO CHỮ VIẾT!</strong><br>
+                        - <strong>AN:</strong> Đứng trước danh từ có âm tiết đầu tiên phát âm là <strong>NGUYÊN ÂM</strong> (U, E, O, A, I - Uể Oải).<br>
+                        - <strong>A:</strong> Đứng trước danh từ có âm tiết đầu tiên phát âm là <strong>PHỤ ÂM</strong>.
+                    </div>
+
+                    <h4 class="sub-heading">Những "Cú Lừa" Kinh Điển Trọng Điểm</h4>
+                    <table class="grammar-table">
+                        <tr>
+                            <th style="width: 50%">Mặt chữ là Nguyên âm, nhưng ĐỌC là Phụ âm (Dùng A)</th>
+                            <th style="width: 50%">Mặt chữ là Phụ âm, nhưng ĐỌC là Nguyên âm (Dùng AN)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>A university</strong> (Chữ u phát âm là /ju/ - Phụ âm Y)<br>
+                                <strong>A uniform</strong> (Đồng phục - /ju/)<br>
+                                <strong>A unit</strong> (Đơn vị - /ju/)<br>
+                                <strong>A one-way street</strong> (Đường 1 chiều - chữ o phát âm là /w/ - Phụ âm W)
+                            </td>
+                            <td>
+                                <strong>An hour</strong> (Chữ h bị câm, phát âm bắt đầu bằng nguyên âm /aʊ/)<br>
+                                <strong>An honest man</strong> (Người trung thực - chữ h câm, đọc là /ɒ/)<br>
+                                <strong>An MP3 player</strong> (Chữ M đọc là /em/ - Bắt đầu bằng nguyên âm E)<br>
+                                <strong>An SOS signal</strong> (Chữ S đọc là /es/ - Bắt đầu bằng nguyên âm E)
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="alert-box">
+                        <strong>🚨 Tuyệt đối KHÔNG dùng A/An với:</strong><br>
+                        1. Danh từ số nhiều (Không có chuyện nói: A cats).<br>
+                        2. Danh từ không đếm được (Không có chuyện nói: A water, An information, A money).
+                    </div>
+                `,
+                quizzes: [
+                    { q: "He works at _____ university in London.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "University phát âm là /ju/ (bắt đầu bằng phụ âm j/y), do đó dùng 'a university' thay vì 'an'." },
+                    { q: "It takes about _____ hour to finish this test.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "Hour có chữ 'h' câm, phát âm là /aʊə(r)/ bắt đầu bằng nguyên âm, nên dùng 'an hour'." },
+                    { q: "I need to buy _____ umbrella because it's raining.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "Umbrella phát âm là /ʌm/ (nguyên âm), nhắc đến lần đầu (không cụ thể) -> an umbrella." },
+                    { q: "She is _____ honest person.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "Honest có chữ 'h' câm, phát âm là /ɒ/ (nguyên âm), nên dùng 'an honest person'." },
+                    { q: "He sent me _____ SOS message.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "SOS phát âm là /es əʊ es/ (bắt đầu bằng âm e), nên dùng 'an'." },
+                    { q: "We stayed in _____ European country last summer.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "European phát âm là /jʊə/ (bắt đầu bằng phụ âm j/y), dùng 'a'." },
+                    { q: "I saw _____ one-eyed dog in the park.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "One phát âm là /wʌn/ (bắt đầu bằng phụ âm w), dùng 'a'." },
+                    { q: "Do you have _____ MP3 player?", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "MP3 phát âm là /em/ (bắt đầu bằng nguyên âm e), dùng 'an'." },
+                    { q: "I would like _____ water, please.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Water là danh từ KHÔNG đếm được, tuyệt đối KHÔNG dùng A/An." },
+                    { q: "He is _____ unique artist.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "Unique phát âm là /ju/ (bắt đầu bằng phụ âm j/y), dùng 'a unique artist'." }
+                ]
+            },
+            2: {
+                icon: "👑",
+                title: "2. Mạo Từ Xác Định (The)",
+                desc: "Kẻ thống trị - Khi cả thế giới đều biết ta đang nói về ai.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Bản chất của mạo từ "THE" là sự xác định. Ta dùng THE khi <strong>CẢ NGƯỜI NÓI VÀ NGƯỜI NGHE ĐỀU TỰ HIỂU MÌNH ĐANG NHẮC TỚI CÁI GÌ.</strong></p>
+                    
+                    <h4 class="sub-heading">Khi Nào Cả 2 Người Cùng Hiểu?</h4>
+                    <div style="display: flex; flex-direction: column; gap: 1rem; margin-bottom: 2rem;">
+                        <div class="highlight-box" style="margin: 0;">
+                            <strong>1. Vật thể đã được nhắc đến từ trước:</strong><br>
+                            - I saw a dog. <strong>The</strong> dog was very cute.<br>
+                            <em>(Lần 1 chưa xác định dùng a. Lần 2 cả hai đều biết con chó nào rồi nên dùng the).</em>
+                        </div>
+                        <div class="highlight-box" style="margin: 0; border-left-color: var(--secondary);">
+                            <strong>2. Vật thể duy nhất trong ngữ cảnh hẹp:</strong><br>
+                            - Please close <strong>the door</strong>. (Vì trong phòng đó chỉ có 1 cái cửa, nói ra là người nghe biết ngay cửa nào).
+                        </div>
+                        <div class="highlight-box" style="margin: 0; border-left-color: var(--accent-1);">
+                            <strong>3. Có cụm từ hạn định theo sau:</strong><br>
+                            - <strong>The</strong> girl <em>in the red dress</em> is my sister. (Cô gái "mặc váy đỏ" - Cụm này làm cho cô gái trở nên xác định, khác biệt với các cô gái khác).
+                        </div>
+                    </div>
+
+                    <h4 class="sub-heading">Bách Khoa Toàn Thư "THE" (6 Nhóm Quy Tắc Kinh Điển)</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Mạo từ THE có rất nhiều quy tắc. Thay vì học vẹt, bạn chỉ cần nắm vững 6 nhóm quy tắc Bách Khoa Toàn Thư sau đây là đủ xử lý mượt mà 99% các bài thi.</p>
+                    
+                    <table class="grammar-table style-2">
+                        <tr>
+                            <th style="width: 25%">Nhóm Quy Tắc</th>
+                            <th style="width: 75%">Trường hợp cụ thể & Ví dụ</th>
+                        </tr>
+                        <tr>
+                            <td><strong>1. Đã Xác Định (Đã Biết)</strong></td>
+                            <td>
+                                - <strong>Nhắc đến lần 2:</strong> <em>I saw a dog. <strong>The</strong> dog was barking.</em><br>
+                                - <strong>Địa điểm quen thuộc:</strong> <em>I am at <strong>the</strong> airport.</em><br>
+                                - <strong>Dùng với Only/Same/Whole:</strong> <em><strong>The</strong> only answer, <strong>the</strong> same car, <strong>the</strong> whole day.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>2. Độc Nhất (Có Một)</strong></td>
+                            <td>
+                                - <strong>Trên thế giới:</strong> <em><strong>The</strong> sun, <strong>the</strong> moon, <strong>the</strong> Earth, <strong>the</strong> universe, <strong>the</strong> internet.</em><br>
+                                - <strong>Phát minh tiêu biểu:</strong> <em><strong>The</strong> telephone changed the world.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>3. So Sánh & Thứ Tự</strong></td>
+                            <td>
+                                - <strong>So sánh nhất:</strong> <em><strong>The</strong> best, <strong>the</strong> tallest, <strong>the</strong> most beautiful.</em><br>
+                                - <strong>Số thứ tự:</strong> <em><strong>The</strong> first, <strong>the</strong> second, <strong>the</strong> next, <strong>the</strong> last.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>4. Địa Lý Tự Nhiên</strong></td>
+                            <td>
+                                - <strong>Đại dương, Biển, Sông:</strong> <em><strong>The</strong> Pacific Ocean, <strong>the</strong> Mediterranean Sea, <strong>the</strong> Amazon.</em><br>
+                                - <strong>Dãy núi, Quần đảo:</strong> <em><strong>The</strong> Alps, <strong>the</strong> Himalayas, <strong>the</strong> Maldives.</em><br>
+                                - <strong>Sa mạc, Kênh đào, Bán đảo:</strong> <em><strong>The</strong> Sahara, <strong>the</strong> Suez Canal, <strong>the</strong> Korean Peninsula.</em><br>
+                                - <strong>Các hướng chỉ vùng:</strong> <em>People in <strong>the</strong> North.</em> (Nhưng nếu chỉ đi về hướng Bắc thì không có The: <em>go north</em>).
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>5. Nhóm Người & Gia Đình</strong></td>
+                            <td>
+                                - <strong>Gia tộc (The + Họ + s):</strong> <em><strong>The</strong> Smiths live next door.</em><br>
+                                - <strong>Nhóm người (The + Tính từ):</strong> <em><strong>The</strong> rich, <strong>the</strong> poor, <strong>the</strong> young, <strong>the</strong> elderly, <strong>the</strong> disabled.</em><br>
+                                - <strong>Quốc tịch (Tập hợp người):</strong> <em><strong>The</strong> Japanese, <strong>the</strong> French, <strong>the</strong> Chinese.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>6. Tên Riêng Đặc Biệt</strong></td>
+                            <td>
+                                - <strong>Quốc gia có từ Republic/States/Kingdom/Emirates:</strong> <em><strong>The</strong> United States, <strong>the</strong> United Kingdom, <strong>the</strong> Netherlands, <strong>the</strong> Dominican Republic.</em><br>
+                                - <strong>Tên Báo chí:</strong> <em><strong>The</strong> New York Times, <strong>The</strong> Guardian.</em><br>
+                                - <strong>Khách sạn, Bảo tàng, Rạp hát:</strong> <em><strong>The</strong> Hilton, <strong>the</strong> Louvre, <strong>the</strong> Opera House.</em><br>
+                                - <strong>Công trình kiến trúc:</strong> <em><strong>The</strong> Eiffel Tower, <strong>the</strong> Great Wall, <strong>the</strong> White House.</em>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>7. Cơ thể người</strong></td>
+                            <td>
+                                - <strong>Bộ phận cơ thể (sau in/on):</strong> <em>hit him in <strong>the</strong> face, pat on <strong>the</strong> shoulder.</em>
+                            </td>
+                        </tr>
+                    </table>
+                    
+                    <div class="tip-box">
+                        <strong>Lưu ý về Nhạc cụ & Thiết bị:</strong><br>
+                        - Khi chơi nhạc cụ nói chung, phải dùng THE: <strong>play the piano, play the guitar, play the drums.</strong><br>
+                        - Nghe đài: <strong>listen to the radio</strong>.<br>
+                        - ❌ Nhưng xem tivi thì KHÔNG có the: <strong>watch TV</strong>.
+                    </div>
+                `,
+                quizzes: [
+                    { q: "I bought a pen and a book. _____ pen is red.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Nhắc lại lần thứ 2, cái bút đã trở nên xác định -> The pen." },
+                    { q: "_____ Earth moves around _____ Sun.", opts: ["A / a", "The / the", "Rỗng / rỗng", "The / a"], ans: 1, exp: "Trái Đất và Mặt Trời là những vật thể duy nhất trên đời (Nhóm độc nhất) -> The Earth, The Sun." },
+                    { q: "_____ Smiths are going on a vacation to Hawaii next week.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "The + Họ (có s) = Gia đình nhà họ (Gia đình nhà Smith) -> Dùng The." },
+                    { q: "We spent our honeymoon in _____ Maldives.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên quần đảo (Maldives) bắt buộc phải dùng The." },
+                    { q: "I usually listen to _____ radio while driving.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Cụm cố định: listen to the radio." },
+                    { q: "He is learning how to play _____ guitar.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Sau động từ chơi (nhạc cụ) phải có the -> play the guitar." },
+                    { q: "_____ United Arab Emirates is a rich country.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Quốc gia có chứa từ Emirates (hoặc States, Kingdom, Republic) phải có The." },
+                    { q: "Neil Armstrong was _____ first person to walk on the moon.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Đứng trước số thứ tự (first, second, third...) dùng The." },
+                    { q: "My brother lives in _____ North of Vietnam.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Các hướng địa lý khi chỉ một vùng/miền (Miền Bắc) dùng The." },
+                    { q: "_____ Japanese are famous for their politeness.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "The + Quốc tịch (The Japanese) = Người Nhật Bản nói chung." }
+                ]
+            },
+            3: {
+                icon: "👻",
+                title: "3. Zero Article (Không Dùng Mạo Từ)",
+                desc: "Tàng hình - Chữa dứt điểm căn bệnh lạm dụng The.",
+                theory: `
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Người học tiếng Anh rất hay bị "nghiện" chữ The. Đụng đâu cũng cho The vào. Thực tế có rất nhiều trường hợp ta <strong>TUYỆT ĐỐI KHÔNG ĐƯỢC DÙNG GÌ CẢ (Zero Article / Rỗng)</strong>.</p>
+                    
+                    <h4 class="sub-heading">Quy Tắc "Nói Chung Chung"</h4>
+                    <div class="tip-box" style="border-left-color: var(--error); background-color: #fdf5f5; color: #8a2525;">
+                        Khi nói về một sự vật/sự việc <strong>CHUNG CHUNG</strong>, mang tính bản chất (Dùng danh từ số nhiều hoặc không đếm được).<br><br>
+                        ❌ The cats are cute. (Câu này nghĩa là MỘT VÀI CON MÈO CỤ THỂ NÀO ĐÓ đang dễ thương).<br>
+                        ✅ <strong>Cats</strong> are cute. (Đúng: Loài mèo nói chung rất dễ thương).<br><br>
+                        ❌ I need the water. (Tôi cần thứ nước cụ thể kia).<br>
+                        ✅ I need <strong>water</strong> to live. (Đúng: Tôi cần nước để sống - chung chung).
+                    </div>
+
+                    <h4 class="sub-heading">Những Tên Riêng "Tàng Hình"</h4>
+                    <table class="grammar-table style-2">
+                        <tr>
+                            <th style="width: 50%">KHÔNG dùng The (Rỗng)</th>
+                            <th style="width: 50%">BẮT BUỘC dùng The (Ngoại lệ)</th>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Quốc gia số ít:</strong> Vietnam, Japan, France.<br>
+                                <strong>Thành phố/Châu lục:</strong> Hanoi, Asia, Europe.<br>
+                                <strong>Tên đường/Đảo đơn:</strong> Wall Street, Bali.
+                            </td>
+                            <td>
+                                <strong>Quốc gia hợp chủng / số nhiều:</strong> <strong>The</strong> USA (United States), <strong>The</strong> UK, <strong>The</strong> Philippines, <strong>The</strong> Netherlands.<br>
+                                <strong>Quần đảo / Dãy núi:</strong> <strong>The</strong> Maldives, <strong>The</strong> Alps, <strong>The</strong> Himalayas.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <strong>Bữa ăn:</strong> have breakfast, dinner, lunch.<br>
+                                <strong>Môn thể thao:</strong> play football, tennis, chess.<br>
+                                <strong>Môn học:</strong> Math, History, Science.
+                            </td>
+                            <td>
+                                (Không có ngoại lệ - Tuyệt đối không nói 'play the football' hay 'have the dinner' trừ khi đó là một bữa tối đặc biệt đã xác định).
+                            </td>
+                        </tr>
+                    </table>
+                `,
+                quizzes: [
+                    { q: "I think _____ cats make better pets than dogs.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Nói về loài mèo nói chung (không xác định con nào), dùng danh từ số nhiều, KHÔNG dùng mạo từ (Rỗng)." },
+                    { q: "_____ water boils at 100 degrees Celsius.", opts: ["A", "The", "Rỗng"], ans: 2, exp: "Nước nói chung (chất lỏng không đếm được) sôi ở 100 độ -> Không dùng mạo từ." },
+                    { q: "I have always wanted to visit _____ Japan.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Japan là tên một quốc gia số ít (không phải hợp chủng/quần đảo) -> Không dùng mạo từ." },
+                    { q: "_____ United States is a large country.", opts: ["A", "The", "Rỗng"], ans: 1, exp: "United States (Mỹ) là một quốc gia hợp chủng (nhiều bang hợp lại), bắt buộc dùng The." },
+                    { q: "Let's play _____ football after school.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Trước tên các môn thể thao (football, tennis...) KHÔNG dùng mạo từ." },
+                    { q: "We usually have _____ dinner at 7 PM.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Trước các bữa ăn trong ngày (breakfast, lunch, dinner) KHÔNG dùng mạo từ." },
+                    { q: "She is studying _____ French at university.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Trước tên các môn học, ngôn ngữ (Math, French, History) KHÔNG dùng mạo từ." },
+                    { q: "My uncle lives in _____ Philippines.", opts: ["a", "the", "rỗng"], ans: 1, exp: "Philippines là một quần đảo (có đuôi s), do đó bắt buộc phải dùng The." },
+                    { q: "I don't like _____ milk. I prefer juice.", opts: ["a", "the", "rỗng"], ans: 2, exp: "Milk nói chung (không đếm được) -> Không dùng mạo từ." },
+                    { q: "Mt. Everest is in _____ Himalayas.", opts: ["a", "the", "rỗng"], ans: 1, exp: "Himalayas là một dãy núi (số nhiều), bắt buộc dùng The." }
+                ]
+            },
+            4: {
+                icon: "💎",
+                title: "4. Ngữ Cảnh Chuyên Sâu & Ngoại Lệ",
+                desc: "Phân biệt Go to school và Go to the school.",
+                theory: `
+                    <h4 class="sub-heading">1. Đến Đúng Mục Đích vs Đến Trái Mục Đích</h4>
+                    <p style="margin-bottom: 1rem; color: var(--text-light);">Đây là bẫy kinh điển nhất trong các bài thi ngữ pháp. Các địa điểm như: <strong>school, hospital, prison, church, bed</strong> sẽ thay đổi ý nghĩa khi có/không có The.</p>
+                    
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--primary); margin-bottom: 1.5rem;">
+                        <strong>KHÔNG DÙNG "THE": (Đúng mục đích bản chất của nơi đó)</strong><br>
+                        - Go to school (Đi học - Là học sinh).<br>
+                        - In hospital (Nằm viện chữa bệnh - Là bệnh nhân).<br>
+                        - Go to bed (Đi ngủ).<br>
+                        - Go to prison (Đi tù - Là tội phạm).
+                    </div>
+                    
+                    <div style="background: white; padding: 1.5rem; border-radius: 10px; border-left: 5px solid var(--secondary); margin-bottom: 1.5rem;">
+                        <strong>DÙNG "THE": (Đến vì một mục đích khác, nơi đó chỉ là một tòa nhà)</strong><br>
+                        - Go to <strong>the</strong> school (Đến trường để họp phụ huynh, đón con, sửa ống nước...).<br>
+                        - In <strong>the</strong> hospital (Vào bệnh viện để thăm người ốm, sửa điện...).<br>
+                        - Sit on <strong>the</strong> bed (Ngồi lên cái giường).<br>
+                        - Go to <strong>the</strong> prison (Đến nhà tù để thăm phạm nhân).
+                    </div>
+
+                    <h4 class="sub-heading">2. THE + Tính từ = Nhóm người</h4>
+                    <div class="tip-box">
+                        Khi thêm "The" vào trước một tính từ, nó sẽ trở thành một danh từ chỉ <strong>MỘT NHÓM NGƯỜI</strong> có đặc điểm đó, và <strong>LUÔN CHIA ĐỘNG TỪ SỐ NHIỀU</strong>.<br><br>
+                        - <strong>The rich</strong> (Người giàu) = Rich people.<br>
+                        - <strong>The poor</strong> (Người nghèo).<br>
+                        - <strong>The blind</strong> (Người khiếm thị).<br>
+                        <em>Ví dụ: The rich <strong>are</strong> getting richer. (Không dùng is).</em>
+                    </div>
+
+                    <h4 class="sub-heading">3. Phương Tiện Giao Thông</h4>
+                    <div class="alert-box" style="background-color: #f1f8fc; border-left-color: #559bd6; color: #306596;">
+                        - Đi bằng phương tiện chung chung (Giới từ BY): <strong>By bus, by car, by train, by plane</strong> (Tuyệt đối KHÔNG có the).<br>
+                        - Nếu dùng giới từ IN / ON: Phải có mạo từ (a/the/my...). <strong>In the car, on the bus, on a train</strong>.
+                    </div>
+                `,
+                quizzes: [
+                    { q: "My mother went to _____ school to meet my teacher.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Mẹ đến trường để gặp giáo viên (sai mục đích chính của trường là để học sinh học), coi trường là một tòa nhà -> Dùng the school." },
+                    { q: "Children start going to _____ school at the age of six.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Trẻ em đi học (đúng mục đích chính) -> Go to school (Không dùng mạo từ)." },
+                    { q: "John had a serious accident and is now in _____ hospital.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "John bị tai nạn và phải nằm viện chữa bệnh (đúng mục đích của bệnh viện) -> In hospital (Không dùng mạo từ)." },
+                    { q: "I went to _____ hospital to visit my sick friend.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Đến viện để THĂM người ốm, không phải để chữa bệnh -> In the hospital." },
+                    { q: "_____ rich should help _____ poor.", opts: ["The / the", "A / a", "Rỗng / rỗng", "The / rỗng"], ans: 0, exp: "The + Tính từ (The rich, the poor) tạo thành một nhóm người mang đặc điểm đó." },
+                    { q: "The homeless _____ a lot of support from the government.", opts: ["needs", "need", "is needing"], ans: 1, exp: "The homeless (Người vô gia cư) là danh từ số nhiều -> Động từ không thêm 's' (need)." },
+                    { q: "I usually go to work by _____ bus.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Đi lại bằng phương tiện chung (by bus, by car) KHÔNG dùng mạo từ." },
+                    { q: "I left my umbrella on _____ bus this morning.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Không có 'by', mà dùng 'on'. Đây là cái xe bus cụ thể sáng nay mình đi -> on the bus." },
+                    { q: "After a long day of work, I was exhausted and went straight to _____ bed.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Đi ngủ (đúng mục đích của cái giường) -> go to bed (Không dùng mạo từ)." },
+                    { q: "He found a spider under _____ bed.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Chỉ cái giường như một vật thể/đồ nội thất trong phòng -> under the bed." }
+                ]
+            }
+        };
+
+        // --- APP LOGIC --- //
+        let currentModuleId = 0;
+        let userProgress = { 1: false, 2: false, 3: false, 4: false };
+        let currentModuleQuizzesPassed = 0;
+        let totalQuestionsInModule = 0;
+
+        function updateDashboard() {
+            let completed = 0;
+            for(let i=1; i<=4; i++) {
+                if(userProgress[i]) {
+                    completed++;
+                    const card = document.getElementById(`card-m${i}`);
+                    card.classList.add('completed');
+                    card.querySelector('.status-badge').innerText = 'Hoàn thành';
+                }
+            }
+            document.getElementById('progress-text').innerText = `${completed}/4`;
+            document.getElementById('main-progress').style.width = `${(completed/4)*100}%`;
+        }
+
+        function goHome() {
+            document.getElementById('view-module').classList.remove('active');
+            document.getElementById('view-dashboard').classList.add('active');
+            document.getElementById('back-btn').style.display = 'none';
+            updateDashboard();
+        }
+
+        function openModule(id) {
+            currentModuleId = id;
+            currentModuleQuizzesPassed = 0;
+            const data = modulesData[id];
+            totalQuestionsInModule = data.quizzes.length;
+            
+            // Set Header
+            document.getElementById('m-icon').innerText = data.icon;
+            document.getElementById('m-title').innerText = data.title;
+            document.getElementById('m-desc').innerText = data.desc;
+            
+            // Set Theory
+            document.getElementById('m-theory').innerHTML = data.theory;
+            
+            // Reset Quiz Status
+            document.getElementById('quiz-status').innerText = `Tiến độ: 0/${totalQuestionsInModule}`;
+            
+            // Build Quizzes
+            const practiceDiv = document.getElementById('m-practice');
+            practiceDiv.innerHTML = '';
+            
+            data.quizzes.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">${qIndex + 1}. ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex}, ${q.ans})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                practiceDiv.innerHTML += quizHtml;
+            });
+            
+            // Reset Complete Button
+            const btnComplete = document.getElementById('btn-complete-module');
+            btnComplete.classList.remove('active');
+            btnComplete.innerText = "Hãy hoàn thành các câu hỏi để tiếp tục";
+
+            // Switch view
+            document.getElementById('view-dashboard').classList.remove('active');
+            document.getElementById('view-module').classList.add('active');
+            document.getElementById('back-btn').style.display = 'block';
+            window.scrollTo(0,0);
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex, correctOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return; // Already answered
+            
+            // Disable all buttons in this question
+            buttons.forEach(b => b.disabled = true);
+            
+            if(selectedOptIndex === correctOptIndex) {
+                buttons[selectedOptIndex].classList.add('correct');
+                currentModuleQuizzesPassed++;
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+                buttons[correctOptIndex].classList.add('correct');
+            }
+            
+            // Show explanation
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+            
+            // Update status
+            document.getElementById('quiz-status').innerText = `Tiến độ: ${currentModuleQuizzesPassed}/${totalQuestionsInModule}`;
+            
+            // Check if all answered
+            const totalAnswered = document.querySelectorAll('.explanation[style="display: block;"]').length;
+            if(totalAnswered === totalQuestionsInModule) {
+                const btnComplete = document.getElementById('btn-complete-module');
+                btnComplete.classList.add('active');
+                if(currentModuleQuizzesPassed >= totalQuestionsInModule * 0.7) {
+                    btnComplete.innerText = "Hoàn Thành Bài Học 🎉";
+                } else {
+                    btnComplete.innerText = "Điểm hơi thấp. Hoàn Thành & Làm Lại Nhé!";
+                }
+            }
+        }
+
+        function completeCurrentModule() {
+            userProgress[currentModuleId] = true;
+            goHome();
+        }
+
+        // Init
+        updateDashboard();
+    </script>
+</body>
+</html>

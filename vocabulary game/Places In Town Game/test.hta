@@ -1,0 +1,14 @@
+<hta:application id="oHTA" />
+<script>
+window.onerror = function(msg, url, line, col, error) {
+    var fso = new ActiveXObject("Scripting.FileSystemObject");
+    var f = fso.CreateTextFile("error.txt", true);
+    f.WriteLine(msg + " at line " + line + ":" + col);
+    f.Close();
+    window.close();
+};
+</script>
+<script src="Places_In_Town_Game.html"></script>
+<script>
+    window.close();
+</script>

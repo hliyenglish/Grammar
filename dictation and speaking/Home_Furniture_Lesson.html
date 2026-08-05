@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home & Furniture (Level A2-B1)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f9fc;
+            --primary-color: #7b8de6;
+            --secondary-color: #f0a3ba;
+            --accent-color: #92e0c1;
+            --text-color: #444;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(0,0,0,0.06);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Outfit', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-color); overflow: hidden; }
+        
+        .toolbar {
+            position: fixed; top: 0; left: 0; right: 0; height: 70px;
+            background: var(--white); box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 30px; z-index: 1000;
+        }
+        .toolbar-left { font-weight: 700; font-size: 1.4rem; color: var(--primary-color); }
+        .toolbar-right { display: flex; gap: 15px; align-items: center; }
+        .btn {
+            background: var(--primary-color); color: var(--white); border: none;
+            padding: 10px 20px; border-radius: 25px; cursor: pointer;
+            font-weight: 600; font-size: 1rem; transition: all 0.3s;
+        }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(123, 141, 230, 0.4); }
+        .btn-settings { background: #f0f0f0; color: #555; font-size: 1.4rem; padding: 0; width: 45px; height: 45px; display:flex; align-items:center; justify-content:center; border-radius: 50%; border: none; cursor: pointer; transition: background 0.3s;}
+        .btn-settings:hover { background: #e0e0e0; }
+
+        .settings-panel {
+            position: fixed; top: 85px; right: 30px; background: var(--white);
+            padding: 25px; border-radius: 15px; box-shadow: var(--card-shadow);
+            display: none; z-index: 1001; width: 340px;
+        }
+        .settings-panel.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .settings-panel h3 { margin-bottom: 20px; font-size: 1.2rem; color: var(--primary-color); border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.95rem; font-weight: 600; color: #555; }
+        .form-group select { width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ddd; outline: none; font-family: 'Outfit', sans-serif;}
+        .form-group select:focus { border-color: var(--primary-color); }
+
+        .slides-container {
+            position: absolute; top: 70px; bottom: 0; left: 0; right: 0;
+            display: flex; transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        .slide {
+            min-width: 100vw; height: calc(100vh - 70px); display: flex;
+            flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; position: relative; overflow-y: auto;
+        }
+        
+        .nav-btn {
+            position: absolute; top: 50%; transform: translateY(-50%);
+            background: var(--white); color: var(--primary-color);
+            border: none; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 60px; height: 60px;
+            border-radius: 50%; cursor: pointer; font-size: 1.5rem; font-weight: bold;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 100; transition: all 0.3s;
+        }
+        .nav-btn:hover { background: var(--primary-color); color: var(--white); transform: translateY(-50%) scale(1.1); }
+        .prev-btn { left: 40px; }
+        .next-btn { right: 40px; }
+        
+        .card {
+            background: var(--white); border-radius: 25px; padding: 50px;
+            box-shadow: var(--card-shadow); max-width: 900px; width: 100%;
+            text-align: center; position: relative;
+        }
+        .title { font-size: 4rem; color: var(--primary-color); margin-bottom: 15px; font-weight: 700; }
+        .subtitle { font-size: 1.8rem; color: #888; margin-bottom: 40px; }
+        
+        .word { font-size: 4.5rem; font-weight: 700; color: var(--text-color); margin-bottom: 10px; }
+        .ipa { font-size: 2rem; color: #999; margin-bottom: 20px; font-style: italic; }
+        .meaning { font-size: 2.2rem; color: var(--secondary-color); font-weight: 600; margin-bottom: 30px; }
+        .play-btn {
+            background: var(--accent-color); color: #1a4a38; border: none;
+            width: 70px; height: 70px; border-radius: 50%; cursor: pointer;
+            font-size: 1.8rem; display: inline-flex; align-items: center; justify-content: center;
+            margin-left: 15px; transition: all 0.3s; box-shadow: 0 4px 10px rgba(146, 224, 193, 0.4);
+        }
+        .play-btn:hover { transform: scale(1.1); background: #7cdbb5; }
+        .vocab-img {
+            width: 280px; height: 280px; border-radius: 12px; background: #f4f7ff;
+            margin: 0 auto 35px auto; display: flex; align-items: center; justify-content: center;
+            font-size: 6rem; box-shadow: inset 0 0 20px rgba(0,0,0,0.03); letter-spacing: 10px;
+        }
+
+        .listen-box {
+            text-align: left; padding: 35px; background: #fafafa; border-radius: 15px;
+            margin-bottom: 25px; border-left: 6px solid var(--primary-color);
+        }
+        .blank-input {
+            border: none; border-bottom: 3px dashed #bbb; background: transparent;
+            font-size: 1.8rem; padding: 5px 10px; min-width: 80px; text-align: center; outline: none;
+            color: var(--primary-color); font-weight: 600; font-family: 'Outfit', sans-serif;
+            margin: 0 5px;
+        }
+        .blank-input:focus { border-bottom-color: var(--primary-color); }
+        .blank-input.correct { border-bottom-style: solid; border-bottom-color: #4CAF50; color: #4CAF50; }
+        .blank-input.incorrect { border-bottom-style: solid; border-bottom-color: #F44336; color: #F44336; }
+        .sentence { font-size: 2rem; line-height: 1.6; color: #333; }
+        
+        .action-btns { display: flex; gap: 12px; justify-content: center; margin-top: 25px; flex-wrap: wrap; }
+        .action-btn {
+            background: #eee; border: none; padding: 12px 24px; border-radius: 10px;
+            cursor: pointer; font-weight: 600; color: #555; font-size: 1rem; transition: background 0.2s;
+        }
+        .action-btn:hover { background: #e0e0e0; }
+        .action-btn.check { background: var(--secondary-color); color: white; }
+        .action-btn.check:hover { background: #e88ba7; }
+        .hidden-content { display: none; margin-top: 20px; padding: 20px; background: #eef2ff; border-radius: 10px; font-size: 1.4rem; color: #444; border-left: 4px solid var(--primary-color);}
+        .hidden-content.show, .sample-answer.show { display: block; animation: fadeIn 0.3s ease; }
+        
+        .options { display: flex; flex-direction: column; gap: 15px; margin-top: 25px; }
+        .option {
+            background: #fff; border: 2px solid #eaeaea; padding: 18px 25px; border-radius: 12px;
+            font-size: 1.3rem; cursor: pointer; transition: all 0.2s; text-align: left; font-weight: 500;
+        }
+        .option:hover { border-color: var(--primary-color); background: #f8fafe; }
+        .option.correct { background: #e6f4ea; border-color: #34a853; color: #137333; font-weight: 600; }
+        .option.incorrect { background: #fce8e6; border-color: #ea4335; color: #c5221f; }
+
+        .question { font-size: 2.4rem; font-weight: 600; color: var(--primary-color); margin-bottom: 30px; line-height: 1.4; }
+        .hint-box {
+            background: #fef7e0; color: #b06000; padding: 25px; border-radius: 12px;
+            font-size: 1.3rem; text-align: left; margin-bottom: 25px; border-left: 5px solid #f9ab00;
+        }
+        .sample-answer {
+            background: #e6f4ea; color: #137333; padding: 25px; border-radius: 12px;
+            font-size: 1.5rem; margin-top: 25px; display: none; border-left: 5px solid #34a853; text-align: left;
+        }
+
+        .slide-counter { position: absolute; bottom: 20px; font-size: 1.2rem; color: #aaa; font-weight: 600; }
+
+        /* Print CSS Fixes */
+        @media print {
+            body { overflow: visible !important; background: #fff !important; margin: 0; padding: 0; width: 100%; font-family: Arial, sans-serif !important; }
+            .toolbar, .nav-btn, .action-btns, .play-btn, .slide-counter, .settings-panel { display: none !important; }
+            .slides-container { position: static !important; transform: none !important; display: block !important; width: 100%; height: auto; }
+            .slide { 
+                page-break-inside: avoid; page-break-after: always; height: 100vh !important; min-height: 0;
+                position: relative !important; width: 100% !important; padding: 20px !important; margin: 0; display: flex; align-items: center; justify-content: center;
+            }
+            .card { box-shadow: none !important; border: 1px solid #ccc; max-width: 100% !important; padding: 30px !important; border-radius: 0 !important; width: 100%; }
+            .hidden-content, .sample-answer { display: block !important; }
+            .blank-input { border-bottom: 2px solid #000; color: #000; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; text-shadow: none !important; }
+            b, strong, h1, h2, h3, h4, h5, h6 { font-weight: 600 !important; }
+            /* Fix I and l bold issue by resetting font-weight to normal for standard texts */
+            p, div, span, .word, .ipa, .meaning, .sentence, .option, .question { font-weight: normal !important; font-family: Arial, sans-serif !important;}
+        }
+    </style>
+</head>
+<body>
+    <div class="toolbar">
+        <div class="toolbar-left">Home & Furniture (Level A2-B1)</div>
+        <div class="toolbar-right">
+            <button class="btn-settings" id="settingsBtn" title="Voice Settings">⚙️</button>
+            <button class="btn" onclick="window.print()">Tải PDF</button>
+        </div>
+    </div>
+    
+    <div class="settings-panel" id="settingsPanel">
+        <h3>Audio Settings (Rate: 0.8)</h3>
+        <div class="form-group">
+            <label>Nguồn phát Audio (Audio Engine):</label>
+            <select id="audioEngineSelect">
+                <option value="system">Giọng máy tính (Emma, Brian...)</option>
+                <option value="cloud">Google Cloud TTS (Dự phòng)</option>
+            </select>
+        </div>
+        <div class="form-group" id="sysFemaleGroup">
+            <label>Female Voice (Customer/Friend 1):</label>
+            <select id="femaleVoiceSelect"></select>
+        </div>
+        <div class="form-group" id="sysMaleGroup">
+            <label>Male Voice (Cashier/Friend 2):</label>
+            <select id="maleVoiceSelect"></select>
+        </div>
+        <button class="btn" onclick="document.getElementById('settingsPanel').classList.remove('active')" style="width:100%">Close</button>
+    </div>
+
+    <button class="nav-btn prev-btn" onclick="prevSlide()">❮</button>
+    <button class="nav-btn next-btn" onclick="nextSlide()">❯</button>
+
+    <div class="slides-container" id="slidesContainer"></div>
+
+    <script>
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            document.getElementById('settingsPanel').classList.toggle('active');
+        });
+
+        document.getElementById('audioEngineSelect').addEventListener('change', function(e) {
+            if(e.target.value === 'system') {
+                document.getElementById('sysFemaleGroup').style.display = 'block';
+                document.getElementById('sysMaleGroup').style.display = 'block';
+            } else {
+                document.getElementById('sysFemaleGroup').style.display = 'none';
+                document.getElementById('sysMaleGroup').style.display = 'none';
+            }
+        });
+
+        // Add keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        const lessonData = {
+            title: "Home & Furniture",
+            level: "Level A2 - B1",
+            sections: [
+                {
+                    type: 'vocab',
+                    items: [
+                        {word: "sofa", pos: "n.", ipa: "/ˈsoʊfə/", vi: "ghế sô pha", eng: "A long comfortable seat with a back and arms, for two or more people to sit on.", icon: "<img src='https://api.iconify.design/mdi:sofa.svg?color=%23FF7043' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "dining table", pos: "n.", ipa: "/ˈdaɪnɪŋ ˈteɪbl/", vi: "bàn ăn", eng: "A table at which meals are eaten.", icon: "<img src='https://api.iconify.design/mdi:table-furniture.svg?color=%238D6E63' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "wardrobe", pos: "n.", ipa: "/ˈwɔːrdroʊb/", vi: "tủ quần áo", eng: "A large, tall cupboard or piece of furniture in which you can hang your clothes.", icon: "<img src='https://api.iconify.design/mdi:wardrobe.svg?color=%235D4037' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "rug", pos: "n.", ipa: "/rʌɡ/", vi: "tấm thảm", eng: "A piece of thick heavy material that covers part of a floor.", icon: "<img src='https://api.iconify.design/mdi:rug.svg?color=%23EC407A' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "armchair", pos: "n.", ipa: "/ˈɑːrmtʃer/", vi: "ghế bành", eng: "A comfortable chair with sides that support your arms.", icon: "<img src='https://api.iconify.design/solar:armchair-bold.svg?color=%23AB47BC' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"}
+                    ]
+                },
+                {
+                    type: 'listening',
+                    context: 'Conversation 1',
+                    audioLabel: "Where are they?",
+                    options: ["At a furniture store", "At a grocery store", "At a hospital", "At a bank"],
+                    answerIndex: 0,
+                    dictation: [
+                        { sent: "I am looking for a new sofa for my living room.", ipa: "/aɪ æm ˈlʊkɪŋ fɔːr ə nuː ˈsoʊfə fɔːr maɪ ˈlɪvɪŋ ruːm./" },
+                        { sent: "We have a great selection of sofas right here.", ipa: "/wiː hæv ə ɡreɪt sɪˈlekʃn ʌv ˈsoʊfəz raɪt hɪr./" },
+                        { sent: "I like this grey one. Is it comfortable?", ipa: "/aɪ laɪk ðɪs ɡreɪ wʌn. ɪz ɪt ˈkʌmftərbəl?/" },
+                        { sent: "Yes, it is very soft and it is on sale today.", ipa: "/jes, ɪt ɪz ˈveri sɔːft ænd ɪt ɪz ɑːn seɪl təˈdeɪ./" },
+                        { sent: "That is a real bargain. Can you deliver it?", ipa: "/ðæt ɪz ə riːl ˈbɑːrɡən. kæn juː dɪˈlɪvər ɪt?/" },
+                        { sent: "We offer free delivery for all large items.", ipa: "/wiː ˈɔːfər friː dɪˈlɪvəri fɔːr ɔːl lɑːrdʒ ˈaɪtəmz./" },
+                        { sent: "Perfect! I will take it.", ipa: "/ˈpɜːrfɪkt! aɪ wɪl teɪk ɪt./" },
+                        { sent: "Let's go to the cashier to pay.", ipa: "/lets ɡoʊ tuː ðə kæˈʃɪr tuː peɪ./" }
+                    ],
+                    questions: [
+                        {q: "What kind of sofa do you prefer?", qIpa: "/wʌt kaɪnd ʌv ˈsoʊfə duː juː prɪˈfɜːr?/", h: ["large and soft", "leather", "fabric", "colorful"], a: "I prefer a large, soft fabric sofa.", aIpa: "/aɪ prɪˈfɜːr ə lɑːrdʒ, sɔːft ˈfæbrɪk ˈsoʊfə./"},
+                        {q: "Is your living room big or small?", qIpa: "/ɪz jʊər ˈlɪvɪŋ ruːm bɪɡ ɔːr smɔːl?/", h: ["quite big", "very small", "cozy", "spacious"], a: "My living room is quite big and spacious.", aIpa: "/maɪ ˈlɪvɪŋ ruːm ɪz kwaɪt bɪɡ ænd ˈspeɪʃəs./"},
+                        {q: "Do you like to eat at the dining table?", qIpa: "/duː juː laɪk tuː iːt æt ðə ˈdaɪnɪŋ ˈteɪbl?/", h: ["yes, every day", "with my family", "sometimes", "prefer the sofa"], a: "Yes, I eat at the dining table with my family every day.", aIpa: "/jes, aɪ iːt æt ðə ˈdaɪnɪŋ ˈteɪbl wɪð maɪ ˈfæməli ˈevri deɪ./"},
+                        {q: "What color is your wardrobe?", qIpa: "/wʌt ˈkʌlər ɪz jʊər ˈwɔːrdroʊb?/", h: ["white", "brown wood", "black", "very large"], a: "My wardrobe is made of brown wood.", aIpa: "/maɪ ˈwɔːrdroʊb ɪz meɪd ʌv braʊn wʊd./"},
+                        {q: "Do you have a rug in your bedroom?", qIpa: "/duː juː hæv ə rʌɡ ɪn jʊər ˈbedruːm?/", h: ["yes, a soft one", "no, just tiles", "wooden floor", "next to the bed"], a: "Yes, I have a soft white rug next to my bed.", aIpa: "/jes, aɪ hæv ə sɔːft waɪt rʌɡ nekst tuː maɪ bed./"},
+                        {q: "Who sits in the armchair in your house?", qIpa: "/huː sɪts ɪn ði ˈɑːrmtʃer ɪn jʊər haʊs?/", h: ["my father", "my grandfather", "I do", "nobody"], a: "My father usually sits in the armchair to read the newspaper.", aIpa: "/maɪ ˈfɑːðər ˈjuːʒuəli sɪts ɪn ði ˈɑːrmtʃer tuː riːd ðə ˈnuːzpeɪpər./"},
+                        {q: "Have you ever bought furniture online?", qIpa: "/hæv juː ˈevər bɔːt ˈfɜːrnɪtʃər ˈɑːnlaɪn?/", h: ["yes, a chair", "never", "too difficult", "good discounts"], a: "Yes, I bought a chair online because it had a good discount.", aIpa: "/jes, aɪ bɔːt ə tʃer ˈɑːnlaɪn bɪˈkəz ɪt hæd ə ɡʊd ˈdɪskaʊnt./"},
+                        {q: "Is it expensive to buy new furniture?", qIpa: "/ɪz ɪt ɪkˈspensɪv tuː baɪ nuː ˈfɜːrnɪtʃər?/", h: ["yes, very", "depends on the brand", "wait for sales", "quite cheap"], a: "It can be very expensive, so I usually wait for sales.", aIpa: "/ɪt kæn biː ˈveri ɪkˈspensɪv, soʊ aɪ ˈjuːʒuəli weɪt fɔːr seɪlz./"},
+                        {q: "Do you like modern or classic furniture?", qIpa: "/duː juː laɪk ˈmɑːdərn ɔːr ˈklæsɪk ˈfɜːrnɪtʃər?/", h: ["modern design", "simple and clean", "classic wood", "vintage"], a: "I prefer modern furniture because it looks simple and clean.", aIpa: "/aɪ prɪˈfɜːr ˈmɑːdərn ˈfɜːrnɪtʃər bɪˈkəz ɪt lʊks ˈsɪmpl ænd kliːn./"},
+                        {q: "Would you rather get a refund or an exchange if the sofa is broken?", qIpa: "/wʊd juː ˈræðər ɡet ə ˈriːfʌnd ɔːr ən ɪksˈtʃeɪndʒ ɪf ðə ˈsoʊfə ɪz ˈbroʊkən?/", h: ["get a refund", "an exchange", "choose a new one", "too much trouble"], a: "I would rather get an exchange for a new sofa.", aIpa: "/aɪ wʊd ˈræðər ɡet ən ɪksˈtʃeɪndʒ fɔːr ə nuː ˈsoʊfə./"}
+                    ]
+                },
+                {
+                    type: 'vocab',
+                    items: [
+                        {word: "mattress", pos: "n.", ipa: "/ˈmætrəs/", vi: "nệm", eng: "The soft part of a bed that you lie on.", icon: "<img src='https://api.iconify.design/fa6-solid:mattress-pillow.svg?color=%2329B6F6' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "bookshelf", pos: "n.", ipa: "/ˈbʊkʃelf/", vi: "giá sách", eng: "A piece of furniture with shelves for keeping books on.", icon: "<img src='https://api.iconify.design/mdi:bookshelf.svg?color=%2366BB6A' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "curtain", pos: "n.", ipa: "/ˈkɜːrtn/", vi: "rèm cửa", eng: "A piece of material hung to cover a window or a door.", icon: "<img src='https://api.iconify.design/mingcute:curtain-fill.svg?color=%23FFA726' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "lamp", pos: "n.", ipa: "/læmp/", vi: "đèn", eng: "A device that uses electricity or oil to produce light.", icon: "<img src='https://api.iconify.design/mdi:desk-lamp.svg?color=%23FFCA28' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "mirror", pos: "n.", ipa: "/ˈmɪrər/", vi: "gương", eng: "A piece of glass with a shiny backing that reflects images.", icon: "<img src='https://api.iconify.design/mdi:mirror.svg?color=%2326C6DA' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"}
+                    ]
+                },
+                {
+                    type: 'listening',
+                    context: 'Conversation 2',
+                    audioLabel: "What does she want to buy?",
+                    options: ["A mirror and a lamp", "A sofa and a rug", "A bed and a mattress", "A dining table"],
+                    answerIndex: 0,
+                    dictation: [
+                        { sent: "I am decorating my bedroom and I need some new things.", ipa: "/aɪ æm ˈdekəreɪtɪŋ maɪ ˈbedruːm ænd aɪ niːd sʌm nuː θɪŋz./" },
+                        { sent: "What exactly are you looking for?", ipa: "/wʌt ɪɡˈzæktli ɑːr juː ˈlʊkɪŋ fɔːr?/" },
+                        { sent: "I need a tall mirror and a reading lamp.", ipa: "/aɪ niːd ə tɔːl ˈmɪrər ænd ə ˈriːdɪŋ læmp./" },
+                        { sent: "We have some beautiful mirrors near the window.", ipa: "/wiː hæv sʌm ˈbjuːtɪfl ˈmɪrərz nɪr ðə ˈwɪndoʊ./" },
+                        { sent: "Oh, this one with the wooden frame is perfect.", ipa: "/oʊ, ðɪs wʌn wɪð ðə ˈwʊdn freɪm ɪz ˈpɜːrfɪkt./" },
+                        { sent: "The lamps are in the next aisle over there.", ipa: "/ðə læmps ɑːr ɪn ðə nekst aɪl ˈoʊvər ðer./" },
+                        { sent: "I will take this small desk lamp.", ipa: "/aɪ wɪl teɪk ðɪs smɔːl desk læmp./" },
+                        { sent: "Great! Let me help you carry them.", ipa: "/ɡreɪt! let miː help juː ˈkæri ðəm./" }
+                    ],
+                    questions: [
+                        {q: "Is your mattress soft or hard?", qIpa: "/ɪz jʊər ˈmætrəs sɔːft ɔːr hɑːrd?/", h: ["very soft", "quite hard", "good for my back", "comfortable"], a: "My mattress is quite hard, which is good for my back.", aIpa: "/maɪ ˈmætrəs ɪz kwaɪt hɑːrd, wɪtʃ ɪz ɡʊd fɔːr maɪ bæk./"},
+                        {q: "How many books do you have on your bookshelf?", qIpa: "/haʊ ˈmeni bʊks duː juː hæv ɑːn jʊər ˈbʊkʃelf?/", h: ["a lot of books", "not many", "full of comics", "around fifty"], a: "I have around fifty books on my bookshelf.", aIpa: "/aɪ hæv əˈraʊnd ˈfɪfti bʊks ɑːn maɪ ˈbʊkʃelf./"},
+                        {q: "What color are the curtains in your room?", qIpa: "/wʌt ˈkʌlər ɑːr ðə ˈkɜːrtnz ɪn jʊər ruːm?/", h: ["light blue", "dark green", "white and clean", "floral pattern"], a: "The curtains in my room are light blue.", aIpa: "/ðə ˈkɜːrtnz ɪn maɪ ruːm ɑːr laɪt bluː./"},
+                        {q: "Do you keep a lamp on your desk?", qIpa: "/duː juː kiːp ə læmp ɑːn jʊər desk?/", h: ["yes, for reading", "no, I use ceiling light", "a small black lamp", "always on at night"], a: "Yes, I keep a small black lamp on my desk for reading.", aIpa: "/jes, aɪ kiːp ə smɔːl blæk læmp ɑːn maɪ desk fɔːr ˈriːdɪŋ./"},
+                        {q: "How often do you look in the mirror?", qIpa: "/haʊ ˈɔːfən duː juː lʊk ɪn ðə ˈmɪrər?/", h: ["every morning", "before going out", "rarely", "many times a day"], a: "I look in the mirror every morning before going to work.", aIpa: "/aɪ lʊk ɪn ðə ˈmɪrər ˈevri ˈmɔːrnɪŋ bɪˈfɔːr ˈɡoʊɪŋ tuː wɜːrk./"},
+                        {q: "Do you prefer a big bed or a small bed?", qIpa: "/duː juː prɪˈfɜːr ə bɪɡ bed ɔːr ə smɔːl bed?/", h: ["a big bed", "more space", "cozy small bed", "king size"], a: "I prefer a big bed because it gives me more space to sleep.", aIpa: "/aɪ prɪˈfɜːr ə bɪɡ bed bɪˈkəz ɪt ɡɪvz miː mɔːr speɪs tuː sliːp./"},
+                        {q: "Are curtains important for a bedroom?", qIpa: "/ɑːr ˈkɜːrtnz ɪmˈpɔːrtnt fɔːr ə ˈbedruːm?/", h: ["yes, for privacy", "block the sun", "very important", "not really"], a: "Yes, they are very important to block the sun and keep privacy.", aIpa: "/jes, ðeɪ ɑːr ˈveri ɪmˈpɔːrtnt tuː blɑːk ðə sʌn ænd kiːp ˈpraɪvəsi./"},
+                        {q: "Where is the best place to put a bookshelf?", qIpa: "/wer ɪz ðə best pleɪs tuː pʊt ə ˈbʊkʃelf?/", h: ["in the living room", "next to the desk", "in the corner", "in the study"], a: "The best place is next to the desk so I can easily reach my books.", aIpa: "/ðə best pleɪs ɪz nekst tuː ðə desk soʊ aɪ kæn ˈiːzəli riːtʃ maɪ bʊks./"},
+                        {q: "Have you ever broken a mirror?", qIpa: "/hæv juː ˈevər ˈbroʊkən ə ˈmɪrər?/", h: ["yes, accidentally", "seven years of bad luck", "never", "dropped it"], a: "Yes, I accidentally dropped a small mirror once.", aIpa: "/jes, aɪ ˌæksɪˈdentəli drɑːpt ə smɔːl ˈmɪrər wʌns./"},
+                        {q: "Do you like to read in bed with a lamp?", qIpa: "/duː juː laɪk tuː riːd ɪn bed wɪð ə læmp?/", h: ["yes, every night", "makes me sleepy", "no, I watch TV", "relaxing"], a: "Yes, reading in bed with a lamp is very relaxing for me.", aIpa: "/jes, ˈriːdɪŋ ɪn bed wɪð ə læmp ɪz ˈveri rɪˈlæksɪŋ fɔːr miː./"}
+                    ]
+                },
+                {
+                    type: 'vocab',
+                    items: [
+                        {word: "microwave", pos: "n.", ipa: "/ˈmaɪkrəweɪv/", vi: "lò vi sóng", eng: "An electric oven that uses waves of energy to cook or heat food quickly.", icon: "<img src='https://api.iconify.design/fluent:microwave-16-filled.svg?color=%2378909C' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "refrigerator", pos: "n.", ipa: "/rɪˈfrɪdʒəreɪtər/", vi: "tủ lạnh", eng: "A piece of electrical equipment in which food is kept cold.", icon: "<img src='https://api.iconify.design/fluent:refrigerator-16-filled.svg?color=%23B0BEC5' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "washing machine", pos: "n.", ipa: "/ˈwɑːʃɪŋ məˈʃiːn/", vi: "máy giặt", eng: "A machine for washing clothes, sheets, and other things.", icon: "<img src='https://api.iconify.design/mdi:washing-machine.svg?color=%235C6BC0' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "pillow", pos: "n.", ipa: "/ˈpɪloʊ/", vi: "cái gối", eng: "A soft object used for resting your head on in bed.", icon: "<img src='https://api.iconify.design/tabler:pillow.svg?color=%2326A69A' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"},
+                        {word: "blanket", pos: "n.", ipa: "/ˈblæŋkɪt/", vi: "cái chăn, mền", eng: "A flat cover made of wool or similar warm material, used on a bed.", icon: "<img src='https://api.iconify.design/material-symbols:blanket.svg?color=%23EF5350' style='width: 100%; height: 100%; object-fit: contain; padding: 20px;'>"}
+                    ]
+                },
+                {
+                    type: 'listening',
+                    context: 'Monologue',
+                    audioLabel: "Why does she need new furniture?",
+                    options: ["She moved to a new apartment", "She broke her old furniture", "She wants to redecorate", "She lost her house"],
+                    answerIndex: 0,
+                    dictation: [
+                        { sent: "I just moved into a new apartment last week.", ipa: "/aɪ dʒʌst muːvd ˈɪntuː ə nuː əˈpɑːrtmənt læst wiːk./" },
+                        { sent: "The place is nice but it has no furniture at all.", ipa: "/ðə pleɪs ɪz naɪs bʌt ɪt hæz noʊ ˈfɜːrnɪtʃər æt ɔːl./" },
+                        { sent: "I need to buy a refrigerator for the kitchen to keep food fresh.", ipa: "/aɪ niːd tuː baɪ ə rɪˈfrɪdʒəreɪtər fɔːr ðə ˈkɪtʃɪn tuː kiːp fuːd freʃ./" },
+                        { sent: "I also need a microwave to heat up my meals quickly.", ipa: "/aɪ ˈɔːlsoʊ niːd ə ˈmaɪkrəweɪv tuː hiːt ʌp maɪ miːlz ˈkwɪkli./" },
+                        { sent: "For my bedroom, I have a bed, but I still need pillows.", ipa: "/fɔːr maɪ ˈbedruːm, aɪ hæv ə bed, bʌt aɪ stɪl niːd ˈpɪloʊz./" },
+                        { sent: "A warm blanket is very important because the nights are cold.", ipa: "/ə wɔːrm ˈblæŋkɪt ɪz ˈveri ɪmˈpɔːrtnt bɪˈkəz ðə naɪts ɑːr koʊld./" },
+                        { sent: "Finally, I must buy a washing machine to do my laundry.", ipa: "/ˈfaɪnəli, aɪ mʌst baɪ ə ˈwɑːʃɪŋ məˈʃiːn tuː duː maɪ ˈlɔːndri./" },
+                        { sent: "Shopping for home appliances is exciting but very expensive.", ipa: "/ˈʃɑːpɪŋ fɔːr hoʊm əˈplaɪənsɪz ɪz ɪkˈsaɪtɪŋ bʌt ˈveri ɪkˈspensɪv./" }
+                    ],
+                    questions: [
+                        {q: "How often do you use the microwave?", qIpa: "/haʊ ˈɔːfən duː juː juːz ðə ˈmaɪkrəweɪv?/", h: ["every day", "to heat up leftovers", "rarely", "very convenient"], a: "I use the microwave every day to heat up leftovers.", aIpa: "/aɪ juːz ðə ˈmaɪkrəweɪv ˈevri deɪ tuː hiːt ʌp ˈleftoʊvərz./"},
+                        {q: "What do you usually keep in your refrigerator?", qIpa: "/wʌt duː juː ˈjuːʒuəli kiːp ɪn jʊər rɪˈfrɪdʒəreɪtər?/", h: ["fresh fruit", "milk and eggs", "vegetables", "a lot of food"], a: "I usually keep fresh fruit, milk, and eggs in my refrigerator.", aIpa: "/aɪ ˈjuːʒuəli kiːp freʃ fruːt, mɪlk, ænd eɡz ɪn maɪ rɪˈfrɪdʒəreɪtər./"},
+                        {q: "Who does the laundry in your house?", qIpa: "/huː dʌz ðə ˈlɔːndri ɪn jʊər haʊs?/", h: ["I do it myself", "my mother", "use the washing machine", "take turns"], a: "I usually do the laundry myself using the washing machine.", aIpa: "/aɪ ˈjuːʒuəli duː ðə ˈlɔːndri maɪˈself ˈjuːzɪŋ ðə ˈwɑːʃɪŋ məˈʃiːn./"},
+                        {q: "How many pillows do you sleep with?", qIpa: "/haʊ ˈmeni ˈpɪloʊz duː juː sliːp wɪð?/", h: ["only one", "two soft pillows", "I don't use pillows", "very comfortable"], a: "I sleep with two soft pillows to be comfortable.", aIpa: "/aɪ sliːp wɪð tuː sɔːft ˈpɪloʊz tuː biː ˈkʌmftərbəl./"},
+                        {q: "Do you prefer a thick blanket or a thin blanket?", qIpa: "/duː juː prɪˈfɜːr ə θɪk ˈblæŋkɪt ɔːr ə θɪn ˈblæŋkɪt?/", h: ["a thick blanket", "in winter", "a thin blanket", "depends on the weather"], a: "I prefer a thick blanket in winter because it keeps me warm.", aIpa: "/aɪ prɪˈfɜːr ə θɪk ˈblæŋkɪt ɪn ˈwɪntər bɪˈkəz ɪt kiːps miː wɔːrm./"},
+                        {q: "Is a washing machine necessary for every family?", qIpa: "/ɪz ə ˈwɑːʃɪŋ məˈʃiːn ˈnesəseri fɔːr ˈevri ˈfæməli?/", h: ["yes, very necessary", "saves a lot of time", "not really", "can hand wash"], a: "Yes, it is very necessary because it saves a lot of time.", aIpa: "/jes, ɪt ɪz ˈveri ˈnesəseri bɪˈkəz ɪt seɪvz ə lɑːt ʌv taɪm./"},
+                        {q: "When did you buy your refrigerator?", qIpa: "/wen dɪd juː baɪ jʊər rɪˈfrɪdʒəreɪtər?/", h: ["two years ago", "recently", "my parents bought it", "brand new"], a: "I bought my refrigerator about two years ago.", aIpa: "/aɪ bɔːt maɪ rɪˈfrɪdʒəreɪtər əˈbaʊt tuː jɪrz əˈɡoʊ./"},
+                        {q: "Do you know how to cook using a microwave?", qIpa: "/duː juː noʊ haʊ tuː kʊk ˈjuːzɪŋ ə ˈmaɪkrəweɪv?/", h: ["yes, simple dishes", "only heating food", "no, I don't", "very easy"], a: "Yes, I can cook simple dishes like instant noodles in the microwave.", aIpa: "/jes, aɪ kæn kʊk ˈsɪmpl ˈdɪʃɪz laɪk ˈɪnstənt ˈnuːdlz ɪn ðə ˈmaɪkrəweɪv./"},
+                        {q: "Are home appliances expensive in your country?", qIpa: "/ɑːr hoʊm əˈplaɪənsɪz ɪkˈspensɪv ɪn jʊər ˈkʌntri?/", h: ["yes, quite expensive", "affordable options", "foreign brands", "sales and discounts"], a: "Yes, especially foreign brands, they can be quite expensive.", aIpa: "/jes, ɪˈspeʃəli ˈfɔːrən brændz, ðeɪ kæn biː kwaɪt ɪkˈspensɪv./"},
+                        {q: "What is the most useful piece of furniture in your house?", qIpa: "/wʌt ɪz ðə moʊst ˈjuːsfl piːs ʌv ˈfɜːrnɪtʃər ɪn jʊər haʊs?/", h: ["the sofa", "my bed", "dining table", "relax after work"], a: "For me, the bed is the most useful because I can rest and sleep.", aIpa: "/fɔːr miː, ðə bed ɪz ðə moʊst ˈjuːsfl bɪˈkəz aɪ kæn rest ænd sliːp./"}
+                    ]
+                }
+            ]
+        };
+
+        function escapeHTML(str) {
+            if (!str) return '';
+            return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        function createPlayBtn(text, gender, style) {
+            // Remove slashes from the text so that it plays properly, and replace single quotes properly.
+            let cleanText = text.replace(/\\/g, '').replace(/'/g, "&apos;");
+            return `<button class="play-btn" style="${style}" data-text="${cleanText}" data-gender="${gender}" onclick="playAudioFromBtn(this)">▶</button>`;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            let slidesHTML = '';
+            let slideCount = 0;
+            
+            slidesHTML += `
+                <div class="slide active">
+                    <div class="card">
+                        <h1 class="title">${lessonData.title}</h1>
+                        <h2 class="subtitle">${lessonData.level}</h2>
+                        <button class="btn" style="font-size: 1.5rem; padding: 15px 40px; margin-top: 30px;" onclick="nextSlide()">Start Lesson</button>
+                        <div class="slide-counter">Slide 1 / 74</div>
+                    </div>
+                </div>`;
+            slideCount++;
+
+            lessonData.sections.forEach((section, sectionIdx) => {
+                if (section.type === 'vocab') {
+                    section.items.forEach(item => {
+                        slideCount++;
+                        slidesHTML += `
+                            <div class="slide">
+                                <div class="card">
+                                    <div class="vocab-img">${item.icon}</div>
+                                    <div style="display:flex; justify-content:center; align-items:center; flex-wrap:wrap;">
+                                        <div class="word">${item.word}</div>
+                                        ${createPlayBtn(item.word, 'female', '')}
+                                    </div>
+                                    <div class="ipa">${item.pos} ${item.ipa}</div>
+                                    <button class="action-btn" style="margin-bottom: 15px;" onclick="toggleView('vi_${slideCount}')">Show Vietnamese Meaning</button>
+                                    <div class="hidden-content meaning" id="vi_${slideCount}" style="background: transparent; border: none; padding: 0; margin-top: 0; margin-bottom: 30px;">${item.vi}</div>
+                                    <div style="margin-top: 20px; padding: 20px; background: #eef2ff; border-radius: 10px; font-size: 1.4rem; color: #444; border-left: 4px solid var(--primary-color); text-align: left;">${item.eng}</div>
+                                    <div class="slide-counter">Slide ${slideCount} / 74</div>
+                                </div>
+                            </div>`;
+                    });
+                } else if (section.type === 'listening') {
+                    slideCount++;
+                    let optionsHTML = section.options.map((opt, idx) => 
+                        `<div class='option' onclick='checkOption(this, ${idx === section.answerIndex ? '"correct"' : '"incorrect"'})'>${opt}</div>`
+                    ).join('');
+                    
+                    slidesHTML += `
+                        <div class="slide">
+                            <div class="card">
+                                <h2 style="margin-bottom: 20px; color: var(--primary-color); font-size: 2.5rem;">Listening: ${section.context}</h2>
+                                <div style="text-align: center; margin-bottom: 40px;">
+                                    <button class="play-btn" style="width:100px; height:100px; font-size:2.5rem;" onclick="playConversation(${sectionIdx})">▶</button>
+                                    <p style="margin-top: 15px; color: #777; font-size: 1.2rem;">Listen to the whole audio</p>
+                                </div>
+                                <div class="listen-box" style="margin-top: 40px;">
+                                    <h3 style="font-size: 1.8rem; margin-bottom: 20px;">${section.audioLabel}</h3>
+                                    <div class="options">${optionsHTML}</div>
+                                </div>
+                                <div class="slide-counter">Slide ${slideCount} / 74</div>
+                            </div>
+                        </div>`;
+
+                    section.dictation.forEach((d, idx) => {
+                        slideCount++;
+                        let chunks = d.sent.split(' ');
+                        let wordObjs = chunks.map((chunk, i) => {
+                            let clean = chunk.replace(/[^a-zA-Z']/g, '');
+                            return { index: i, clean: clean, length: clean.length, original: chunk };
+                        }).filter(o => o.length > 0);
+                        
+                        wordObjs.sort((a, b) => b.length - a.length);
+                        let numBlanks = Math.max(1, Math.floor(wordObjs.length / 2));
+                        let blankIndices = wordObjs.slice(0, numBlanks).map(o => o.index);
+                        
+                        let finalChunks = chunks.map((chunk, i) => {
+                            if(blankIndices.includes(i)) {
+                                let cleanWord = chunk.replace(/[^a-zA-Z']/g, '');
+                                let prefix = chunk.substring(0, chunk.indexOf(cleanWord));
+                                let suffix = chunk.substring(chunk.indexOf(cleanWord) + cleanWord.length);
+                                return `${prefix}<input type='text' class='blank-input' data-answer='${escapeHTML(cleanWord)}' autocomplete='off' style='width: calc(${cleanWord.length}ch + 15px); text-align: center;' onkeypress='if(event.key === "Enter") checkSlideBlanks(this)'>${suffix}`;
+                            }
+                            return chunk;
+                        });
+                        
+                        let blanked = finalChunks.join(' ');
+                        let gender = (idx % 2 === 0 || section.context === 'Monologue') ? 'female' : 'male';
+
+                        slidesHTML += `
+                            <div class="slide">
+                                <div class="card">
+                                    <h2 style="margin-bottom: 30px; color: var(--primary-color); font-size: 2.2rem;">Sentence ${idx + 1} Dictation</h2>
+                                    <div class="listen-box" style="text-align:center;">
+                                        <div class="sentence" style="display:flex; align-items:center; justify-content:center; gap: 15px; flex-wrap: wrap;">
+                                            <div style="line-height:2.2;">${blanked}</div>
+                                            ${createPlayBtn(d.sent, gender, 'width:50px;height:50px;font-size:1.2rem; margin:0; margin-left: 10px;')}
+                                        </div>
+                                        <div class="action-btns">
+                                            <button class="action-btn check" onclick="checkSlideBlanks(this)">Check Answer</button>
+                                            <button class="action-btn" onclick="toggleView('sent_${slideCount}')">Show/Hide Sentence</button>
+                                        </div>
+                                        <div class="hidden-content" id="sent_${slideCount}">
+                                            <div style="font-size:1.8rem; margin-bottom:10px;">${d.sent}</div>
+                                            <div style="font-size:1.5rem; color:#888; font-style:italic;">${d.ipa}</div>
+                                        </div>
+                                    </div>
+                                    <div class="slide-counter">Slide ${slideCount} / 74</div>
+                                </div>
+                            </div>`;
+                    });
+
+                    section.questions.forEach((qObj, idx) => {
+                        slideCount++;
+                        slidesHTML += `
+                            <div class="slide">
+                                <div class="card">
+                                    <div style="display:flex; justify-content:center; align-items:center; margin-bottom: 20px; gap:20px;">
+                                        ${createPlayBtn(qObj.q, 'female', 'width:80px;height:80px;font-size:2rem; margin:0; flex-shrink:0;')}
+                                    </div>
+                                    <div style="text-align: center; margin-bottom: 25px;">
+                                        <button class="action-btn" onclick="toggleView('q_${slideCount}')" style="font-size: 1.1rem; padding: 8px 15px;">Show/Hide Question</button>
+                                    </div>
+                                    <div class="hidden-content" id="q_${slideCount}" style="margin-top: 0; margin-bottom: 30px; padding: 15px; text-align: center; background: transparent; border: none;">
+                                        <div class="question" style="margin:0; font-size: 2.2rem; color: var(--primary-color);">${qObj.q}</div>
+                                        <div style="font-size:1.4rem; color:#888; font-style:italic; margin-top: 10px;">${qObj.qIpa}</div>
+                                    </div>
+                                    <div class="hint-box" style="background: transparent; border: none; padding: 0; display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 15px;">
+                                        ${qObj.h.map(hint => `<span style="display: inline-block; padding: 6px 15px; border: 1.5px solid var(--primary-color); border-radius: 20px; color: var(--primary-color); font-size: 1.2rem; font-weight: 500; background: rgba(76, 175, 80, 0.05);">${hint}</span>`).join('')}
+                                    </div>
+                                    <div class="action-btns">
+                                        <button class="action-btn check" onclick="toggleView('ans_${slideCount}')">Show Sample Answer</button>
+                                    </div>
+                                    <div class="sample-answer" id="ans_${slideCount}">
+                                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                                            <div style="flex-grow: 1;">
+                                                <div style="font-size: 1.8rem; margin-bottom: 5px;">${qObj.a}</div>
+                                                <div style="font-size: 1.3rem; color: #777; font-style: italic;">${qObj.aIpa}</div>
+                                            </div>
+                                            ${createPlayBtn(qObj.a, 'female', 'width:50px;height:50px;font-size:1.2rem; margin:0 0 0 15px; flex-shrink:0;')}
+                                        </div>
+                                    </div>
+                                    <div class="slide-counter">Slide ${slideCount} / 74</div>
+                                </div>
+                            </div>`;
+                    });
+                }
+            });
+
+            document.getElementById('slidesContainer').innerHTML = slidesHTML;
+            updateSlides();
+        });
+
+        // Logic
+        let currentSlide = 0;
+
+        function updateSlides() {
+            const slides = document.querySelectorAll('.slide');
+            if(slides.length === 0) return;
+            document.getElementById('slidesContainer').style.transform = `translateX(-${currentSlide * 100}vw)`;
+            cancelAudioSafe();
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.slide');
+            if (currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlides();
+            }
+        }
+
+        function toggleView(id) {
+            let el = document.getElementById(id);
+            if(el) el.classList.toggle('show');
+        }
+
+        function checkOption(element, status) {
+            let options = element.parentElement.children;
+            for(let opt of options) { opt.classList.remove('correct', 'incorrect'); }
+            element.classList.add(status);
+        }
+
+        function checkSlideBlanks(btn) {
+            let slide = btn.closest('.slide');
+            let inputs = slide.querySelectorAll('.blank-input');
+            inputs.forEach(input => {
+                const ans = input.dataset.answer.toLowerCase();
+                const val = input.value.trim().toLowerCase();
+                const cleanVal = val.replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g,"");
+                const cleanAns = ans.replace(/[.,\/#!$%^&*;:{}=\-_`~()]/g,"");
+                input.classList.remove('correct', 'incorrect');
+                if (cleanVal === cleanAns) {
+                    input.classList.add('correct');
+                    input.readOnly = true;
+                } else {
+                    input.classList.add('incorrect');
+                }
+            });
+        }
+
+        // --- Audio Engine ---
+        let currentCloudAudio = null;
+        let synth = window.speechSynthesis;
+        let availableVoices = [];
+        window.speechUtterances = []; 
+
+        function playCloudSequence(sequence, index) {
+            if(index >= sequence.length) return;
+            let text = sequence[index].text.trim();
+            if(!text) { playCloudSequence(sequence, index + 1); return; }
+            let url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-US&q=${encodeURIComponent(text)}`;
+            currentCloudAudio = new Audio(url);
+            currentCloudAudio.playbackRate = 0.8;
+            currentCloudAudio.onended = () => playCloudSequence(sequence, index + 1);
+            currentCloudAudio.play().catch(e => console.log(e));
+        }
+
+        function playConversation(sectionIndex) {
+            const section = lessonData.sections[sectionIndex];
+            const engine = document.getElementById('audioEngineSelect').value;
+            
+            let sequence = section.dictation.map((d, idx) => {
+                let gender = (idx % 2 === 0 || section.context === 'Monologue') ? 'female' : 'male';
+                return { text: d.sent, gender: gender };
+            });
+
+            if (engine === 'cloud') {
+                playCloudSequence(sequence, 0);
+            } else {
+                cancelAudioSafe();
+                setTimeout(() => {
+                    sequence.forEach(item => {
+                        const cleanText = item.text.replace(/\\/g, '').replace(/'/g, "'");
+                        const utterance = new SpeechSynthesisUtterance(cleanText);
+                        window.speechUtterances.push(utterance);
+                        
+                        let selectId = item.gender === 'female' ? 'femaleVoiceSelect' : 'maleVoiceSelect';
+                        const selectEl = document.getElementById(selectId);
+                        
+                        if (selectEl && selectEl.value) {
+                            const voice = availableVoices.find(v => v.voiceURI === selectEl.value);
+                            if (voice) utterance.voice = voice;
+                        }
+                        
+                        utterance.rate = 0.8;
+                        synth.speak(utterance);
+                    });
+                }, 50);
+            }
+        }
+
+        function playCloudTTS(text) {
+            cancelAudioSafe();
+            if(text.length > 150) {
+                let sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+                let sequence = sentences.map(s => ({text: s, gender: 'female'}));
+                playCloudSequence(sequence, 0);
+            } else {
+                let url = `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en-US&q=${encodeURIComponent(text)}`;
+                currentCloudAudio = new Audio(url);
+                currentCloudAudio.playbackRate = 0.8;
+                currentCloudAudio.play().catch(e => alert("Lỗi kết nối Audio, vui lòng kiểm tra mạng."));
+            }
+        }
+
+        function populateVoiceList() {
+            if (!synth) return;
+            availableVoices = synth.getVoices();
+            if (availableVoices.length === 0) return;
+
+            const enVoices = availableVoices.filter(v => v.lang.startsWith('en-'));
+            const strictVoices = enVoices.filter(v => 
+                v.name.includes('Emma') || 
+                v.name.includes('Jenny') || 
+                v.name.includes('Andrew') || 
+                v.name.includes('Brian')
+            );
+            
+            const displayVoices = strictVoices.length > 0 ? strictVoices : enVoices;
+            
+            const selects = [document.getElementById('femaleVoiceSelect'), document.getElementById('maleVoiceSelect')];
+            
+            selects.forEach((selectEl, index) => {
+                if(!selectEl) return;
+                const prevValue = selectEl.value;
+                selectEl.innerHTML = '';
+                
+                displayVoices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.textContent = voice.name + ' (' + voice.lang + ')';
+                    option.value = voice.voiceURI;
+                    selectEl.appendChild(option);
+                });
+                
+                if (prevValue && displayVoices.some(v => v.voiceURI === prevValue)) {
+                    selectEl.value = prevValue;
+                } else {
+                    if(index === 0) { // Female
+                        const emma = displayVoices.find(v => v.name.includes('Emma'));
+                        const jenny = displayVoices.find(v => v.name.includes('Jenny'));
+                        if(emma) selectEl.value = emma.voiceURI;
+                        else if(jenny) selectEl.value = jenny.voiceURI;
+                    } else { // Male
+                        const brian = displayVoices.find(v => v.name.includes('Brian'));
+                        const andrew = displayVoices.find(v => v.name.includes('Andrew'));
+                        if(brian) selectEl.value = brian.voiceURI;
+                        else if(andrew) selectEl.value = andrew.voiceURI;
+                    }
+                }
+            });
+        }
+        
+        if (synth) {
+            populateVoiceList();
+            if (synth.onvoiceschanged !== undefined) {
+                synth.onvoiceschanged = populateVoiceList;
+            }
+        }
+
+        function cancelAudioSafe() {
+            if (synth) {
+                synth.pause();
+                synth.cancel();
+            }
+            window.speechUtterances = [];
+            if(currentCloudAudio) currentCloudAudio.pause();
+        }
+
+        function playAudioFromBtn(btn) {
+            let text = btn.getAttribute('data-text');
+            let gender = btn.getAttribute('data-gender');
+            playAudio(text, gender);
+        }
+
+        function playAudio(text, gender) {
+            const engine = document.getElementById('audioEngineSelect').value;
+            
+            if (engine === 'cloud') {
+                playCloudTTS(text);
+                return;
+            }
+
+            cancelAudioSafe(); 
+            
+            setTimeout(() => {
+                if (text && text.trim() !== '') {
+                    const cleanText = text.replace(/\\/g, '').replace(/'/g, "'");
+                    const utterance = new SpeechSynthesisUtterance(cleanText);
+                    window.speechUtterances.push(utterance); // Prevent GC bug
+                    
+                    let selectId = gender === 'female' ? 'femaleVoiceSelect' : 'maleVoiceSelect';
+                    const selectEl = document.getElementById(selectId);
+                    
+                    if (selectEl && selectEl.value) {
+                        const voice = availableVoices.find(v => v.voiceURI === selectEl.value);
+                        if (voice) {
+                            utterance.voice = voice;
+                        }
+                    }
+                    
+                    utterance.rate = 0.8; 
+                    synth.speak(utterance);
+                }
+            }, 50);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thử Thách 100 Câu Trắc Nghiệm Mạo Từ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f4f9f9;
+            --primary: #7ea8e6;
+            --primary-light: #e6f0fa;
+            --text-main: #3d4a5c;
+            --text-light: #6e7c8c;
+            --success: #6cd99b;
+            --error: #ff7675;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Quicksand', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.7; }
+
+        .navbar { background-color: white; padding: 1rem 2rem; box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; justify-content: center; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .brand { font-size: 1.5rem; font-weight: 800; color: var(--primary); }
+
+        .container { max-width: 900px; margin: 2rem auto; padding: 0 1rem; }
+
+        .header-section { text-align: center; margin-bottom: 2rem; background: white; padding: 2.5rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.04); }
+        .header-section h1 { color: var(--primary); font-size: 2.2rem; margin-bottom: 0.5rem; font-weight: 800; }
+        .progress-bar { width: 100%; height: 15px; background-color: #e0e0e0; border-radius: 10px; margin: 1.5rem auto; overflow: hidden; }
+        .progress-fill { height: 100%; background-color: var(--success); width: 0%; transition: width 0.3s ease; }
+        
+        .score-display { font-size: 1.5rem; font-weight: 800; color: var(--primary); margin-top: 1rem; }
+        .score-display span { color: var(--success); }
+
+        .content-card { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        
+        .quiz-item { margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 2px dashed #eee; animation: fadeIn 0.5s ease; }
+        .quiz-item:last-child { border-bottom: none; }
+        .quiz-question { font-size: 1.3rem; font-weight: 700; margin-bottom: 1.5rem; color: #34495e; }
+        
+        .options-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+        .opt-btn { padding: 15px; border: 2px solid #eaeaea; background: #fafafa; border-radius: 12px; cursor: pointer; font-size: 1.1rem; font-weight: 600; transition: all 0.2s; color: var(--text-main); text-align: center; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: white; transform: translateY(-2px); }
+        .opt-btn.correct { background: #e8f8f0; border-color: var(--success); color: #1a7a40; }
+        .opt-btn.incorrect { background: #ffecec; border-color: var(--error); color: #b33131; }
+        .opt-btn:disabled { cursor: not-allowed; opacity: 0.9; }
+        
+        .explanation { display: none; margin-top: 1.5rem; padding: 1.2rem; background: var(--primary-light); border-radius: 10px; border-left: 5px solid var(--primary); color: #2a3c54; font-weight: 600; font-size: 1.1rem; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="brand">🏆 Bài Kiểm Tra Cuối Khóa: 100 Câu Mạo Từ</div>
+    </nav>
+
+    <div class="container">
+        <div class="header-section">
+            <h1>Thử Thách 100 Câu Mạo Từ</h1>
+            <p style="font-size: 1.1rem; color: var(--text-light);">Độ khó tăng dần. Chinh phục toàn bộ các bẫy về A/An, The, Zero Article, và Địa lý phức tạp.</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="main-progress"></div>
+            </div>
+            <div class="score-display">Tiến độ: <span id="progress-text">0/100</span></div>
+        </div>
+
+        <div class="content-card" id="quiz-container">
+            <!-- Quizzes injected here via JS -->
+        </div>
+    </div>
+
+    <script>
+        // 100 Article Questions - Progressive Difficulty
+        const questionsDB = [
+            // CẤP ĐỘ 1: NHẬN DIỆN A / AN (1-20)
+            { q: "I have _____ apple in my bag.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'apple' bắt đầu bằng nguyên âm /æ/ -> Dùng an." },
+            { q: "She is reading _____ book.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'book' bắt đầu bằng phụ âm /b/ -> Dùng a." },
+            { q: "He wants to buy _____ umbrella.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'umbrella' bắt đầu bằng nguyên âm /ʌ/ -> Dùng an." },
+            { q: "It takes about _____ hour to get there.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'hour' có chữ 'h' câm, phát âm bắt đầu bằng nguyên âm /aʊ/ -> Dùng an." },
+            { q: "My brother is _____ university student.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'university' phát âm là /ju/ (bắt đầu bằng phụ âm j/y) -> Dùng a." },
+            { q: "She is _____ honest woman.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'honest' có chữ 'h' câm, đọc là /ɒ/ (nguyên âm) -> Dùng an." },
+            { q: "They live in _____ European country.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'European' phát âm là /jʊə/ (phụ âm j/y) -> Dùng a." },
+            { q: "I need to buy _____ uniform for school.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'uniform' phát âm là /ju/ -> Dùng a." },
+            { q: "He works as _____ MP (Member of Parliament).", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'MP' đọc là /em pi:/, bắt đầu bằng nguyên âm e -> Dùng an." },
+            { q: "This is _____ one-way street.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'one' phát âm là /wʌn/ (bắt đầu bằng phụ âm w) -> Dùng a." },
+            { q: "I saw _____ elephant at the zoo.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'elephant' bắt đầu bằng nguyên âm /e/ -> Dùng an." },
+            { q: "Can you give me _____ useful tip?", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'useful' phát âm là /ju/ -> Dùng a." },
+            { q: "She has _____ idea.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'idea' bắt đầu bằng nguyên âm /aɪ/ -> Dùng an." },
+            { q: "It's _____ honor to meet you.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'honor' có 'h' câm, đọc là /ˈɒnə/ -> Dùng an." },
+            { q: "We stayed at _____ hotel in Paris.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'hotel' chữ 'h' KHÔNG câm -> Dùng a." },
+            { q: "He is _____ FBI agent.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'FBI' đọc là /ef.../, bắt đầu bằng nguyên âm e -> Dùng an." },
+            { q: "I have _____ younger sister.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'younger' bắt đầu bằng phụ âm /j/ -> Dùng a." },
+            { q: "Please send _____ SOS signal.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'SOS' đọc là /es.../, bắt đầu bằng nguyên âm e -> Dùng an." },
+            { q: "It was _____ unique experience.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "'unique' phát âm là /ju/ -> Dùng a." },
+            { q: "I ate _____ orange for breakfast.", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "'orange' bắt đầu bằng nguyên âm /ɒ/ -> Dùng an." },
+
+            // CẤP ĐỘ 2: LẦN ĐẦU / LẦN HAI, SỐ ÍT/SỐ NHIỀU, KHÔNG ĐẾM ĐƯỢC (21-40)
+            { q: "I bought a pen and a notebook. _____ pen is red.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Nhắc lại lần thứ 2, vật thể trở nên xác định -> Dùng the." },
+            { q: "Could you pass me _____ salt, please?", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Trong bữa ăn, lọ muối trên bàn là vật mà cả người nói và nghe đều thấy (xác định) -> the salt." },
+            { q: "I need _____ water.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Water là danh từ không đếm được, và trong câu này chỉ nước chung chung -> Không dùng mạo từ." },
+            { q: "Look at _____ moon! It's beautiful tonight.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Mặt trăng là vật thể duy nhất trên đời -> The moon." },
+            { q: "_____ cats are my favorite animals.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Nói về loài mèo chung chung (danh từ số nhiều) -> Không dùng mạo từ (Rỗng)." },
+            { q: "I have two children: _____ boy and a girl.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "Nhắc đến lần đầu tiên (một cậu bé chưa xác định) -> a boy." },
+            { q: "_____ boy in the blue shirt is my son.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Cậu bé đã được xác định rõ ràng bởi cụm 'in the blue shirt' -> The boy." },
+            { q: "She loves drinking _____ milk.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Sữa nói chung (không đếm được) -> Không dùng mạo từ." },
+            { q: "_____ milk in this bottle is sour.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Sữa 'trong cái chai này' đã được xác định cụ thể -> The milk." },
+            { q: "Are you afraid of _____ dogs?", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Loài chó nói chung -> Không dùng mạo từ." },
+            { q: "_____ dogs next door bark all night.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Chó 'nhà hàng xóm' (đã xác định cụ thể) -> The dogs." },
+            { q: "He gave me some advice. _____ advice was very useful.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Nhắc lại lần 2 -> The advice." },
+            { q: "They are looking for _____ information about the project.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Information không đếm được, dùng chung chung -> Rỗng." },
+            { q: "Would you like to be _____ actor?", opts: ["a", "an", "the", "rỗng"], ans: 1, exp: "Chỉ nghề nghiệp nói chung (một diễn viên) -> an actor." },
+            { q: "She is _____ best teacher in our school.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "So sánh nhất (best) bắt buộc đi với the." },
+            { q: "What is _____ longest river in the world?", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "So sánh nhất (longest) đi với the." },
+            { q: "He was _____ first person to arrive.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Số thứ tự (first, second...) luôn đi với the." },
+            { q: "I live on _____ third floor.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Số thứ tự (third) đi với the." },
+            { q: "Let's sit in _____ shade. It's too hot here.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Ngồi trong bóng râm (cụm từ cố định / đã xác định) -> in the shade." },
+            { q: "Where is _____ nearest bank?", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "So sánh nhất (nearest) dùng the." },
+
+            // CẤP ĐỘ 3: ZERO ARTICLE VS THE (Đời sống, Bữa ăn, Thể thao, Ngôn ngữ) (41-60)
+            { q: "I usually have _____ breakfast at 7 AM.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Trước các bữa ăn nói chung (breakfast, lunch, dinner) -> Không dùng mạo từ." },
+            { q: "We had _____ delicious dinner at a restaurant last night.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "Khi có tính từ bổ nghĩa cho bữa ăn (delicious dinner) mô tả 1 bữa cụ thể -> Dùng a/an." },
+            { q: "Let's play _____ football after school.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Trước tên các môn thể thao -> Không dùng mạo từ." },
+            { q: "Can you play _____ piano?", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Sau động từ chơi NHẠC CỤ -> Bắt buộc dùng the." },
+            { q: "I am learning _____ English.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Trước tên ngôn ngữ, môn học -> Không dùng mạo từ." },
+            { q: "_____ English are very polite.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "The + Quốc tịch/Ngôn ngữ = Người dân nước đó (Người Anh) -> The English." },
+            { q: "He speaks _____ Japanese very well.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Tiếng Nhật (ngôn ngữ) -> Không dùng mạo từ." },
+            { q: "_____ Japanese are famous for their technology.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Người Nhật (nhóm người) -> The Japanese." },
+            { q: "What did you watch on _____ TV last night?", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Xem truyền hình nói chung -> watch TV (Rỗng). (Khác với listen to the radio)." },
+            { q: "Turn off _____ television, please.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Chỉ cái máy tivi vật lý trong phòng (đã xác định) -> the television." },
+            { q: "I love listening to _____ radio.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Cụm cố định: listen to the radio." },
+            { q: "_____ rich should pay more taxes.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "The + Tính từ = Một nhóm người (Người giàu) -> The rich." },
+            { q: "Life is very hard for _____ poor.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "The poor = Những người nghèo." },
+            { q: "My mother is going to _____ church to pray.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Đến nhà thờ đúng mục đích cầu nguyện/tôn giáo -> go to church (Rỗng)." },
+            { q: "Some workmen went to _____ church to repair the roof.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Đến nhà thờ trái mục đích (để sửa mái nhà) -> Dùng the." },
+            { q: "My brother is in _____ hospital because he had a crash.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Nằm viện để chữa bệnh -> in hospital." },
+            { q: "I went to _____ hospital to visit my brother.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Đến bệnh viện để thăm người bệnh -> to the hospital." },
+            { q: "Criminals are sent to _____ prison.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Tội phạm vào tù (đúng mục đích) -> go to prison." },
+            { q: "I am going to _____ bed now. I'm tired.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Đi ngủ -> go to bed." },
+            { q: "Don't jump on _____ bed!", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Chỉ cái giường vật lý -> the bed." },
+
+            // CẤP ĐỘ 4: ĐỊA LÝ & TÊN RIÊNG ĐẶC BIỆT (61-80)
+            { q: "We spent our holiday in _____ France.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Quốc gia số ít thông thường -> Không có mạo từ." },
+            { q: "She lives in _____ United States.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Quốc gia có chữ 'States' -> Dùng the." },
+            { q: "_____ Philippines consists of thousands of islands.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Quốc gia dạng quần đảo (có đuôi s) -> Dùng the." },
+            { q: "_____ Mount Everest is the highest mountain.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Tên ngọn núi đơn lẻ (Mount Everest, Mount Fuji) -> Rỗng." },
+            { q: "_____ Himalayas are beautiful.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Tên một DÃY NÚI (số nhiều) -> The Himalayas." },
+            { q: "They crossed _____ Sahara desert.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên sa mạc -> Dùng the." },
+            { q: "_____ Nile is the longest river in Africa.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Tên dòng sông -> Dùng the." },
+            { q: "We swam in _____ Pacific Ocean.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên đại dương -> Dùng the." },
+            { q: "_____ Lake Victoria is huge.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Tên hồ (có chữ Lake đứng trước) -> KHÔNG dùng the." },
+            { q: "_____ Smiths have a large house.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "The + Họ (có s) = Gia đình nhà ai đó (The Smiths)." },
+            { q: "I read _____ New York Times every morning.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên các tờ báo (newspaper) -> Dùng the." },
+            { q: "We stayed at _____ Hilton Hotel.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên khách sạn -> Dùng the." },
+            { q: "He works for _____ IBM.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Tên công ty (IBM, Google, Apple) -> Rỗng." },
+            { q: "_____ President Kennedy was assassinated in 1963.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Chức danh + Tên riêng -> KHÔNG dùng the." },
+            { q: "The President of _____ United Kingdom...", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Quốc gia có chữ 'Kingdom' -> Dùng the." },
+            { q: "They went to _____ Asia last year.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Tên châu lục (Asia, Europe) -> Rỗng." },
+            { q: "_____ North of Vietnam is very cold in winter.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Chỉ một khu vực/miền địa lý -> The North." },
+            { q: "Birds fly _____ south in winter.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Chỉ phương hướng di chuyển (đi về hướng Nam) -> Rỗng." },
+            { q: "We visited _____ Louvre Museum.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Tên bảo tàng -> Dùng the." },
+            { q: "Have you ever been to _____ Netherlands?", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Hà Lan (The Netherlands) - Ngoại lệ có đuôi s -> Dùng the." },
+
+            // CẤP ĐỘ 5: NGOẠI LỆ NÂNG CAO VÀ CÁC TRƯỜNG HỢP HÓC BÚA (81-100)
+            { q: "_____ telephone was invented by Alexander Graham Bell.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Nhắc đến một phát minh tiêu biểu nói chung -> The telephone, the internet." },
+            { q: "I need to make _____ telephone call.", opts: ["a", "an", "the", "rỗng"], ans: 0, exp: "Ở đây chỉ một cuộc gọi điện thoại bình thường (a telephone call)." },
+            { q: "She goes to work by _____ bus.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Giới từ 'by' + phương tiện chung chung -> Rỗng (by bus, by car)." },
+            { q: "She is sitting in _____ car.", opts: ["a", "an", "the", "rỗng"], ans: [0, 2], exp: "Không dùng 'by' mà dùng in/on thì phải có mạo từ (in a car hoặc in the car đều được)." },
+            { q: "_____ space is infinite.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Vũ trụ/Không gian (Space) theo nghĩa vũ trụ bao la -> KHÔNG dùng the." },
+            { q: "He tried to park his car, but _____ space was too small.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Chỗ trống (để đỗ xe) đã được xác định cụ thể -> the space." },
+            { q: "I have _____ same problem as you.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Cụm cố định 'the same' (giống nhau)." },
+            { q: "He is _____ only person who can help me.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Đi với từ 'only' mang nghĩa duy nhất -> The only." },
+            { q: "We worked _____ whole day.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Cụm cố định 'the whole' (toàn bộ)." },
+            { q: "_____ man is mortal.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Từ 'man' mang nghĩa 'con người/nhân loại' nói chung -> Rỗng." },
+            { q: "She took him by _____ hand.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Chỉ bộ phận cơ thể sau giới từ -> the hand." },
+            { q: "He was hit on _____ head.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Bộ phận cơ thể sau giới từ -> the head." },
+            { q: "_____ most people like music.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Most (hầu hết) + danh từ chung chung -> Không dùng the (Most people, không phải The most people)." },
+            { q: "He is _____ most handsome boy in the school.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "So sánh nhất của tính từ (the most handsome)." },
+            { q: "Let's meet in _____ morning.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Buổi trong ngày -> in the morning/afternoon/evening." },
+            { q: "They went out at _____ night.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Cụm cố định: at night, at noon (Rỗng)." },
+            { q: "This is _____ third time I have seen this movie.", opts: ["a", "an", "the", "rỗng"], ans: 2, exp: "Số thứ tự -> the third time." },
+            { q: "_____ love is a powerful emotion.", opts: ["A", "An", "The", "Rỗng"], ans: 3, exp: "Danh từ trừu tượng chung chung (tình yêu) -> Rỗng." },
+            { q: "_____ love she has for her child is infinite.", opts: ["A", "An", "The", "Rỗng"], ans: 2, exp: "Tình yêu ĐÃ ĐƯỢC XÁC ĐỊNH (của cô ấy dành cho con) -> The love." },
+            { q: "I will go to _____ London next year.", opts: ["a", "an", "the", "rỗng"], ans: 3, exp: "Tên thành phố (London) -> Rỗng. Chúc mừng bạn đã hoàn thành 100 câu!" }
+        ];
+
+        // Render Quizzes
+        let currentQuestions = [...questionsDB];
+        let answeredQuestions = 0;
+
+        function initQuiz() {
+            const container = document.getElementById('quiz-container');
+            container.innerHTML = '';
+            
+            currentQuestions.forEach((q, qIndex) => {
+                const quizHtml = `
+                    <div class="quiz-item" id="q-${qIndex}">
+                        <div class="quiz-question">Câu ${qIndex + 1}: ${q.q}</div>
+                        <div class="options-grid">
+                            ${q.opts.map((opt, oIndex) => `
+                                <button class="opt-btn" onclick="checkAnswer(${qIndex}, ${oIndex})">${opt}</button>
+                            `).join('')}
+                        </div>
+                        <div class="explanation" id="exp-${qIndex}">💡 <strong>Giải thích:</strong> ${q.exp}</div>
+                    </div>
+                `;
+                container.innerHTML += quizHtml;
+            });
+        }
+
+        function checkAnswer(qIndex, selectedOptIndex) {
+            const quizContainer = document.getElementById(`q-${qIndex}`);
+            const buttons = quizContainer.querySelectorAll('.opt-btn');
+            
+            if(buttons[0].disabled) return;
+            
+            buttons.forEach(b => b.disabled = true);
+            answeredQuestions++;
+            
+            const q = currentQuestions[qIndex];
+            const correctAns = Array.isArray(q.ans) ? q.ans : [q.ans];
+            
+            if(correctAns.includes(selectedOptIndex)) {
+                buttons[selectedOptIndex].classList.add('correct');
+            } else {
+                buttons[selectedOptIndex].classList.add('incorrect');
+            }
+            
+            correctAns.forEach(idx => {
+                buttons[idx].classList.add('correct');
+            });
+            
+            document.getElementById(`exp-${qIndex}`).style.display = 'block';
+            
+            // Update progress UI
+            document.getElementById('progress-text').innerText = `${answeredQuestions}/100`;
+            document.getElementById('main-progress').style.width = `${(answeredQuestions/100)*100}%`;
+        }
+
+        // Initialize
+        initQuiz();
+
+    </script>
+</body>
+</html>

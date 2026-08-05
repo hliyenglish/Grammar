@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Greetings & Introductions (A1-A2)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;500;700&family=Afacad+Flux:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { box-sizing: border-box; }
+        
+        body {
+            background-color: #334155; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            padding: 0;
+            font-family: 'Afacad Flux', sans-serif;
+            height: 100vh;
+            overflow: hidden; 
+        }
+
+        /* TOOLBAR */
+        .toolbar {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            display: flex; gap: 15px; z-index: 1000; background: rgba(255, 255, 255, 0.9);
+            padding: 10px 20px; border-radius: 50px; box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .tool-btn {
+            background-color: #1e293b; color: white; border: none; border-radius: 50px;
+            padding: 10px 18px; font-size: 15px; font-family: 'Comfortaa', sans-serif;
+            font-weight: 700; cursor: pointer; display: flex; align-items: center;
+            gap: 8px; transition: 0.2s;
+        }
+        .tool-btn:hover { background-color: #ff823a; }
+        .nav-btn { background-color: #4f46e5; font-size: 18px; padding: 10px 25px; }
+        .nav-btn:hover { background-color: #4338ca; }
+        .nav-btn:disabled { background-color: #94a3b8; cursor: not-allowed; }
+        .slide-counter { display: flex; align-items: center; font-size: 18px; font-weight: bold; color: #1e293b; padding: 0 10px; font-family: 'Comfortaa', sans-serif;}
+
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); z-index: 2000; display: none;
+            justify-content: center; align-items: center;
+        }
+        .modal {
+            background: #fff; padding: 30px; border-radius: 20px; width: 450px;
+            font-family: 'Afacad Flux', sans-serif; box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal h3 { font-family: 'Comfortaa', sans-serif; margin-top: 0; color: #1e293b; }
+        .modal label { display: block; margin: 15px 0 5px; font-weight: bold; color: #475569;}
+        .modal select { width: 100%; padding: 10px; border-radius: 8px; border: 2px solid #cbd5e1; font-family: 'Afacad Flux', sans-serif; font-size: 16px; outline: none; }
+        .modal-close { background: #ff823a; color: #fff; border: none; padding: 12px 20px; border-radius: 8px; margin-top: 20px; cursor: pointer; width: 100%; font-size: 18px; font-weight: bold; }
+
+        .slides-wrapper {
+            position: relative; width: 1280px; height: 720px; background: #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); border-radius: 12px; overflow: hidden;
+        }
+        .slide-container {
+            position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: none; 
+            flex-direction: column; padding: 50px 60px; width: 100%; height: 100%;
+        }
+        .slide-container.active { display: flex; animation: fadeInSlide 0.4s ease-out; }
+        @keyframes fadeInSlide { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+
+        /* TYPOGRAPHY & COLORS */
+        h1, h2, .slide-title { font-family: 'Comfortaa', sans-serif; color: #1e293b; margin: 0; }
+        p, li, h3, input, button { font-family: 'Afacad Flux', sans-serif; color: #1e293b; }
+        .slide-title { font-size: 42px; font-weight: 700; width: 100%; margin-bottom: 25px; text-align: left; border-bottom: 4px solid #1e293b; padding-bottom: 10px; display: inline-block; width: max-content;}
+        
+        .bg-lime { background-color: #dcfd8b; } .bg-peach { background-color: #fdd5bd; }
+        .bg-purple { background-color: #e5c3ff; } .bg-orange { background-color: #ffb88e; }
+        .bg-blue { background-color: #bde0fd; } .bg-pink { background-color: #fdcceb; }
+        .bg-light { background-color: #f8fafc; } .bg-white { background-color: #ffffff; }
+
+        .content-area { display: flex; flex-direction: column; flex-grow: 1; width: 100%; justify-content: center; }
+        .two-column { display: flex; width: 100%; gap: 40px; height: 100%; align-items: stretch; }
+        .two-column > div { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        
+        .content-box { border-radius: 30px; padding: 40px; display: flex; flex-direction: column; justify-content: center; border: 3px solid #1e293b;}
+        .content-box h3 { font-size: 32px; margin-bottom: 20px; }
+        .content-box p, .content-box li { font-size: 26px; line-height: 1.5; margin-bottom: 15px; font-weight: 500;}
+        .content-box ul { padding-left: 30px; }
+
+        .image-placeholder {
+            width: 100%; height: 100%; min-height: 300px; border-radius: 30px; 
+            display: flex; align-items: center; justify-content: center; text-align: center;
+            background: #e2e8f0; border: 3px solid #1e293b; overflow: hidden; padding: 0;
+        }
+        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* MCQ */
+        .mcq-option {
+            background: #fff; border: 3px solid #1e293b; border-radius: 16px; padding: 18px 25px; margin-bottom: 15px;
+            font-size: 24px; font-weight: 600; cursor: pointer; transition: 0.2s; display: flex; align-items: center; gap: 15px;
+        }
+        .mcq-option:hover { transform: translateX(10px); background: #f1f5f9; box-shadow: 4px 4px 0 #1e293b; }
+        .mcq-option.correct-ans { background: #dcfd8b; border-color: #4d7c0f; }
+        .mcq-option.incorrect-ans { background: #fecdd3; border-color: #be123c; }
+
+        .dict-container { display: flex; flex-direction: column; gap: 15px; width: 100%; }
+        .audio-btn {
+            color: #fff; border: 3px solid #1e293b; border-radius: 50%; width: 50px; height: 50px;
+            font-size: 20px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
+            box-shadow: 2px 2px 0 #1e293b; transition: 0.1s;
+        }
+        .audio-btn:active { transform: translate(2px, 2px); box-shadow: none; }
+        .audio-btn.male { background: #3b82f6; } .audio-btn.female { background: #ec4899; }
+        
+        .fill-blank-box { background: #fff; border: 3px solid #1e293b; border-radius: 20px; padding: 25px; font-size: 32px; line-height: 1.6; box-shadow: 4px 4px 0 #1e293b; display: flex; align-items: center; gap: 20px; flex-wrap: wrap;}
+        .blank-input { border: none; border-bottom: 4px solid #ff823a; background: #fff8f5; font-size: 30px; width: 140px; text-align: center; color: #4f46e5; outline: none; font-family: 'Afacad Flux', sans-serif; font-weight: bold; border-radius: 8px 8px 0 0;}
+        
+        .action-row { display: flex; gap: 15px; margin-top: 10px; align-items: center;}
+        .check-btn { background: #10b981; color: #fff; border: 3px solid #1e293b; padding: 12px 30px; font-size: 22px; border-radius: 12px; cursor: pointer; font-weight: bold; box-shadow: 3px 3px 0 #1e293b; display: flex; align-items: center; gap: 10px;}
+        .record-btn { background: #ef4444; color: #fff; border: 3px solid #1e293b; padding: 12px 30px; font-size: 22px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 10px; box-shadow: 3px 3px 0 #1e293b; transition: 0.2s;}
+        .record-btn.recording { background-color: #f59e0b; }
+        
+        .hidden-result { display: none; background: #f8fafc; border: 3px dashed #94a3b8; border-radius: 16px; padding: 20px; margin-top: 10px; animation: fadeIn 0.3s; }
+        .show-results .hidden-result { display: block; }
+        .result-text { font-size: 28px; margin-bottom: 5px; font-weight: 700; color: #0f172a;}
+        .ipa-text { font-size: 24px; color: #64748b; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-weight: 500;}
+        
+        .qna-box { background: #e0f2fe; border: 3px solid #0284c7; border-radius: 16px; padding: 20px; margin-top: 10px; }
+        .answer-box { display: none; margin-top: 15px; border-top: 2px dashed #0284c7; padding-top: 15px; animation: fadeIn 0.3s; }
+        .show-results .answer-box { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .script-box { background: #fff; border: 3px solid #1e293b; border-radius: 20px; padding: 30px; font-size: 24px; line-height: 1.5; height: 100%; box-shadow: 6px 6px 0 #1e293b; display: flex; flex-direction: column; gap: 15px;}
+        .script-line { display: flex; gap: 15px; font-weight: 500;}
+        .speaker { font-weight: bold; color: #1e293b; width: 120px; flex-shrink: 0; text-align: right; text-transform: uppercase; letter-spacing: 1px;}
+        
+        .tiled-content { display: flex; flex-wrap: wrap; gap: 20px; width: 100%; justify-content: center; }
+        .tile { border: 3px solid #1e293b; border-radius: 20px; padding: 25px; flex: 1 1 calc(33% - 20px); min-width: 300px; display: flex; flex-direction: column; gap: 15px; box-shadow: 4px 4px 0 #1e293b; }
+        .tile .icon { font-size: 45px; color: #1e293b; }
+        .tile p { font-size: 26px; margin: 0; font-weight: 700;}
+
+        @media print {
+            @page { size: 1280px 720px; margin: 0 !important; }
+            body, html { 
+                width: 1280px !important; height: 100% !important; max-height: none !important; 
+                margin: 0 !important; padding: 0 !important; background: #fff !important; 
+                -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; 
+                overflow: visible !important; position: static !important; 
+            }
+            .toolbar, .modal-overlay, .no-print { display: none !important; }
+            .slides-wrapper { 
+                width: 1280px !important; height: auto !important; max-height: none !important;
+                box-shadow: none !important; border: none !important; border-radius: 0 !important; 
+                overflow: visible !important; display: block !important; position: static !important; 
+            }
+            .slide-container { 
+                display: flex !important; position: static !important; 
+                width: 1280px !important; height: 720px !important; box-sizing: border-box !important;
+                page-break-after: always !important; page-break-inside: avoid !important; 
+                opacity: 1 !important; visibility: visible !important; transform: none !important; 
+                padding: 40px !important; margin: 0 !important; clear: both !important;
+            }
+            * { text-shadow: none !important; font-variant-ligatures: none !important; -webkit-font-smoothing: antialiased !important; }
+            .blank-input { border-bottom-color: #000 !important; background: transparent !important;}
+            
+            /* HIỂN THỊ ĐÁP ÁN & IPA KHI IN PDF */
+            .hidden-result { 
+                display: block !important; opacity: 1 !important; visibility: visible !important; 
+                box-shadow: none !important; border: 2px dashed #94a3b8 !important; 
+            }
+            .answer-box { 
+                display: block !important; opacity: 1 !important; visibility: visible !important; 
+                border-top: 2px dashed #0284c7 !important; margin-top: 15px !important; padding-top: 15px !important;
+            }
+            
+            .content-box, .mcq-option, .fill-blank-box, .script-box, .tile, .audio-btn { box-shadow: none !important; border-width: 2px !important; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar no-print">
+        <button class="tool-btn nav-btn" id="prevBtn" onclick="changeSlide(-1)"><i class="fa-solid fa-chevron-left"></i> Prev</button>
+        <span class="slide-counter" id="slideCounter">1 / 40</span>
+        <button class="tool-btn nav-btn" id="nextBtn" onclick="changeSlide(1)">Next <i class="fa-solid fa-chevron-right"></i></button>
+        <div style="width: 2px; background: #cbd5e1; margin: 0 10px;"></div>
+        <button class="tool-btn" onclick="document.getElementById('settingsModal').style.display='flex'">
+            <i class="fa-solid fa-gear"></i> Giọng đọc
+        </button>
+        <button class="tool-btn" onclick="downloadHTML()">
+            <i class="fa-solid fa-download"></i> Tải HTML
+        </button>
+        <button class="tool-btn" style="background-color: #be123c;" onclick="window.print()">
+            <i class="fa-solid fa-file-pdf"></i> Tải PDF
+        </button>
+    </div>
+
+    <!-- SETTINGS MODAL -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <h3><i class="fa-solid fa-microphone-lines"></i> Cài đặt Giọng đọc</h3>
+            <label for="femaleVoiceSelect">Giọng Nữ (Emma/Sarah):</label>
+            <select id="femaleVoiceSelect"></select>
+            
+            <label for="maleVoiceSelect">Giọng Nam (David/Michael):</label>
+            <select id="maleVoiceSelect"></select>
+            
+            <button class="modal-close" onclick="document.getElementById('settingsModal').style.display='none'">Lưu & Đóng</button>
+        </div>
+    </div>
+
+    <div class="slides-wrapper">
+
+        <!-- ================= PHẦN 1: A1 ================= -->
+
+        <!-- Slide 1 -->
+        <div class="slide-container bg-peach active" id="slide1">
+            <div class="content-area" style="align-items: center; text-align: center;">
+                <div style="font-size: 120px; margin-bottom: 20px;"><i class="fa-solid fa-handshake-angle" style="color: #1e293b;"></i></div>
+                <h1 style="font-size: 90px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;">Greetings &<br>Introductions</h1>
+                <p style="font-size: 36px; margin-top: 30px; font-weight: bold; background: #fff; padding: 10px 40px; border-radius: 50px; border: 3px solid #1e293b; box-shadow: 4px 4px 0 #1e293b;">Level A1 - A2 Masterclass</p>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide-container bg-light" id="slide2">
+            <h2 class="slide-title">Warm-up Questions (A1-A2)</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div class="content-box bg-lime">
+                        <h3>Let's think about...</h3>
+                        <ul>
+                            <li>How do you usually greet a new friend?</li>
+                            <li style="margin-top:30px;">What information do you share when you introduce yourself?</li>
+                            <li style="margin-top:30px;">Do you feel confident speaking English with strangers?</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <div class="image-placeholder bg-blue">
+                            <i class="fa-regular fa-comments" style="font-size: 100px; color:#3b82f6;"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide-container bg-light" id="slide3">
+            <h2 class="slide-title">Prediction Activity</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <div class="image-placeholder bg-pink">
+                            <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Students in classroom">
+                        </div>
+                    </div>
+                    <div class="content-box bg-white">
+                        <p style="font-weight: 700; margin-bottom: 30px; font-size: 30px;">Look at the picture of two students in a classroom. Can you guess what they are talking about?</p>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">A. Ordering food in a restaurant.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">B. Introducing themselves and sharing hobbies.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. Asking for directions to the library.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide-container bg-light" id="slide4">
+            <h2 class="slide-title">Audio Dictation 1 (Level A1)</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center; max-width: 900px; margin: 0 auto;">
+                    <button class="audio-btn female no-print" style="width: 100px; height: 100px; font-size: 40px; margin-bottom: 20px;" onclick="playConversation1()"><i class="fa-solid fa-play"></i></button>
+                    <p style="font-size: 32px; font-weight: bold; margin-bottom: 30px;">What is the main topic of this conversation?</p>
+                    <div style="width: 100%; text-align: left;">
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">A. Buying books.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">B. Introducing themselves and sharing hobbies.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. Playing a soccer match.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">D. Booking a train ticket.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide-container bg-light dict-block" id="slide5">
+            <h2 class="slide-title">Sentence 1 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Good morning, my name is David, and it is very nice to meet you today.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span><input type='text' class='blank-input'> morning, my <input type='text' class='blank-input'> is David, and it is very nice to meet you <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    
+                    <div class="hidden-result">
+                        <div class="result-text">Good morning, my name is David, and it is very nice to meet you today.</div>
+                        <div class="ipa-text">/ɡʊd ˈmɔ:rnɪŋ, maɪ neɪm ɪz ˈdeɪvɪd, ænd ɪt ɪz ˈveri naɪs tə mi:t ju: təˈdeɪ/</div>
+                    </div>
+
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is the man's name David? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is the man\'s name David?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ðə mænz neɪm ˈdeɪvɪd/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: Yes, his name is David. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Yes, his name is David.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/jes, hɪz neɪm ɪz ˈdeɪvɪd/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide-container bg-light dict-block" id="slide6">
+            <h2 class="slide-title">Sentence 2 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Hi David, I am Emma, and it is a wonderful pleasure to meet you too.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Hi David, I am Emma, and it is a <input type='text' class='blank-input'> pleasure to <input type='text' class='blank-input'> you too.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Hi David, I am Emma, and it is a wonderful pleasure to meet you too.</div>
+                        <div class="ipa-text">/haɪ ˈdeɪvɪd, aɪ æm ˈemə, ænd ɪt ɪz ə ˈwʌndɜːrfl ˈpleʒɜːr tə mi:t ju: tu:/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is the woman's name Sarah? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is the woman\'s name Sarah?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ðə ˈwʊmənz neɪm ˈserə/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, her name is Emma. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, her name is Emma.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, hɜːr neɪm ɪz ˈemə/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide-container bg-light dict-block" id="slide7">
+            <h2 class="slide-title">Sentence 3 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Are you a new student in this morning English class?', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Are you a new <input type='text' class='blank-input'> in this <input type='text' class='blank-input'> English class?</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Are you a new student in this morning English class?</div>
+                        <div class="ipa-text">/ɑ:r ju: ə nu: ˈstu:dnt ɪn ðɪs ˈmɔ:rnɪŋ ˈɪŋɡlɪʃ klæs/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is Emma a new student? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is Emma a new student?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ˈemə ə nu: ˈstu:dnt/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: Yes, she is a new student. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Yes, she is a new student.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/jes, ʃi: ɪz ə nu: ˈstu:dnt/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide-container bg-light dict-block" id="slide8">
+            <h2 class="slide-title">Sentence 4 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Yes, I am a new student here, and I am originally from Canada.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Yes, I am a new student here, and I am <input type='text' class='blank-input'> from <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Yes, I am a new student here, and I am originally from Canada.</div>
+                        <div class="ipa-text">/jes, aɪ æm ə nu: ˈstu:dnt hɪr, ænd aɪ æm əˈrɪdʒənəli frəm ˈkænədə/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is Emma from the United States? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is Emma from the United States?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ˈemə frəm ðə juˈnaɪtɪd steɪts/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, she is originally from Canada. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, she is originally from Canada.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, ʃi: ɪz əˈrɪdʒənəli frəm ˈkænədə/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide-container bg-light dict-block" id="slide9">
+            <h2 class="slide-title">Sentence 5 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('That is really great, because I am from the United States.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>That is really <input type='text' class='blank-input'>, because I am from the United <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">That is really great, because I am from the United States.</div>
+                        <div class="ipa-text">/ðæt ɪz ˈri:əli ɡreɪt, bɪˈkɔ:z aɪ æm frəm ðə juˈnaɪtɪd steɪts/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Where is David from? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Where is David from?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/wer ɪz ˈdeɪvɪd frəm/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: He is from the United States. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('He is from the United States.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/hi: ɪz frəm ðə juˈnaɪtɪd steɪts/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="slide-container bg-light dict-block" id="slide10">
+            <h2 class="slide-title">Sentence 6 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('What do you usually do in your free time on the weekend, David?', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>What do you usually do in your <input type='text' class='blank-input'> time on the <input type='text' class='blank-input'>, David?</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">What do you usually do in your free time on the weekend, David?</div>
+                        <div class="ipa-text">/hwɑ:t du: ju: ˈju:ʒuəli du: ɪn jʊr fri: taɪm ɑ:n ðə ˈwi:kend, ˈdeɪvɪd/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What does Emma ask David about? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What does Emma ask David about?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t dəz ˈemə æsk ˈdeɪvɪd əˈbaʊt/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: She asks about his free time. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('She asks about his free time.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ʃi: æsks əˈbaʊt hɪz fri: taɪm/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide-container bg-light dict-block" id="slide11">
+            <h2 class="slide-title">Sentence 7 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('I love reading thick books and playing soccer with my good friends.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I love reading <input type='text' class='blank-input'> books and playing <input type='text' class='blank-input'> with my good friends.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I love reading thick books and playing soccer with my good friends.</div>
+                        <div class="ipa-text">/aɪ lʌv ˈri:dɪŋ θɪk bʊks ænd ˈpleɪɪŋ ˈsɑ:kɜːr wɪθ maɪ ɡʊd frendz/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What does David love doing? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What does David love doing?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t dəz ˈdeɪvɪd lʌv ˈdu:ɪŋ/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: He loves reading books and playing soccer. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('He loves reading books and playing soccer.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/hi: lʌvz ˈri:dɪŋ bʊks ænd ˈpleɪɪŋ ˈsɑ:kɜːr/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide-container bg-light dict-block" id="slide12">
+            <h2 class="slide-title">Sentence 8 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('That sounds very fun, let\'s talk more about it after the class ends.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>That sounds very <input type='text' class='blank-input'>, let's talk <input type='text' class='blank-input'> about it after the class ends.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check Answer</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">That sounds very fun, let's talk more about it after the class ends.</div>
+                        <div class="ipa-text">/ðæt saʊndz ˈveri fʌn, lets tɔ:k mɔ:r əˈbaʊt ɪt ˈæftɜːr ðə klæs endz/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: When will they talk more? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('When will they talk more?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/wen wɪl ðeɪ tɔ:k mɔ:r/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: They will talk more after the class ends. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('They will talk more after the class ends.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ðeɪ wɪl tɔ:k mɔ:r ˈæftɜːr ðə klæs endz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 13 -->
+        <div class="slide-container bg-light" id="slide13">
+            <h2 class="slide-title">Full Conversation (A1)</h2>
+            <div class="content-area">
+                <div class="script-box">
+                    <button class="audio-btn male no-print" style="align-self: flex-start;" onclick="playConversation1()"><i class="fa-solid fa-play"></i></button>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>Good morning, my name is David, and it is very nice to meet you today.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>Hi David, I am Emma, and it is a wonderful pleasure to meet you too.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>Are you a new student in this morning English class?</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>Yes, I am a new student here, and I am originally from Canada.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>That is really great, because I am from the United States.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>What do you usually do in your free time on the weekend, David?</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>I love reading thick books and playing soccer with my good friends.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>That sounds very fun, let's talk more about it after the class ends.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14 -->
+        <div class="slide-container bg-orange" id="slide14">
+            <h2 class="slide-title">Real-life Speaking Activity</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center;">
+                    <div style="font-size: 100px; color: #ff823a; margin-bottom: 20px;"><i class="fa-solid fa-comments"></i></div>
+                    <h3 style="font-size: 45px; font-family: 'Comfortaa', sans-serif;">Role-play Time!</h3>
+                    <p style="font-size: 32px; max-width: 900px; margin: 0 auto; line-height: 1.5;">Introduce yourself to the teacher just like David and Emma did. Mention your <strong>name</strong>, <strong>where you are from</strong>, and <strong>one favorite hobby</strong> in your free time.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PHẦN 2: A2 ================= -->
+
+        <!-- Slide 15 -->
+        <div class="slide-container bg-light" id="slide15">
+            <h2 class="slide-title">Prediction Activity 2</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div class="content-box bg-purple">
+                        <p style="font-weight: 700; margin-bottom: 30px; font-size: 30px;">You will hear David introducing his colleague to Emma. What job do you think his colleague does?</p>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">A. Doctor</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">B. Software Engineer</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. Chef</div>
+                    </div>
+                    <div>
+                        <div class="image-placeholder bg-white">
+                            <img src="https://images.unsplash.com/photo-1573164713988-8665fc963095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Colleagues introducing">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 16 -->
+        <div class="slide-container bg-light" id="slide16">
+            <h2 class="slide-title">Audio Dictation 2 (Level A2)</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center; max-width: 900px; margin: 0 auto;">
+                    <button class="audio-btn male no-print" style="width: 100px; height: 100px; font-size: 40px; margin-bottom: 20px;" onclick="playConversation2()"><i class="fa-solid fa-play"></i></button>
+                    <p style="font-size: 32px; font-weight: bold; margin-bottom: 30px;">What is the main idea of this part?</p>
+                    <div style="width: 100%; text-align: left;">
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">A. David introduces his colleague Michael to Emma.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">B. Emma is leaving the company today.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. Michael is buying a new mobile phone.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">D. David is teaching a foreign language.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 17 -->
+        <div class="slide-container bg-light dict-block" id="slide17">
+            <h2 class="slide-title">Sentence 1 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Emma, I would like to introduce you to my colleague, Michael.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Emma, I would like to <input type='text' class='blank-input'> you to my <input type='text' class='blank-input'>, Michael.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Emma, I would like to introduce you to my colleague, Michael.</div>
+                        <div class="ipa-text">/ˈemə, aɪ wʊd laɪk tʊ ˌɪntrəˈdu:s ju: tə maɪ ˈkɑ:li:ɡ, ˈmaɪkl/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Does David introduce his colleague? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Does David introduce his colleague?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/dəz ˈdeɪvɪd ˌɪntrəˈdu:s hɪz ˈkɑ:li:ɡ/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: Yes, he does. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Yes, he does.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/jes, hi: dəz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 18 -->
+        <div class="slide-container bg-light dict-block" id="slide18">
+            <h2 class="slide-title">Sentence 2 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Hello Michael, it is a great pleasure to finally meet you.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Hello Michael, it is a great <input type='text' class='blank-input'> to finally <input type='text' class='blank-input'> you.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Hello Michael, it is a great pleasure to finally meet you.</div>
+                        <div class="ipa-text">/heˈləʊ ˈmaɪkl, ɪt ɪz ə ɡreɪt ˈpleʒɜːr tə ˈfaɪnəli mi:t ju:/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is Michael unhappy to meet Emma? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is Michael unhappy to meet Emma?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ˈmaɪkl ʌnˈhæpi tə mi:t ˈemə/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, it is a great pleasure for him. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, it is a great pleasure for him.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, ɪt ɪz ə ɡreɪt ˈpleʒɜːr fər hɪm/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 19 -->
+        <div class="slide-container bg-light dict-block" id="slide19">
+            <h2 class="slide-title">Sentence 3 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Hi Emma, David has told me so many good things about you.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Hi Emma, David has <input type='text' class='blank-input'> me so many good <input type='text' class='blank-input'> about you.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Hi Emma, David has told me so many good things about you.</div>
+                        <div class="ipa-text">/haɪ ˈemə, ˈdeɪvɪd hæz təʊld mi: səʊ ˈmeni ɡʊd θɪŋz əˈbaʊt ju:/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Did David tell Emma bad things about Michael? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Did David tell Emma bad things about Michael?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/dɪd ˈdeɪvɪd tel ˈemə bæd θɪŋz əˈbaʊt ˈmaɪkl/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, he told her good things. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, he told her good things.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, hi: təʊld hɜːr ɡʊd θɪŋz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 20 -->
+        <div class="slide-container bg-light dict-block" id="slide20">
+            <h2 class="slide-title">Sentence 4 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Thank you, I heard you work as a software engineer here.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Thank you, I <input type='text' class='blank-input'> you work as a <input type='text' class='blank-input'> engineer here.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Thank you, I heard you work as a software engineer here.</div>
+                        <div class="ipa-text">/θæŋk ju:, aɪ hɜːrd ju: wɜːrk əz ə ˈsɔ:ftwer ˌendʒɪˈnɪr hɪr/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Does Michael work as a doctor? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Does Michael work as a doctor?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/dəz ˈmaɪkl wɜːrk əz ə ˈdɑ:ktɜːr/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, he works as a software engineer. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, he works as a software engineer.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, hi: wɜːrks əz ə ˈsɔ:ftwer ˌendʒɪˈnɪr/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 21 -->
+        <div class="slide-container bg-light dict-block" id="slide21">
+            <h2 class="slide-title">Sentence 5 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Yes, I design mobile applications for a big technology company.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Yes, I <input type='text' class='blank-input'> mobile applications for a big <input type='text' class='blank-input'> company.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Yes, I design mobile applications for a big technology company.</div>
+                        <div class="ipa-text">/jes, aɪ dɪˈzaɪn ˈməʊbl ˌæplɪˈkeɪʃnz fər ə bɪɡ tekˈnɑ:lədʒi ˈkʌmpəni/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What does Michael design? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What does Michael design?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t dəz ˈmaɪkl dɪˈzaɪn/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: He designs mobile applications. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('He designs mobile applications.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/hi: dɪˈzaɪnz ˈməʊbl ˌæplɪˈkeɪʃnz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 22 -->
+        <div class="slide-container bg-light dict-block" id="slide22">
+            <h2 class="slide-title">Sentence 6 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('Michael is also very interested in learning new foreign languages.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Michael is also very <input type='text' class='blank-input'> in learning new <input type='text' class='blank-input'> languages.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Michael is also very interested in learning new foreign languages.</div>
+                        <div class="ipa-text">/ˈmaɪkl ɪz ˈɔ:lsəʊ ˈveri ˈɪntrəstɪd ɪn ˈlɜːrnɪŋ nu: ˈfɔ:rən ˈlæŋɡwɪdʒɪz/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What is Michael interested in? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What is Michael interested in?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t ɪz ˈmaɪkl ˈɪntrəstɪd ɪn/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: He is interested in learning foreign languages. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('He is interested in learning foreign languages.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/hi: ɪz ˈɪntrəstɪd ɪn ˈlɜːrnɪŋ ˈfɔ:rən ˈlæŋɡwɪdʒɪz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 23 -->
+        <div class="slide-container bg-light dict-block" id="slide23">
+            <h2 class="slide-title">Sentence 7 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('That is amazing, maybe we can practice speaking English together sometimes.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>That is amazing, maybe we can <input type='text' class='blank-input'> speaking English together <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">That is amazing, maybe we can practice speaking English together sometimes.</div>
+                        <div class="ipa-text">/ðæt ɪz əˈmeɪzɪŋ, ˈmeɪbi wi: kæn ˈpræktɪs ˈspi:kɪŋ ˈɪŋɡlɪʃ təˈɡeðɜːr ˈsʌmtaɪmz/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What does Emma suggest they do? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What does Emma suggest they do?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t dəz ˈemə səɡˈdʒest ðeɪ du:/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: She suggests practicing speaking English together. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('She suggests practicing speaking English together.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ʃi: səɡˈdʒests ˈpræktɪsɪŋ ˈspi:kɪŋ ˈɪŋɡlɪʃ təˈɡeðɜːr/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 24 -->
+        <div class="slide-container bg-light dict-block" id="slide24">
+            <h2 class="slide-title">Sentence 8 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn male no-print" onclick="speak('I would definitely love that, let\'s exchange our phone numbers now.', 'male')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I would definitely love that, let's <input type='text' class='blank-input'> our phone <input type='text' class='blank-input'> now.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I would definitely love that, let's exchange our phone numbers now.</div>
+                        <div class="ipa-text">/aɪ wʊd ˈdefɪnətli lʌv ðæt, lets ɪksˈtʃeɪndʒ ˈaʊɜːr fəʊn ˈnʌmbɜːrz naʊ/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What do they exchange at the end? <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What do they exchange at the end?', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t du: ðeɪ ɪksˈtʃeɪndʒ æt ðə end/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: They exchange their phone numbers. <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('They exchange their phone numbers.', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ðeɪ ɪksˈtʃeɪndʒ ðer fəʊn ˈnʌmbɜːrz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 25 -->
+        <div class="slide-container bg-light" id="slide25">
+            <h2 class="slide-title">Full Conversation (A2)</h2>
+            <div class="content-area">
+                <div class="script-box">
+                    <button class="audio-btn male no-print" style="align-self: flex-start;" onclick="playConversation2()"><i class="fa-solid fa-play"></i></button>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>Emma, I would like to introduce you to my colleague, Michael.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>Hello Michael, it is a great pleasure to finally meet you.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#059669">Michael:</div><div>Hi Emma, David has told me so many good things about you.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>Thank you, I heard you work as a software engineer here.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#059669">Michael:</div><div>Yes, I design mobile applications for a big technology company.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#2563eb">David:</div><div>Michael is also very interested in learning new foreign languages.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Emma:</div><div>That is amazing, maybe we can practice speaking English together sometimes.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#059669">Michael:</div><div>I would definitely love that, let's exchange our phone numbers now.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 26 -->
+        <div class="slide-container bg-lime" id="slide26">
+            <h2 class="slide-title">Real-life Speaking Activity</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center;">
+                    <div style="font-size: 100px; color: #4d7c0f; margin-bottom: 20px;"><i class="fa-solid fa-users"></i></div>
+                    <h3 style="font-size: 45px; font-family: 'Comfortaa', sans-serif;">Networking Practice</h3>
+                    <p style="font-size: 32px; max-width: 900px; margin: 0 auto; line-height: 1.5;">Imagine you are introducing a friend to another friend at a coffee shop. Role-play the situation and use phrases like <strong>"I would like to introduce you to..."</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PHẦN 3: ĐỘC THOẠI A2 ================= -->
+
+        <!-- Slide 27: Prediction 3 -->
+        <div class="slide-container bg-light" id="slide27">
+            <h2 class="slide-title">Prediction Activity 3</h2>
+            <div class="content-area">
+                <div class="two-column">
+                    <div>
+                        <div class="image-placeholder bg-peach" style="position: relative; padding: 0; overflow: hidden; border: 3px solid #1e293b;">
+                            <img src="https://images.unsplash.com/photo-1503899036084-c55cdd92da26?auto=format&fit=crop&w=800&q=80" alt="Tokyo street" style="width: 100%; height: 100%; object-fit: cover;">
+                            
+                            <!-- Cờ Nhật Bản (Vẽ bằng CSS đảm bảo không bao giờ lỗi) -->
+                            <div style="position: absolute; top: 20px; right: 20px; width: 90px; height: 60px; background: white; border-radius: 8px; box-shadow: 0 6px 15px rgba(0,0,0,0.4); display: flex; justify-content: center; align-items: center; border: 2px solid #cbd5e1;">
+                                <div style="width: 36px; height: 36px; background: #bc002d; border-radius: 50%;"></div>
+                            </div>
+                            
+                            <!-- Thẻ Check-in Vị Trí -->
+                            <div style="position: absolute; bottom: 20px; left: 20px; background: rgba(255,255,255,0.95); padding: 10px 20px; border-radius: 30px; font-weight: 700; color: #1e293b; box-shadow: 0 6px 15px rgba(0,0,0,0.3); display: flex; align-items: center; gap: 10px; border: 3px solid #1e293b; font-size: 20px;">
+                                <i class="fa-solid fa-location-dot" style="color: #ef4444;"></i> Tokyo, Japan
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content-box bg-white">
+                        <p style="font-weight: 700; margin-bottom: 30px; font-size: 30px;">You will hear Sarah introducing herself in a meeting. Where do you think she currently lives?</p>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">A. London</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">B. Tokyo</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. Paris</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 28 -->
+        <div class="slide-container bg-light" id="slide28">
+            <h2 class="slide-title">Audio Dictation 3 (Monologue)</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center; max-width: 900px; margin: 0 auto;">
+                    <button class="audio-btn female no-print" style="width: 100px; height: 100px; font-size: 40px; margin-bottom: 20px;" onclick="playConversation3()"><i class="fa-solid fa-play"></i></button>
+                    <p style="font-size: 32px; font-weight: bold; margin-bottom: 30px;">What is Sarah talking about?</p>
+                    <div style="width: 100%; text-align: left;">
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">A. Her travel experience to London.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, true)">B. A formal introduction about her life and job.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">C. How to use a camera.</div>
+                        <div class="mcq-option" onclick="selectAnswer(this, false)">D. Her favorite fashion brand.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 29 -->
+        <div class="slide-container bg-light dict-block" id="slide29">
+            <h2 class="slide-title">Sentence 1 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Good evening everyone, please allow me to formally introduce myself tonight.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Good evening everyone, please <input type='text' class='blank-input'> me to formally <input type='text' class='blank-input'> myself tonight.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Good evening everyone, please allow me to formally introduce myself tonight.</div>
+                        <div class="ipa-text">/ɡʊd ˈi:vnɪŋ ˈevriwʌn, pli:z əˈlaʊ mi: tə ˈfɔ:rməli ˌɪntrəˈdu:s maɪˈself təˈnaɪt/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is she formally introducing herself? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is she formally introducing herself?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ʃi: ˈfɔ:rməli ˌɪntrəˈdu:sɪŋ hɜːrˈself/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: Yes, she is. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Yes, she is.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/jes, ʃi: ɪz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 30 -->
+        <div class="slide-container bg-light dict-block" id="slide30">
+            <h2 class="slide-title">Sentence 2 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('My full name is Sarah Jenkins, and I am thirty-two years old.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>My full <input type='text' class='blank-input'> is Sarah Jenkins, and I am thirty-two <input type='text' class='blank-input'> old.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">My full name is Sarah Jenkins, and I am thirty-two years old.</div>
+                        <div class="ipa-text">/maɪ fʊl neɪm ɪz ˈserə ˈdʒeŋkɪnz, ænd aɪ æm ˈθɜːrti tu: jɪrz əʊld/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is Sarah twenty years old? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is Sarah twenty years old?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ˈserə ˈtwenti jɪrz əʊld/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, she is thirty-two years old. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, she is thirty-two years old.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, ʃi: ɪz ˈθɜːrti tu: jɪrz əʊld/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 31 -->
+        <div class="slide-container bg-light dict-block" id="slide31">
+            <h2 class="slide-title">Sentence 3 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('I originally come from London, but currently, I reside in Tokyo.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I originally come from London, but <input type='text' class='blank-input'>, I <input type='text' class='blank-input'> in Tokyo.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I originally come from London, but currently, I reside in Tokyo.</div>
+                        <div class="ipa-text">/aɪ əˈrɪdʒənəli kʌm frəm ˈlʌndən, bʌt ˈkɜːrəntli, aɪ rɪˈzaɪd ɪn ˈtəʊkiəʊ/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Does Sarah currently live in London? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Does Sarah currently live in London?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/dəz ˈserə ˈkɜːrəntli lɪv ɪn ˈlʌndən/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, she resides in Tokyo. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, she resides in Tokyo.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, ʃi: rɪˈzaɪdz ɪn ˈtəʊkiəʊ/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 32 -->
+        <div class="slide-container bg-light dict-block" id="slide32">
+            <h2 class="slide-title">Sentence 4 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('I work as an international marketing manager for a fashion brand.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I work as an international <input type='text' class='blank-input'> manager for a fashion <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I work as an international marketing manager for a fashion brand.</div>
+                        <div class="ipa-text">/aɪ wɜːrk əz ən ˌɪntɜːrˈnæʃnəl ˈmɑ:rkɪtɪŋ ˈmænɪdʒɜːr fər ə ˈfæʃn brænd/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: Is she a fashion designer? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Is she a fashion designer?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/ɪz ʃi: ə ˈfæʃn dɪˈzaɪnɜːr/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: No, she is an international marketing manager. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('No, she is an international marketing manager.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/nəʊ, ʃi: ɪz ən ˌɪntɜːrˈnæʃnəl ˈmɑ:rkɪtɪŋ ˈmænɪdʒɜːr/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 33 -->
+        <div class="slide-container bg-light dict-block" id="slide33">
+            <h2 class="slide-title">Sentence 5 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('In my free time, I am quite passionate about photography and traveling.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>In my free time, I am quite <input type='text' class='blank-input'> about photography and <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">In my free time, I am quite passionate about photography and traveling.</div>
+                        <div class="ipa-text">/ɪn maɪ fri: taɪm, aɪ æm kwaɪt ˈpæʃənət əˈbaʊt fəˈtɑ:ɡrəfi ænd ˈtrævlɪŋ/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What is Sarah passionate about? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What is Sarah passionate about?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t ɪz ˈserə ˈpæʃənət əˈbaʊt/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: She is passionate about photography and traveling. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('She is passionate about photography and traveling.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ʃi: ɪz ˈpæʃənət əˈbaʊt fəˈtɑ:ɡrəfi ænd ˈtrævlɪŋ/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 34 -->
+        <div class="slide-container bg-light dict-block" id="slide34">
+            <h2 class="slide-title">Sentence 6 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('Exploring different cultures always brings me a lot of exciting inspirations.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>Exploring different <input type='text' class='blank-input'> always brings me a lot of exciting <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">Exploring different cultures always brings me a lot of exciting inspirations.</div>
+                        <div class="ipa-text">/ɪkˈsplɔ:rɪŋ ˈdɪfrənt ˈkʌltʃɜːrz ˈɔ:lweɪz brɪŋz mi: ə lɑ:t əv ɪkˈsaɪtɪŋ ˌɪnspəˈreɪʃnz/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What brings her exciting inspirations? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What brings her exciting inspirations?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t brɪŋz hɜːr ɪkˈsaɪtɪŋ ˌɪnspəˈreɪʃnz/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: Exploring different cultures brings her inspirations. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('Exploring different cultures brings her inspirations.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ɪkˈsplɔ:rɪŋ ˈdɪfrənt ˈkʌltʃɜːrz brɪŋz hɜːr ˌɪnspəˈreɪʃnz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 35 -->
+        <div class="slide-container bg-light dict-block" id="slide35">
+            <h2 class="slide-title">Sentence 7 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('I am truly delighted to be a part of this amazing community.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I am truly <input type='text' class='blank-input'> to be a part of this amazing <input type='text' class='blank-input'>.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I am truly delighted to be a part of this amazing community.</div>
+                        <div class="ipa-text">/aɪ æm ˈtru:li dɪˈlaɪtɪd tə bi: ə pɑ:rt əv ðɪs əˈmeɪzɪŋ kəˈmju:nəti/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: How does she feel about the community? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('How does she feel about the community?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/haʊ dəz ʃi: fi:l əˈbaʊt ðə kəˈmju:nəti/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: She is truly delighted to be a part of it. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('She is truly delighted to be a part of it.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ʃi: ɪz ˈtru:li dɪˈlaɪtɪd tə bi: ə pɑ:rt əv ɪt/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 36 -->
+        <div class="slide-container bg-light dict-block" id="slide36">
+            <h2 class="slide-title">Sentence 8 Dictation</h2>
+            <div class="content-area">
+                <div class="dict-container">
+                    <div class="fill-blank-box">
+                        <button class="audio-btn female no-print" onclick="speak('I look forward to making wonderful memories with all of you here.', 'female')"><i class="fa-solid fa-volume-high"></i></button>
+                        <span>I look <input type='text' class='blank-input'> to making wonderful <input type='text' class='blank-input'> with all of you here.</span>
+                    </div>
+                    <div class="action-row no-print">
+                        <button class="check-btn" onclick="this.closest('.dict-block').classList.add('show-results')"><i class="fa-solid fa-check"></i> Check</button>
+                        <button class="record-btn" onclick="toggleRecord(this)"><i class="fa-solid fa-microphone"></i> Record</button>
+                    </div>
+                    <div class="hidden-result">
+                        <div class="result-text">I look forward to making wonderful memories with all of you here.</div>
+                        <div class="ipa-text">/aɪ lʊk ˈfɔ:rwɜːrd tə ˈmeɪkɪŋ ˈwʌndɜːrfl ˈmeməriz wɪθ ɔ:l əv ju: hɪr/</div>
+                    </div>
+                    <div class="qna-box">
+                        <div style="font-weight:bold; font-size: 26px; color:#1e293b; margin-bottom: 5px;">Question: What does she look forward to? <button class="audio-btn male no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('What does she look forward to?', 'male')"><i class="fa-solid fa-volume-high"></i></button></div>
+                        <div class="ipa-text" style="margin-bottom: 5px;">/hwɑ:t dəz ʃi: lʊk ˈfɔ:rwɜːrd tu:/</div>
+                        <div class="answer-box">
+                            <div style="font-size: 26px; color:#059669; font-weight: bold; margin-bottom: 5px;">Answer: She looks forward to making wonderful memories. <button class="audio-btn female no-print" style="width:35px;height:35px;font-size:16px;" onclick="speak('She looks forward to making wonderful memories.', 'female')"><i class="fa-solid fa-volume-high"></i></button></div>
+                            <div class="ipa-text">/ʃi: lʊks ˈfɔ:rwɜːrd tə ˈmeɪkɪŋ ˈwʌndɜːrfl ˈmeməriz/</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 37 -->
+        <div class="slide-container bg-light" id="slide37">
+            <h2 class="slide-title">Full Monologue (A2)</h2>
+            <div class="content-area">
+                <div class="script-box">
+                    <button class="audio-btn female no-print" style="align-self: flex-start;" onclick="playConversation3()"><i class="fa-solid fa-play"></i></button>
+                    <div class="script-line"><div class="speaker" style="color:#db2777">Sarah:</div><div>Good evening everyone, please allow me to formally introduce myself tonight.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>My full name is Sarah Jenkins, and I am thirty-two years old.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>I originally come from London, but currently, I reside in Tokyo.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>I work as an international marketing manager for a fashion brand.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>In my free time, I am quite passionate about photography and traveling.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>Exploring different cultures always brings me a lot of exciting inspirations.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>I am truly delighted to be a part of this amazing community.</div></div>
+                    <div class="script-line"><div class="speaker" style="color:#db2777"></div><div>I look forward to making wonderful memories with all of you here.</div></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 38 -->
+        <div class="slide-container bg-purple" id="slide38">
+            <h2 class="slide-title">Real-life Speaking Activity</h2>
+            <div class="content-area">
+                <div class="content-box bg-white" style="align-items: center; text-align: center;">
+                    <div style="font-size: 100px; color: #9333ea; margin-bottom: 20px;"><i class="fa-solid fa-user-tie"></i></div>
+                    <h3 style="font-size: 45px; font-family: 'Comfortaa', sans-serif;">Professional Introduction</h3>
+                    <p style="font-size: 32px; max-width: 900px; margin: 0 auto; line-height: 1.5;">Pretend you are in a formal meeting with new partners. Give a short monologue introducing <strong>yourself</strong>, your <strong>job</strong>, and your <strong>passion</strong>.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= PHẦN 4: TỔNG KẾT ================= -->
+
+        <!-- Slide 39 -->
+        <div class="slide-container bg-light" id="slide39">
+            <h2 class="slide-title">Real-life Application (Level A1)</h2>
+            <div class="content-area">
+                <div class="tiled-content">
+                    <div class="tile bg-lime">
+                        <div class="icon"><i class="fa-solid fa-id-card"></i></div>
+                        <p>What is your full name?</p>
+                    </div>
+                    <div class="tile bg-peach">
+                        <div class="icon"><i class="fa-solid fa-earth-americas"></i></div>
+                        <p>Where do you come from?</p>
+                    </div>
+                    <div class="tile bg-blue">
+                        <div class="icon"><i class="fa-solid fa-gamepad"></i></div>
+                        <p>What do you like to do in your free time?</p>
+                    </div>
+                    <div class="tile bg-purple">
+                        <div class="icon"><i class="fa-solid fa-briefcase"></i></div>
+                        <p>Are you a student or do you work?</p>
+                    </div>
+                    <div class="tile bg-orange">
+                        <div class="icon"><i class="fa-solid fa-face-smile"></i></div>
+                        <p>Nice to meet you, how are you today?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 40 -->
+        <div class="slide-container bg-light" id="slide40">
+            <h2 class="slide-title">Real-life Application (Level A2)</h2>
+            <div class="content-area">
+                <div class="tiled-content">
+                    <div class="tile bg-pink">
+                        <div class="icon"><i class="fa-solid fa-list-check"></i></div>
+                        <p>Can you describe your current job or studies in detail?</p>
+                    </div>
+                    <div class="tile bg-lime">
+                        <div class="icon"><i class="fa-solid fa-language"></i></div>
+                        <p>What foreign languages are you interested in learning?</p>
+                    </div>
+                    <div class="tile bg-blue">
+                        <div class="icon"><i class="fa-solid fa-handshake"></i></div>
+                        <p>How do you usually introduce a new colleague to your team?</p>
+                    </div>
+                    <div class="tile bg-peach">
+                        <div class="icon"><i class="fa-solid fa-heart"></i></div>
+                        <p>What is something you are passionate about, and why?</p>
+                    </div>
+                    <div class="tile bg-purple">
+                        <div class="icon"><i class="fa-solid fa-calendar-star"></i></div>
+                        <p>What are you looking forward to doing this weekend?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ================= JAVASCRIPT ================= -->
+    <script>
+        // --- NAVIGATION LOGIC ---
+        let currentSlide = 1;
+        const totalSlides = 40;
+
+        function updateNav() {
+            document.querySelectorAll('.slide-container').forEach((el, index) => {
+                if(index + 1 === currentSlide) { el.classList.add('active'); } 
+                else { el.classList.remove('active'); }
+            });
+            document.getElementById('slideCounter').innerText = `${currentSlide} / ${totalSlides}`;
+            document.getElementById('prevBtn').disabled = currentSlide === 1;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides;
+        }
+
+        function changeSlide(step) {
+            if (synth.speaking) synth.cancel();
+            currentSlide += step;
+            if (currentSlide < 1) currentSlide = 1;
+            if (currentSlide > totalSlides) currentSlide = totalSlides;
+            updateNav();
+        }
+        
+        function selectAnswer(element, isCorrect) {
+            element.parentElement.querySelectorAll('.mcq-option').forEach(el => { el.classList.remove('correct-ans', 'incorrect-ans'); });
+            if(isCorrect) element.classList.add('correct-ans');
+            else element.classList.add('incorrect-ans');
+        }
+
+        function downloadHTML() {
+            const htmlContent = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+            const blob = new Blob([htmlContent], { type: 'text/html' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'greetings_and_introductions_full.html';
+            a.click();
+        }
+
+        // --- TTS LOGIC ---
+        let synth = window.speechSynthesis;
+        let voices = [];
+        let maleSelect = document.getElementById('maleVoiceSelect');
+        let femaleSelect = document.getElementById('femaleVoiceSelect');
+
+        function populateVoiceList() {
+            voices = synth.getVoices().filter(voice => voice.lang.includes('en-US') || voice.lang.includes('en-GB'));
+            maleSelect.innerHTML = ''; femaleSelect.innerHTML = '';
+
+            voices.forEach((voice, index) => {
+                let option = document.createElement('option');
+                option.textContent = `${voice.name} (${voice.lang})`;
+                option.value = index;
+                let optionClone = option.cloneNode(true);
+
+                if(voice.name.toLowerCase().includes('andrew') || voice.name.toLowerCase().includes('brian') || voice.name.toLowerCase().includes('guy') || voice.name.toLowerCase().includes('david')) {
+                    maleSelect.appendChild(option); femaleSelect.appendChild(optionClone);
+                } else if(voice.name.toLowerCase().includes('emma') || voice.name.toLowerCase().includes('ava') || voice.name.toLowerCase().includes('girl') || voice.name.toLowerCase().includes('zira')) {
+                    femaleSelect.appendChild(optionClone); maleSelect.appendChild(option);
+                } else {
+                    maleSelect.appendChild(option); femaleSelect.appendChild(optionClone);
+                }
+            });
+
+            let emmaIdx = voices.findIndex(v => v.name.includes('Emma'));
+            let avaIdx = voices.findIndex(v => v.name.includes('Ava'));
+            let brianIdx = voices.findIndex(v => v.name.includes('Brian'));
+            let andrewIdx = voices.findIndex(v => v.name.includes('Andrew'));
+            
+            if(emmaIdx !== -1) femaleSelect.value = emmaIdx; else if(avaIdx !== -1) femaleSelect.value = avaIdx;
+            if(brianIdx !== -1) maleSelect.value = brianIdx; else if(andrewIdx !== -1) maleSelect.value = andrewIdx;
+        }
+
+        populateVoiceList();
+        if (speechSynthesis.onvoiceschanged !== undefined) { speechSynthesis.onvoiceschanged = populateVoiceList; }
+
+        function speak(text, gender, queue = false) {
+            if (!queue && synth.speaking) { synth.cancel(); }
+            if (text !== '') {
+                let utterThis = new SpeechSynthesisUtterance(text);
+                let selectedVoiceIndex = gender === 'male' ? maleSelect.value : femaleSelect.value;
+                if(voices[selectedVoiceIndex]) { utterThis.voice = voices[selectedVoiceIndex]; }
+                utterThis.rate = 0.85; 
+                synth.speak(utterThis);
+            }
+        }
+
+        // --- SCRIPT HỘI THOẠI FULL ---
+        const conv1 = [
+            { text: "Good morning, my name is David, and it is very nice to meet you today.", gender: "male" },
+            { text: "Hi David, I am Emma, and it is a wonderful pleasure to meet you too.", gender: "female" },
+            { text: "Are you a new student in this morning English class?", gender: "male" },
+            { text: "Yes, I am a new student here, and I am originally from Canada.", gender: "female" },
+            { text: "That is really great, because I am from the United States.", gender: "male" },
+            { text: "What do you usually do in your free time on the weekend, David?", gender: "female" },
+            { text: "I love reading thick books and playing soccer with my good friends.", gender: "male" },
+            { text: "That sounds very fun, let's talk more about it after the class ends.", gender: "female" }
+        ];
+
+        const conv2 = [
+            { text: "Emma, I would like to introduce you to my colleague, Michael.", gender: "male" },
+            { text: "Hello Michael, it is a great pleasure to finally meet you.", gender: "female" },
+            { text: "Hi Emma, David has told me so many good things about you.", gender: "male" },
+            { text: "Thank you, I heard you work as a software engineer here.", gender: "female" },
+            { text: "Yes, I design mobile applications for a big technology company.", gender: "male" },
+            { text: "Michael is also very interested in learning new foreign languages.", gender: "male" }, 
+            { text: "That is amazing, maybe we can practice speaking English together sometimes.", gender: "female" },
+            { text: "I would definitely love that, let's exchange our phone numbers now.", gender: "male" }
+        ];
+
+        const conv3 = [
+            { text: "Good evening everyone, please allow me to formally introduce myself tonight.", gender: "female" },
+            { text: "My full name is Sarah Jenkins, and I am thirty-two years old.", gender: "female" },
+            { text: "I originally come from London, but currently, I reside in Tokyo.", gender: "female" },
+            { text: "I work as an international marketing manager for a fashion brand.", gender: "female" },
+            { text: "In my free time, I am quite passionate about photography and traveling.", gender: "female" },
+            { text: "Exploring different cultures always brings me a lot of exciting inspirations.", gender: "female" },
+            { text: "I am truly delighted to be a part of this amazing community.", gender: "female" },
+            { text: "I look forward to making wonderful memories with all of you here.", gender: "female" }
+        ];
+
+        function playConversation(convArray) {
+            if(synth.speaking) synth.cancel();
+            setTimeout(() => { convArray.forEach(line => speak(line.text, line.gender, true)); }, 100);
+        }
+        function playConversation1() { playConversation(conv1); }
+        function playConversation2() { playConversation(conv2); }
+        function playConversation3() { playConversation(conv3); }
+
+
+        // --- RECORD AUDIO (MEDIARECORDER API) ---
+        let mediaRecorder;
+        let audioChunks = [];
+
+        async function toggleRecord(btn) {
+            if (btn.classList.contains('recording')) {
+                // Đang ghi -> Bấm để Dừng
+                mediaRecorder.stop();
+                btn.classList.remove('recording');
+                btn.innerHTML = '<i class="fa-solid fa-microphone"></i> Record';
+            } else {
+                // Chưa ghi -> Bấm để Bắt đầu
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+                    
+                    mediaRecorder.ondataavailable = e => { audioChunks.push(e.data); };
+                    
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        
+                        let container = btn.parentElement;
+                        let existingAudio = container.querySelector('audio');
+                        if(existingAudio) existingAudio.remove(); // Xóa bản ghi cũ
+                        
+                        let audioEl = document.createElement('audio');
+                        audioEl.src = audioUrl;
+                        audioEl.controls = true;
+                        audioEl.style.height = '40px';
+                        audioEl.style.marginLeft = '15px';
+                        audioEl.style.borderRadius = '20px';
+                        container.appendChild(audioEl);
+                    };
+
+                    mediaRecorder.start();
+                    btn.classList.add('recording');
+                    btn.innerHTML = '<i class="fa-solid fa-stop"></i> Stop';
+                } catch (err) {
+                    alert('KHÔNG THỂ TRUY CẬP MICRO!\n\nLý do: ' + err.message + '\n\n* LƯU Ý: Trình duyệt sẽ chặn Micro nếu bạn mở trực tiếp file HTML bằng đường dẫn file:///. Vui lòng tải file này lên Web/LMS hoặc dùng Live Server để có thể thu âm!');
+                }
+            }
+        }
+
+        document.addEventListener('keydown', function(event) {
+            if(event.key === "ArrowRight") changeSlide(1);
+            if(event.key === "ArrowLeft") changeSlide(-1);
+        });
+        
+        updateNav();
+    </script>
+</body>
+</html>
